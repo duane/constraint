@@ -1,0 +1,13 @@
+[package]
+name = "constraint"
+version = "0.1.0"
+authors = ["Duane Bailey <bailey.d.r@gmail.com>"]
+
+
+[lib]
+name = "constraint"
+path = "src/lib.rs"
+
+[[bin]]
+name = "rig"
+path = "src/bin.rs"
