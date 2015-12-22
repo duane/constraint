@@ -2,12 +2,15 @@
 name = "constraint"
 version = "0.1.0"
 authors = ["Duane Bailey <bailey.d.r@gmail.com>"]
+build = "build.rs"
 
 
 [lib]
 name = "constraint"
 path = "src/lib.rs"
 
-[[bin]]
-name = "rig"
-path = "src/bin.rs"
+[build-dependencies]
+lalrpop = "0.7.0"
+
+[dependencies]
+lalrpop-util = "0.7.0"

@@ -1,6 +1,7 @@
 use std::str::FromStr;
 use std::cmp::Ordering;
 use std::str::Chars;
+use grammar;
 
 pub struct ProblemParser {
   buf: String
@@ -86,10 +87,8 @@ impl<'s> ParserStream<'s> {
       (c >= '0' && c <= '9' && !initial)
   }
 
-  fn is_white(&self, c: char, include_newline: bool) -> bool {
-    c == ' ' ||
-      c == '\t' ||
-      ((c == '\n' || c == '\r') && include_newline)
+  fn is_white(&self, c: char) -> bool {
+    c == ' ' || c == '\t'
   }
 
   fn is_operator(&self, c: char) -> bool {
@@ -101,7 +100,7 @@ impl<'s> ParserStream<'s> {
 
   fn skip_whitespace(&mut self) {
     let mut peek_char = self.peek();
-    while peek_char.is_some() && self.is_white(peek_char.unwrap(), false) {
+    while peek_char.is_some() && self.is_white(peek_char.unwrap()) {
       let _ = self.next();
       peek_char = self.peek();
     }
@@ -206,7 +205,35 @@ impl ProblemParser {
     }
     Ok(Some(LinearRelation::new(lhs.unwrap(), relation.unwrap(), rhs.unwrap())))
   }
-  
+
+  fn consume_line<'i, 's>(input: &'i mut ParserStream<'s>) -> Result<(), ParserError> {
+    let bookmark = input.get_col_pos();
+    let mut peek_char = input.peek();
+    let mut in_comment = false;
+    loop {
+      let _ = input.next();
+      match peek_char {
+        Some('\n') => {
+          let _ = input.next();
+          break;
+        }
+        Some(c) if input.is_white(c) || in_comment  => {
+          let _ = input.next();
+        }
+        Some ('#') => {
+          let _ = input.next();
+          in_comment = true;
+        }
+        Some(c) => {
+          return Err(input.error_here(format!("Don't know how to interpret '{}', expected whitespace or comment.", c).as_ref() as &str));
+        }
+        None => break
+      }
+      peek_char = input.peek();
+    }
+    Ok(())
+  }
+
   fn parse_scalar<'i, 's>(input: &'i mut ParserStream<'s>) -> Result<Option<Scalar>, ParserError> {
     let mut state = FloatParseState::PreHyphen;
     let mut buf = String::new();
@@ -279,6 +306,10 @@ impl ProblemParser {
 
 
 mod test {
+  use grammar;
+  use std::str::FromStr;
+
+
   use expr::{approx_eq, LinearExpression, LinearRelation, Relation, Scalar, Variable};
   use super::{ParserError, ParserStream, ProblemParser};
 
@@ -317,6 +348,19 @@ mod test {
   }
 
   #[test]
+  fn parse_scalar_lalr() {
+    assert!(approx_eq(0.0, grammar::parse_Scalar("0.0").unwrap()));
+    assert!(approx_eq(0.0, grammar::parse_Scalar("-0.0").unwrap()));
+    assert!(approx_eq(0.0, grammar::parse_Scalar("0.").unwrap()));
+    assert!(approx_eq(0.0, grammar::parse_Scalar("-0.").unwrap()));
+
+    assert!(approx_eq(42.3, grammar::parse_Scalar("42.3").unwrap()));
+    assert!(approx_eq(-42.3, grammar::parse_Scalar("-42.3").unwrap()));
+    assert!(approx_eq(7.0, grammar::parse_Scalar("7.").unwrap()));
+    assert!(approx_eq(-7.0, grammar::parse_Scalar("-7.").unwrap()));
+  }
+
+  #[test]
   fn parse_scalars() {
     assert!(approx_eq(42.3, parse_scalar("42.3").unwrap().unwrap()));
     assert!(approx_eq(-42.3, parse_scalar("-42.3").unwrap().unwrap()));
@@ -335,6 +379,14 @@ mod test {
     assert_eq!(Variable::from("_"), parse_identifier("_").unwrap().unwrap());
     assert!(parse_identifier("9").unwrap().is_none());
     assert_eq!(Variable::from("x2"), parse_identifier("x2").unwrap().unwrap());
+  }
+
+  #[test]
+  fn parse_lalr_identifiers() {
+    assert_eq!(Variable::from("x"), grammar::parse_Variable("x").unwrap());
+    assert_eq!(Variable::from("_"), grammar::parse_Variable("_").unwrap());
+    assert_eq!(Variable::from("x2"), grammar::parse_Variable("x2").unwrap());
+    assert!(grammar::parse_Variable("9").is_err());
   }
 
   #[test]
@@ -359,6 +411,42 @@ mod test {
   }
 
   #[test]
+  fn parse_lalr_terms() {
+    let term1 = grammar::parse_Term("2x").unwrap();
+    assert!(approx_eq(2.0, term1.0.unwrap()));
+    assert_eq!(Variable::from("x"), term1.1.unwrap());
+
+    let term2 = grammar::parse_Term("-43.x2").unwrap();
+    assert!(approx_eq(-43.0, term2.0.unwrap()));
+    assert_eq!(Variable::from("x2"), term2.1.unwrap());
+    
+    let term3 = grammar::parse_Term("y").unwrap();
+    assert!(term3.0.is_none());
+    assert_eq!(Variable::from("y"), term3.1.unwrap());
+
+    let term4 = grammar::parse_Term("0.4").unwrap();
+    assert!(approx_eq(0.4, term4.0.unwrap()));
+    assert!(term4.1.is_none());
+
+    let term5 = grammar::parse_Term("-72.3 x3").unwrap();
+    assert!(approx_eq(-72.3, term5.0.unwrap()));
+    assert_eq!(Variable::from("x3"), term5.1.unwrap());
+
+    let term6 = grammar::parse_Term("-72.3*x3").unwrap();
+    assert!(approx_eq(-72.3, term6.0.unwrap()));
+    assert_eq!(Variable::from("x3"), term6.1.unwrap());
+  }
+
+  #[test]
+  fn parse_lalr_exprs() {
+    let expr = grammar::parse_Expression("-42.3 x4 + 92 +-92.x4+0.0x2+-92.3x3+-82").unwrap();
+    assert!(approx_eq(-134.3, expr.get_coefficient(&Variable::from("x4"))));
+    assert!(approx_eq(0.0, expr.get_coefficient(&Variable::from("x2"))));
+    assert!(approx_eq(-92.3, expr.get_coefficient(&Variable::from("x3"))));
+    assert!(approx_eq(10.0, expr.get_constant()));    
+  }
+
+  #[test]
   fn parse_exprs() {
     let expr = parse_expr("-42.3 x4 + 92 +-92.x4+0.0x2+-92.3x3+-82").unwrap().unwrap();
     assert!(approx_eq(-134.3, expr.get_coefficient(&Variable::from("x4"))));
@@ -368,14 +456,13 @@ mod test {
   }
 
   #[test]
-  fn parse_relations() {
-    assert_eq!(Some(Relation::EQ), parse_relation("==").unwrap());
-    assert_eq!(Some(Relation::NEQ), parse_relation("=!=").unwrap());
-    assert_eq!(Some(Relation::LT), parse_relation("<").unwrap());
-    assert_eq!(Some(Relation::LEQ), parse_relation("<=").unwrap());
-    assert_eq!(Some(Relation::GT), parse_relation(">").unwrap());
-    assert_eq!(Some(Relation::GEQ), parse_relation(">=").unwrap());
-    assert!(parse_relation("foo").unwrap().is_none());
+  fn parse_lalr_relations() {
+    assert_eq!(Relation::EQ, grammar::parse_Relation("==").unwrap());
+    assert_eq!(Relation::NEQ, grammar::parse_Relation("=!=").unwrap());
+    assert_eq!(Relation::LT, grammar::parse_Relation("<").unwrap());
+    assert_eq!(Relation::LEQ, grammar::parse_Relation("<=").unwrap());
+    assert_eq!(Relation::GT, grammar::parse_Relation(">").unwrap());
+    assert_eq!(Relation::GEQ, grammar::parse_Relation(">=").unwrap());
   }
 
   #[test]
@@ -391,6 +478,22 @@ mod test {
     let lt = parse_linear_relation("4y<5y2").unwrap().unwrap();
     assert!(lt.op == Relation::LT);
     let neq = parse_linear_relation("x =!= y").unwrap().unwrap();
+    assert!(neq.op == Relation::NEQ);
+  }
+
+  #[test]
+  fn parse_lalr_linear_relations() {
+    let gt = grammar::parse_LinearRelation("3x1>2x2").unwrap();
+    assert!(gt.op == Relation::GT);
+    let eq = grammar::parse_LinearRelation("-8.2x+5==8.2y+5").unwrap();
+    assert!(eq.op == Relation::EQ);
+    let geq = grammar::parse_LinearRelation("2x + 3x >= 5x").unwrap();
+    assert!(geq.op == Relation::GEQ);
+    let leq = grammar::parse_LinearRelation("2x <= 3x").unwrap();
+    assert!(leq.op == Relation::LEQ);
+    let lt = grammar::parse_LinearRelation("4y<5y2").unwrap();
+    assert!(lt.op == Relation::LT);
+    let neq = grammar::parse_LinearRelation("x =!= y").unwrap();
     assert!(neq.op == Relation::NEQ);
   }
 }

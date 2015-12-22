@@ -1,0 +1,61 @@
+use std::str::FromStr;
+use expr::{Scalar, Variable, LinearExpression, LinearRelation, Relation};
+use problem::{Problem, ProblemObjective};
+
+grammar;
+
+pub Scalar: Scalar = <s:r"-?[0-9]+\.?[0-9]*([eE]-?[0-9]+)?"> => f64::from_str(s).unwrap();
+
+pub Variable: Variable = <s:r"[_a-zA-Z][_a-zA-Z0-9]*"> => Variable::from(s);
+
+pub Term: (Option<Scalar>, Option<Variable>) = {
+  <s:Scalar> => (Some(s), None),
+  <v:Variable> => (None, Some(v)),
+  <s:Scalar> "*"? <v:Variable> => (Some(s), Some(v))
+};
+
+pub Expression: LinearExpression = {
+  <e:(Term "+")*> <u:Term> => {
+    let mut expr = LinearExpression::new();
+    let mut terms: Vec<(Option<Scalar>, Option<Variable>)> = e.into_iter().map(|(t, tok)|{t}).collect();
+    terms.push(u);
+    for (scalar, var) in terms.into_iter() {
+      let term = match (scalar, var) {
+        (Some(scalar), Some(var)) => LinearExpression::term(var, scalar),
+        (None, Some(var)) => LinearExpression::from(var),
+        (Some(scalar), None) => LinearExpression::from(scalar),
+        (None, None) => LinearExpression::new()
+      };
+      expr.plus_this(&term);
+    }
+    expr
+  }
+};
+
+pub Relation: Relation = {
+  "<" => Relation::LT,
+  "<=" => Relation::LEQ,
+  ">" => Relation::GT,
+  ">=" => Relation::GEQ,
+  "==" => Relation::EQ,
+  "=!=" => Relation::NEQ
+};
+
+pub LinearRelation: LinearRelation = {
+  <lhs:Expression> <o:Relation> <rhs:Expression> => LinearRelation::new(lhs, o, rhs)
+};
+
+pub ProblemObjective: ProblemObjective = {
+  "maximize(" <e:Expression> ")" => ProblemObjective::Maximize(e),
+  "minimize(" <e:Expression> ")" => ProblemObjective::Minimize(e)
+};
+
+pub LINE_SEP = ";";
+
+pub Problem: Problem = {
+  <o: ProblemObjective> LINE_SEP+ <i:LinearRelation> <r:(LINE_SEP+ LinearRelation)*> => {
+    let mut exprs: Vec<LinearRelation> = r.into_iter().map(|t|{t.1}).collect();
+    exprs.push(i);
+    Problem::new(o, exprs)
+  }
+};

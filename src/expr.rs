@@ -4,16 +4,18 @@ use std::rc::Rc;
 use std::iter::Iterator;
 use std::cmp::{Ord, Ordering};
 use std::fmt::{Display, Formatter, Error};
+use state::*;
+use std::mem::swap;
 
 pub type Scalar = f64;
-const SCALAR_EPSILON: Scalar = 0.000001;
+pub const SCALAR_EPSILON: Scalar = 0.000001;
 
 pub fn approx_eq(a: Scalar, b: Scalar) -> bool {
   let delta = (a - b).abs();
   delta < SCALAR_EPSILON
 }
 
-#[derive(Debug,Eq,PartialEq,Clone,Copy)]
+#[derive(Debug,Eq,PartialEq,Clone)]
 pub enum Relation {
   EQ,
   NEQ,
@@ -24,15 +26,15 @@ pub enum Relation {
 }
 
 impl Relation {
-  fn reverse(self) -> Relation {
-    match self {
-      Relation::EQ => Relation::NEQ,
-      Relation::NEQ => Relation::EQ,
-      Relation::GT => Relation::LEQ,
-      Relation::LEQ => Relation::GT,
-      Relation::LT => Relation::GEQ,
-      Relation::GEQ => Relation::LT
-    }
+  fn reverse(&mut self) {
+    *self = match self {
+      &mut Relation::EQ => Relation::NEQ,
+      &mut Relation::NEQ => Relation::EQ,
+      &mut Relation::GT => Relation::LT,
+      &mut Relation::LEQ => Relation::GEQ,
+      &mut Relation::GEQ => Relation::LEQ,
+      &mut Relation::LT => Relation::GT
+    };
   }
 }
 
@@ -50,6 +52,7 @@ impl Display for Relation {
   }
 }
 
+#[derive(Debug,Clone)]
 pub struct LinearRelation {
   pub lhs: LinearExpression,
   pub op: Relation,
@@ -63,6 +66,11 @@ impl LinearRelation {
       op: op,
       rhs: rhs
     }
+  }
+
+  pub fn reverse(&mut self) {
+    swap(&mut self.lhs, &mut self.rhs);
+    self.op.reverse();
   }
 }
 
@@ -108,9 +116,17 @@ impl Ord for Variable {
   }
 }
 
+impl Variable {
+  pub fn named(namer: &mut Namer) -> Variable {
+    Variable::from(namer.vend())
+  }
+}
+
+pub type SlackVariable = Variable;
+
 ///LinearExpression contains ax+by+...+c
 
-#[derive(Clone)]
+#[derive(Debug,Clone)]
 pub struct LinearExpression {
   constant: Scalar,
   terms: BTreeMap<Variable, Scalar>,
@@ -122,6 +138,14 @@ impl LinearExpression {
       constant: 0.0,
       terms: BTreeMap::new()
     }
+  }
+
+  pub fn mut_terms<'t>(&'t mut self) -> &'t mut BTreeMap<Variable, Scalar> {
+    &mut self.terms
+  }
+  
+  pub fn terms<'t>(&'t self) -> &'t BTreeMap<Variable, Scalar> {
+    &self.terms
   }
 
   pub fn term(variable: Variable, coefficient: Scalar) -> LinearExpression {
@@ -160,6 +184,35 @@ impl LinearExpression {
                                               }).collect())
   }
 
+  pub fn plus_this(&mut self, expr: &LinearExpression) {
+    for (name, coef) in expr.terms.iter() {
+      let existing_coef = self.terms.get(&name).map(|c|{*c}).unwrap_or(0.0);
+      let new_coef = existing_coef + *coef;
+      if approx_eq(0.0, new_coef) {
+        if !approx_eq(0.0, *coef) {
+          self.terms.remove(&name);
+        }
+      } else {
+        let _ = self.terms.insert(name.clone(), new_coef);
+      }
+    }
+
+    self.constant += expr.constant;
+    
+  }
+
+  pub fn times_this(&mut self, scalar: Scalar) {
+    if approx_eq(0.0, scalar) {
+      self.terms.clear();
+    } else {
+      for (_, value) in self.terms.iter_mut() {
+        *value *= scalar;
+      }
+    }
+    
+    self.constant *= scalar;
+  }
+  
   pub fn plus(&self, expr: &LinearExpression) -> LinearExpression {
     let mut new_terms = self.terms.clone();
 
@@ -173,7 +226,9 @@ impl LinearExpression {
   }
 
   pub fn minus(&self, expr: &LinearExpression) -> LinearExpression {
-    self.plus(&expr.times(-1.0))
+    let mut new = expr.times(-1.0);
+    new.plus_this(self);
+    new
   }
 
   pub fn div(&self, constant: Scalar) -> LinearExpression {
