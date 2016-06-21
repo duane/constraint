@@ -9,8 +9,10 @@ build = "build.rs"
 name = "constraint"
 path = "src/lib.rs"
 
+[dependencies]
+prettytable-rs = "0.5.0"
+lalrpop-util = "0.7.0"
+
 [build-dependencies]
 lalrpop = "0.7.0"
 
-[dependencies]
-lalrpop-util = "0.7.0"

@@ -1,14 +1,14 @@
 use std::str::FromStr;
-use expr::{Scalar, Variable, LinearExpression, LinearRelation, Relation};
+use expr::{Scalar, LinearExpression, LinearRelation, Relation};
 use problem::{Problem, ProblemObjective};
 
 grammar;
 
 pub Scalar: Scalar = <s:r"-?[0-9]+\.?[0-9]*([eE]-?[0-9]+)?"> => f64::from_str(s).unwrap();
 
-pub Variable: Variable = <s:r"[_a-zA-Z][_a-zA-Z0-9]*"> => Variable::from(s);
+pub Variable: String = <s:r"[_a-zA-Z][_a-zA-Z0-9]*"> => String::from(s);
 
-pub Term: (Option<Scalar>, Option<Variable>) = {
+pub Term: (Option<Scalar>, Option<String>) = {
   <s:Scalar> => (Some(s), None),
   <v:Variable> => (None, Some(v)),
   <s:Scalar> "*"? <v:Variable> => (Some(s), Some(v))
@@ -17,7 +17,7 @@ pub Term: (Option<Scalar>, Option<Variable>) = {
 pub Expression: LinearExpression = {
   <e:(Term "+")*> <u:Term> => {
     let mut expr = LinearExpression::new();
-    let mut terms: Vec<(Option<Scalar>, Option<Variable>)> = e.into_iter().map(|(t, tok)|{t}).collect();
+    let mut terms: Vec<(Option<Scalar>, Option<String>)> = e.into_iter().map(|t| t.0).collect();
     terms.push(u);
     for (scalar, var) in terms.into_iter() {
       let term = match (scalar, var) {

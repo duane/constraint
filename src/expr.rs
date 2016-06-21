@@ -1,10 +1,6 @@
-use std::collections::HashMap;
 use std::collections::BTreeMap;
-use std::rc::Rc;
 use std::iter::Iterator;
-use std::cmp::{Ord, Ordering};
 use std::fmt::{Display, Formatter, Error};
-use state::*;
 use std::mem::swap;
 
 pub type Scalar = f64;
@@ -72,6 +68,64 @@ impl LinearRelation {
     swap(&mut self.lhs, &mut self.rhs);
     self.op.reverse();
   }
+
+  pub fn plus_this(&mut self, expr: &LinearExpression) {
+    self.lhs.plus_this(expr);
+    self.rhs.plus_this(expr);
+  }
+
+  pub fn minus_this(&mut self, expr: &LinearExpression) {
+    self.lhs.minus_this(expr);
+    self.rhs.minus_this(expr);
+  }
+
+  pub fn times_this(&mut self, constant: Scalar) {
+    self.lhs.times_this(constant);
+    self.rhs.times_this(constant);
+  }
+
+  pub fn div_this(&mut self, constant: Scalar) {
+    self.lhs.div_this(constant);
+    self.rhs.div_this(constant);
+  }
+
+  pub fn substitute(&mut self, v: &String, e: &LinearExpression) {
+    self.lhs.substitute(v, e);
+    self.rhs.substitute(v, e);
+  }
+
+  ///
+  /// # Examples
+  ///
+  /// ```
+  ///   extern crate constraint;
+  ///   use constraint::expr::{approx_eq, LinearExpression, LinearRelation, Relation};
+  ///
+  ///   fn main() {
+  ///     let relation = LinearRelation::new(LinearExpression::term(String::from("x"), -0.5), Relation::GEQ, LinearExpression::from(3.0));
+  ///     let (op, expr) = relation.solve_for(&String::from("x")).unwrap();
+  ///     assert_eq!(Relation::LEQ, op);
+  ///     assert!(expr.terms().is_empty());
+  ///     assert!(approx_eq(-6.0, expr.get_constant()));
+  ///   }
+  /// ```
+  ///
+  pub fn solve_for(&self, var: &String) -> Result<(Relation, LinearExpression), String> {
+    let mut lhs = self.lhs.clone();
+    let mut rhs = self.rhs.clone();
+    let a = lhs.mut_terms().remove(var).unwrap_or(0.0);
+    let b = rhs.mut_terms().remove(var).unwrap_or(0.0);
+    let numerator = rhs.minus(&lhs);
+    let denominator = a - b;
+    if approx_eq(0.0, denominator) {
+      return Err(format!("Solving for {} results in {} / 0", var, numerator)); 
+    }
+    let mut op = self.op.clone();
+    if denominator < 0.0 && op != Relation::EQ {
+      op.reverse()
+    }
+    Ok((op, numerator.div(denominator)))
+  }
 }
 
 impl Display for LinearRelation {
@@ -83,53 +137,12 @@ impl Display for LinearRelation {
   }
 }
 
-#[derive(Debug,Hash,Eq,PartialEq,PartialOrd,Clone)]
-pub struct Variable {
-  pub name: String
-}
-
-impl<'a> From<&'a str> for Variable {
-  fn from(name: &'a str) -> Variable {
-    Variable{
-      name: String::from(name)
-    }
-  }
-}
-
-impl From<String> for Variable {
-  fn from(name: String) -> Variable {
-    Variable{
-      name: name
-    }
-  }
-}
-
-impl Display for Variable {
-  fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
-    fmt.write_str(self.name.as_ref() as &str)
-  }
-}
-
-impl Ord for Variable {
-  fn cmp(&self, other: &Self) -> Ordering {
-    self.name.cmp(&(other.name))
-  }
-}
-
-impl Variable {
-  pub fn named(namer: &mut Namer) -> Variable {
-    Variable::from(namer.vend())
-  }
-}
-
-pub type SlackVariable = Variable;
-
 ///LinearExpression contains ax+by+...+c
 
 #[derive(Debug,Clone)]
 pub struct LinearExpression {
   constant: Scalar,
-  terms: BTreeMap<Variable, Scalar>,
+  terms: BTreeMap<String, Scalar>,
 }
 
 impl LinearExpression {
@@ -140,32 +153,32 @@ impl LinearExpression {
     }
   }
 
-  pub fn mut_terms<'t>(&'t mut self) -> &'t mut BTreeMap<Variable, Scalar> {
+  pub fn mut_terms<'t>(&'t mut self) -> &'t mut BTreeMap<String, Scalar> {
     &mut self.terms
   }
   
-  pub fn terms<'t>(&'t self) -> &'t BTreeMap<Variable, Scalar> {
+  pub fn terms<'t>(&'t self) -> &'t BTreeMap<String, Scalar> {
     &self.terms
   }
 
-  pub fn term(variable: Variable, coefficient: Scalar) -> LinearExpression {
+  pub fn term(variable: String, coefficient: Scalar) -> LinearExpression {
     let mut expr = LinearExpression::new();
     expr.set_coefficient(variable, coefficient);
     expr
   }
 
-  pub fn from_constant_and_terms(constant: Scalar, terms: BTreeMap<Variable, Scalar>) -> LinearExpression {
+  pub fn from_constant_and_terms(constant: Scalar, terms: BTreeMap<String, Scalar>) -> LinearExpression {
     LinearExpression{
       constant: constant,
       terms: terms
     }
   }
 
-  pub fn get_coefficient(&self, v: &Variable) -> Scalar {
-    self.terms.get(v).map(|t|{*t}).unwrap_or(0.0)
+  pub fn get_coefficient<'s, 'v>(&'s self, v: &String) -> Scalar {
+    self.terms.get(v).map(|t| *t).unwrap_or(0.0)
   }
 
-  pub fn set_coefficient(&mut self, v: Variable, coefficient: Scalar) {
+  pub fn set_coefficient(&mut self, v: String, coefficient: Scalar) {
     self.terms.insert(v, coefficient);
   }
 
@@ -186,11 +199,11 @@ impl LinearExpression {
 
   pub fn plus_this(&mut self, expr: &LinearExpression) {
     for (name, coef) in expr.terms.iter() {
-      let existing_coef = self.terms.get(&name).map(|c|{*c}).unwrap_or(0.0);
+      let existing_coef = self.terms.get(name).map(|c|{*c}).unwrap_or(0.0);
       let new_coef = existing_coef + *coef;
       if approx_eq(0.0, new_coef) {
         if !approx_eq(0.0, *coef) {
-          self.terms.remove(&name);
+          self.terms.remove(name);
         }
       } else {
         let _ = self.terms.insert(name.clone(), new_coef);
@@ -212,6 +225,11 @@ impl LinearExpression {
     
     self.constant *= scalar;
   }
+
+  pub fn div_this(&mut self, scalar: Scalar) {
+    assert!(!approx_eq(0.0, scalar));
+    self.times_this(1.0/scalar);
+  }
   
   pub fn plus(&self, expr: &LinearExpression) -> LinearExpression {
     let mut new_terms = self.terms.clone();
@@ -231,21 +249,46 @@ impl LinearExpression {
     new
   }
 
+  pub fn minus_this(&mut self, expr: &LinearExpression) {
+    for (name, coef) in expr.terms.iter() {
+      let existing_coef = self.terms.get(name).map(|c|{*c}).unwrap_or(0.0);
+      let new_coef = existing_coef - *coef;
+      if approx_eq(0.0, new_coef) {
+        if !approx_eq(0.0, *coef) {
+          self.terms.remove(name);
+        }
+      } else {
+        let _ = self.terms.insert(name.clone(), new_coef);
+      }
+    }
+
+    self.constant -= expr.constant;
+  }
+
   pub fn div(&self, constant: Scalar) -> LinearExpression {
     assert!(!approx_eq(constant, 0.0));
     self.times(1.0 / constant)
   }
-}
 
-impl From<Variable> for LinearExpression {
-  fn from(var: Variable) -> LinearExpression {
-    LinearExpression::term(var, 1.0)
+  pub fn substitute(&mut self, var: &String, e: &LinearExpression) {
+    let o_coef = self.terms.remove(var);
+    if o_coef.is_none() {
+      return;
+    }
+    let coef = o_coef.unwrap();
+    self.plus_this(&e.times(coef));
   }
 }
 
 impl<'a> From<&'a str> for LinearExpression {
   fn from(var: &'a str) -> LinearExpression {
-    LinearExpression::from(Variable::from(String::from(var)))
+    LinearExpression::from(String::from(var))
+  }
+}
+
+impl<'a> From<String> for LinearExpression {
+  fn from(var: String) -> LinearExpression {
+    LinearExpression::term(var, 1.0)
   }
 }
 
@@ -260,10 +303,10 @@ impl From<Scalar> for LinearExpression {
 
 impl Display for LinearExpression {
   fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
-    let mut terms = vec![];
-    for (ref name, coeff) in self.terms.iter() {
+    let mut terms: Vec<String> = vec![];
+    for (name, coeff) in self.terms.iter() {
       if approx_eq(1.0, *coeff) {
-        terms.push(name.name.clone());
+        terms.push(name.clone());
       } else {
         terms.push(format!("{}{}", coeff, name));
       }
@@ -275,6 +318,7 @@ impl Display for LinearExpression {
   }
 }
 
+#[cfg(test)]
 mod test {
   mod linear_expression {
     use super::super::*;
@@ -286,7 +330,7 @@ mod test {
     #[test]
     fn get_and_set_coefficients() {
       let mut expr = LinearExpression::new();
-      let var = Variable::from(String::from("x"));
+      let var = String::from("x");
       assert!(approx_eq(expr.get_coefficient(&var), 0.0));
       expr.set_coefficient(var.clone(), 42.0);
       assert!(approx_eq(expr.get_coefficient(&var), 42.0));
@@ -305,8 +349,8 @@ mod test {
       let a = 1.0;
       let b = -2.0;
       let c = 7.0;
-      let x1 = Variable::from(String::from("x1"));
-      let x2 = Variable::from(String::from("x2"));
+      let x1 = String::from("x1");
+      let x2 = String::from("x2");
       
       let mut expr = LinearExpression::new();
       expr.set_coefficient(x1.clone(), a);
@@ -333,9 +377,9 @@ mod test {
       let c1 = 3.0;
       let c2 = -4.5;
 
-      let x1 = Variable::from(String::from("x1"));
-      let x2 = Variable::from(String::from("x2"));
-      let x3 = Variable::from(String::from("x3"));
+      let x1 = String::from("x1");
+      let x2 = String::from("x2");
+      let x3 = String::from("x3");
 
       let mut expr1 = LinearExpression::new();
       expr1.set_coefficient(x1.clone(), p);
