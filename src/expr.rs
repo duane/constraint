@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, HashMap, HashSet};
 use std::iter::Iterator;
 use std::fmt::{Display, Formatter, Error};
 use std::mem::swap;
@@ -153,6 +153,44 @@ impl LinearExpression {
     }
   }
 
+  pub fn eval(&self, bindings: &HashMap<String, Scalar>) -> Result<Scalar, String> {
+    let undefined_bindings: HashSet<String> = self.terms.keys().filter(|v|!bindings.contains_key(v.clone())).map(|v|v.clone()).collect();
+    if undefined_bindings.is_empty() {
+      let mut sum = 0.0f64;
+      for (var, coef) in self.terms.iter() {
+        sum += *bindings.get(var).unwrap();
+      }
+      Ok(sum + self.constant)
+    } else {
+      Err(format!("cannot evaluate undefined variables: {:?}", undefined_bindings))
+    }
+  }
+
+  pub fn coefficient_transform<'t, F>(&'t mut self, operation: F)
+    where F : Fn(Scalar) -> Scalar {
+    for (_, value) in self.terms.iter_mut() {
+      *value = operation(*value);
+    }
+    self.constant = operation(self.constant);
+  }
+
+  pub fn coefficient_merge<'a, 'b, F>(&'a mut self, other: &'b LinearExpression, merge_fun: F)
+    where F : Fn(Scalar, Scalar) -> Scalar {
+    for (name, coef) in other.terms.iter() {
+      let existing_coef = self.terms.get(name).map(|c|{*c}).unwrap_or(0.0);
+      let new_coef = merge_fun(existing_coef, *coef);
+      if approx_eq(0.0, new_coef) {
+        if !approx_eq(0.0, *coef) {
+          self.terms.remove(name);
+        }
+      } else {
+        let _ = self.terms.insert(name.clone(), new_coef);
+      }
+    }
+
+    self.constant = merge_fun(self.constant, other.constant);
+  }
+
   pub fn mut_terms<'t>(&'t mut self) -> &'t mut BTreeMap<String, Scalar> {
     &mut self.terms
   }
@@ -198,49 +236,27 @@ impl LinearExpression {
   }
 
   pub fn plus_this(&mut self, expr: &LinearExpression) {
-    for (name, coef) in expr.terms.iter() {
-      let existing_coef = self.terms.get(name).map(|c|{*c}).unwrap_or(0.0);
-      let new_coef = existing_coef + *coef;
-      if approx_eq(0.0, new_coef) {
-        if !approx_eq(0.0, *coef) {
-          self.terms.remove(name);
-        }
-      } else {
-        let _ = self.terms.insert(name.clone(), new_coef);
-      }
-    }
-
-    self.constant += expr.constant;
-    
+    self.coefficient_merge(expr, |a, b| a + b);
   }
 
   pub fn times_this(&mut self, scalar: Scalar) {
     if approx_eq(0.0, scalar) {
       self.terms.clear();
+      self.constant = 0.0;
     } else {
-      for (_, value) in self.terms.iter_mut() {
-        *value *= scalar;
-      }
+      self.coefficient_transform(|a| a * scalar);
     }
-    
-    self.constant *= scalar;
   }
 
   pub fn div_this(&mut self, scalar: Scalar) {
     assert!(!approx_eq(0.0, scalar));
-    self.times_this(1.0/scalar);
+    self.coefficient_transform(|a| a / scalar);
   }
   
   pub fn plus(&self, expr: &LinearExpression) -> LinearExpression {
-    let mut new_terms = self.terms.clone();
-
-    for (name, coef) in expr.terms.iter() {
-      let existing_coef = new_terms.get(name).map(|c|{*c}).unwrap_or(0.0);
-      let _ = new_terms.insert(name.clone(), existing_coef + coef);
-    }
-
-    LinearExpression::from_constant_and_terms(self.constant + expr.constant,
-                                              new_terms)
+    let mut result = self.clone();
+    result.plus_this(expr);
+    result
   }
 
   pub fn minus(&self, expr: &LinearExpression) -> LinearExpression {
@@ -250,19 +266,7 @@ impl LinearExpression {
   }
 
   pub fn minus_this(&mut self, expr: &LinearExpression) {
-    for (name, coef) in expr.terms.iter() {
-      let existing_coef = self.terms.get(name).map(|c|{*c}).unwrap_or(0.0);
-      let new_coef = existing_coef - *coef;
-      if approx_eq(0.0, new_coef) {
-        if !approx_eq(0.0, *coef) {
-          self.terms.remove(name);
-        }
-      } else {
-        let _ = self.terms.insert(name.clone(), new_coef);
-      }
-    }
-
-    self.constant -= expr.constant;
+    self.coefficient_merge(expr, |a, b| a - b);
   }
 
   pub fn div(&self, constant: Scalar) -> LinearExpression {

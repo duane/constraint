@@ -89,16 +89,18 @@ impl Problem {
   }
 
   // lhs <= rhs
-  // 0 >= (rhs - lhs)
-  // 0 == (rhs - lhs) + s_n, 0 <= s_n
+  // lhs + s_n == rhs, 0 <= s_n
+  // 0 == rhs - lhs - s_n, 0 <= s_n
+  // 0 >= (rhs - lhs - + s_n), 0 <= s_n
+  // 0 == (rhs - lhs), 0 <= s_n
   fn convert_leq_to_eq<'s, 'r>(&'s self, lr: &'r mut LinearRelation, namer: &mut Namer) -> Option<String> {
     if lr.op == Relation::LEQ {
       let slack = namer.vend();
+      lr.lhs.plus_this(&LinearExpression::from(slack.as_ref()));
       lr.lhs.times_this(-1.0);
       lr.rhs.plus_this(&lr.lhs);
       lr.lhs = LinearExpression::new(); 
-      
-      lr.rhs.plus_this(&LinearExpression::from(slack.as_ref()));
+
       lr.op = Relation::EQ;
       Some(slack)
     } else {
@@ -157,6 +159,7 @@ impl Problem {
     }
 
     println!("{}", new_f);
+    println!("phase two: {}", new_f);
     println!("subject to:");
     for (v, e) in c_u.iter() {
       println!("{} == {}", v, e);
@@ -236,7 +239,7 @@ impl Problem {
       normalized_constraints.push_back(constraint);
     }
 
-    println!("{}", self.objective);
+    println!("phase one: {}", self.objective);
     println!("subject to:");
     for constraint in normalized_constraints.iter() {
       println!("{}", constraint);
@@ -273,7 +276,7 @@ mod test {
 
   #[test]
   fn test_problem_parse() {
-    let buf = r#"minimize(x_m+-1.0x_l);2x_m==x_l+x_r;x_l+10<=x_r;x_l>=0;x_r<=100"#;
+    let buf = r#"minimize(x_m+-1.0x_l);2x_m==x_l+x_r;x_l+10<=x_r;x_l>=-10;x_r<=100"#;
     let problem = parse_Problem(buf).unwrap();
     println!("before problem: {}", problem);
     println!("");

@@ -9,7 +9,7 @@ impl Namer {
   pub fn init(prefix: &'static str) -> Namer {
     Namer{
       prefix: prefix,
-      count: 0
+      count: 1
     }
   }
 
