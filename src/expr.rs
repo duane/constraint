@@ -158,7 +158,7 @@ impl LinearExpression {
     if undefined_bindings.is_empty() {
       let mut sum = 0.0f64;
       for (var, coef) in self.terms.iter() {
-        sum += *bindings.get(var).unwrap();
+        sum += coef * *bindings.get(var).unwrap();
       }
       Ok(sum + self.constant)
     } else {
@@ -324,88 +324,179 @@ impl Display for LinearExpression {
 
 #[cfg(test)]
 mod test {
-  mod linear_expression {
-    use super::super::*;
-    #[test]
-    fn to_string() {
-      assert_eq!("0", LinearExpression::new().to_string().as_ref() as &str)
-    }
+  use super::*;
+  use std::collections::HashMap;
 
-    #[test]
-    fn get_and_set_coefficients() {
-      let mut expr = LinearExpression::new();
-      let var = String::from("x");
-      assert!(approx_eq(expr.get_coefficient(&var), 0.0));
-      expr.set_coefficient(var.clone(), 42.0);
-      assert!(approx_eq(expr.get_coefficient(&var), 42.0));
-    }
+  #[test]
+  fn to_string() {
+    assert_eq!("0", LinearExpression::new().to_string().as_ref() as &str)
+  }
 
-    #[test]
-    fn get_and_set_constant() {
-      let mut expr = LinearExpression::new();
-      assert!(approx_eq(expr.get_constant(), 0.0));
-      expr.set_constant(-34.0);
-      assert!(approx_eq(expr.get_constant(), -34.0));
-    }
+  #[test]
+  fn get_and_set_coefficients() {
+    let mut expr = LinearExpression::new();
+    let var = String::from("x");
+    assert!(approx_eq(expr.get_coefficient(&var), 0.0));
+    expr.set_coefficient(var.clone(), 42.0);
+    assert!(approx_eq(expr.get_coefficient(&var), 42.0));
+  }
 
-    #[test]
-    fn times_and_div() {
-      let a = 1.0;
-      let b = -2.0;
-      let c = 7.0;
-      let x1 = String::from("x1");
-      let x2 = String::from("x2");
-      
-      let mut expr = LinearExpression::new();
-      expr.set_coefficient(x1.clone(), a);
-      expr.set_coefficient(x2.clone(), b);
-      expr.set_constant(c);
+  #[test]
+  fn get_and_set_constant() {
+    let mut expr = LinearExpression::new();
+    assert!(approx_eq(expr.get_constant(), 0.0));
+    expr.set_constant(-34.0);
+    assert!(approx_eq(expr.get_constant(), -34.0));
+  }
 
-      let times_expr = expr.times(2.0);
-      assert!(approx_eq(times_expr.get_coefficient(&x1), 2.0));
-      assert!(approx_eq(times_expr.get_coefficient(&x2), -4.0));
-      assert!(approx_eq(times_expr.get_constant(), 14.0));
+  #[test]
+  fn times_and_div() {
+    let a = 1.0;
+    let b = -2.0;
+    let c = 7.0;
+    let x1 = String::from("x1");
+    let x2 = String::from("x2");
 
-      let div_expr = expr.div(2.0);
-      assert!(approx_eq(div_expr.get_coefficient(&x1), 0.5));
-      assert!(approx_eq(div_expr.get_coefficient(&x2), -1.0));
-      assert!(approx_eq(div_expr.get_constant(), 3.5));
-    }
+    let mut expr = LinearExpression::new();
+    expr.set_coefficient(x1.clone(), a);
+    expr.set_coefficient(x2.clone(), b);
+    expr.set_constant(c);
 
-    #[test]
-    fn plus_and_minus() {
-      let p = 1.0;
-      let q = -2.0;
-      let r = 3.4;
-      let s = 10.0;
-      let c1 = 3.0;
-      let c2 = -4.5;
+    let times_expr = expr.times(2.0);
+    assert!(approx_eq(times_expr.get_coefficient(&x1), 2.0));
+    assert!(approx_eq(times_expr.get_coefficient(&x2), -4.0));
+    assert!(approx_eq(times_expr.get_constant(), 14.0));
 
-      let x1 = String::from("x1");
-      let x2 = String::from("x2");
-      let x3 = String::from("x3");
+    let div_expr = expr.div(2.0);
+    assert!(approx_eq(div_expr.get_coefficient(&x1), 0.5));
+    assert!(approx_eq(div_expr.get_coefficient(&x2), -1.0));
+    assert!(approx_eq(div_expr.get_constant(), 3.5));
+  }
 
-      let mut expr1 = LinearExpression::new();
-      expr1.set_coefficient(x1.clone(), p);
-      expr1.set_coefficient(x2.clone(), q);
-      expr1.set_constant(c1);
+  #[test]
+  fn plus_and_minus() {
+    let p = 1.0;
+    let q = -2.0;
+    let r = 3.4;
+    let s = 10.0;
+    let c1 = 3.0;
+    let c2 = -4.5;
 
-      let mut expr2 = LinearExpression::new();
-      expr2.set_coefficient(x2.clone(), r);
-      expr2.set_coefficient(x3.clone(), s);
-      expr2.set_constant(c2);
+    let x1 = String::from("x1");
+    let x2 = String::from("x2");
+    let x3 = String::from("x3");
 
-      let add_expr = expr1.plus(&expr2);
-      assert!(approx_eq(add_expr.get_coefficient(&x1), p));
-      assert!(approx_eq(add_expr.get_coefficient(&x2), q + r));
-      assert!(approx_eq(add_expr.get_coefficient(&x3), s));
-      assert!(approx_eq(add_expr.get_constant(), c1 + c2));
+    let mut expr1 = LinearExpression::new();
+    expr1.set_coefficient(x1.clone(), p);
+    expr1.set_coefficient(x2.clone(), q);
+    expr1.set_constant(c1);
 
-      let minus_expr = expr1.minus(&expr2);
-      assert!(approx_eq(minus_expr.get_coefficient(&x1), p));
-      assert!(approx_eq(minus_expr.get_coefficient(&x2), q - r));
-      assert!(approx_eq(minus_expr.get_coefficient(&x3), -s));
-      assert!(approx_eq(minus_expr.get_constant(), c1 - c2));
-    }
+    let mut expr2 = LinearExpression::new();
+    expr2.set_coefficient(x2.clone(), r);
+    expr2.set_coefficient(x3.clone(), s);
+    expr2.set_constant(c2);
+
+    let add_expr = expr1.plus(&expr2);
+    assert!(approx_eq(add_expr.get_coefficient(&x1), p));
+    assert!(approx_eq(add_expr.get_coefficient(&x2), q + r));
+    assert!(approx_eq(add_expr.get_coefficient(&x3), s));
+    assert!(approx_eq(add_expr.get_constant(), c1 + c2));
+
+    let minus_expr = expr1.minus(&expr2);
+    assert!(approx_eq(minus_expr.get_coefficient(&x1), p));
+    assert!(approx_eq(minus_expr.get_coefficient(&x2), q - r));
+    assert!(approx_eq(minus_expr.get_coefficient(&x3), -s));
+    assert!(approx_eq(minus_expr.get_constant(), c1 - c2));
+  }
+
+  #[test]
+  fn eval_zero() {
+    assert!(approx_eq(0.0, LinearExpression::new().eval(&HashMap::new()).unwrap()));
+  }
+
+  #[test]
+  fn eval_constant() {
+    assert!(approx_eq(10.0, LinearExpression::from(10.0).eval(&HashMap::new()).unwrap()));
+  }
+
+  #[test]
+  fn eval_single_term() {
+    let expr = LinearExpression::term(String::from("x"), -2.0);
+    let mut bindings: HashMap<String, Scalar> = HashMap::new();
+    bindings.insert(String::from("x"), -21.0);
+    assert!(approx_eq(42.0, expr.eval(&bindings).unwrap()));
+  }
+
+  #[test]
+  fn eval_multiple_term() {
+    let expr = LinearExpression::term(String::from("x"), -2.0).plus(&LinearExpression::term(String::from("y"), 3.4));
+    let mut bindings: HashMap<String, Scalar> = HashMap::new();
+    bindings.insert(String::from("x"), -21.0);
+    bindings.insert(String::from("y"), -6.0);
+    assert!(approx_eq(21.6, expr.eval(&bindings).unwrap()));
+  }
+
+  #[test]
+  fn eval_terms_and_constant() {
+    let expr = LinearExpression::term(String::from("x"), -2.0).plus(&LinearExpression::term(String::from("y"), 3.4)).plus(&LinearExpression::from(7.2));
+    let mut bindings: HashMap<String, Scalar> = HashMap::new();
+    bindings.insert(String::from("x"), -21.0);
+    bindings.insert(String::from("y"), -6.0);
+    assert!(approx_eq(28.8, expr.eval(&bindings).unwrap()));
+  }
+
+  #[test]
+  fn eval_unbound_val() {
+    assert!(LinearExpression::term(String::from("x"), -2.0).eval(&HashMap::new()).is_err());
+  }
+
+  #[test]
+  fn no_substitute() {
+    let mut expr = LinearExpression::new();
+    expr.substitute(&String::from("x"), &LinearExpression::from(2.0));
+    assert!(approx_eq(0.0, expr.eval(&HashMap::new()).unwrap()));
+    assert!(expr.terms().len() == 0);
+  }
+
+  #[test]
+  fn constant_substitute() {
+    let mut expr = LinearExpression::term(String::from("x"), 2.0).plus(&LinearExpression::term(String::from("y"), -3.0));
+    assert!(expr.terms().len() == 2);
+    expr.substitute(&String::from("x"), &LinearExpression::from(1.2));
+    assert!(expr.terms().len() == 1);
+    let mut bindings: HashMap<String, Scalar> = HashMap::new();
+    bindings.insert(String::from("y"), 1.6);
+    assert!(approx_eq(-2.4, expr.eval(&bindings).unwrap()));
+  }
+
+  #[test]
+  fn replace_substitute() {
+    let mut expr = LinearExpression::term(String::from("x"), 2.0).plus(&LinearExpression::term(String::from("y"), -3.0));
+    assert!(expr.terms().len() == 2);
+    expr.substitute(&String::from("x"), &LinearExpression::term(String::from("z"), -4.0));
+    assert!(expr.terms().len() == 2);
+    assert!(approx_eq(-8.0, expr.get_coefficient(&String::from("z"))));
+    let mut bindings: HashMap<String, Scalar> = HashMap::new();
+    bindings.insert(String::from("z"), 1.3);
+    bindings.insert(String::from("y"), 1.6);
+    assert!(approx_eq(-15.2, expr.eval(&bindings).unwrap()));
+  }
+
+  #[test]
+  fn complicated_substitute() {
+    let mut expr1 = LinearExpression::term(String::from("x"), 2.0).plus(&LinearExpression::term(String::from("y"), -3.0)).plus(&LinearExpression::from(3.0));
+    let expr2 = LinearExpression::term(String::from("w"), -2.5).plus(&LinearExpression::term(String::from("z"), 4.3)).plus(&LinearExpression::from(-10.0));
+    assert!(expr1.terms().len() == 2);
+    expr1.substitute(&String::from("x"), &expr2);
+    assert!(expr1.terms().len() == 3);
+    assert!(approx_eq(8.6, expr1.get_coefficient(&String::from("z"))));
+    assert!(approx_eq(-5.0, expr1.get_coefficient(&String::from("w"))));
+    assert!(approx_eq(-3.0, expr1.get_coefficient(&String::from("y"))));
+    assert!(approx_eq(-17.0, expr1.get_constant()));
+    let mut bindings: HashMap<String, Scalar> = HashMap::new();
+    bindings.insert(String::from("z"), 1.3);
+    bindings.insert(String::from("y"), 1.6);
+    bindings.insert(String::from("w"), -2.7);
+    assert!(approx_eq(2.88, expr1.eval(&bindings).unwrap()));
   }
 }
