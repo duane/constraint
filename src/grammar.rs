@@ -3,6 +3,7 @@
 use std::str::FromStr;
 use expr::{Scalar, LinearExpression, LinearRelation, Relation};
 use problem::{Problem, ProblemObjective};
+use var::Var;
 extern crate lalrpop_util as __lalrpop_util;
 use self::__lalrpop_util::ParseError as __ParseError;
 
@@ -12,6 +13,7 @@ mod __parse__Expression {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
+    use var::Var;
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_Expression<
@@ -42,8 +44,8 @@ mod __parse__Expression {
         _22_2a_22_3f(::std::option::Option<&'input str>),
         _28LINE__SEP_2b_20LinearRelation_29((::std::vec::Vec<&'input str>, LinearRelation)),
         _28LINE__SEP_2b_20LinearRelation_29_2a(::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>),
-        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<String>), &'input str)),
-        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>),
+        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<Var>), &'input str)),
+        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>),
         Expression(LinearExpression),
         LINE__SEP(&'input str),
         LINE__SEP_2b(::std::vec::Vec<&'input str>),
@@ -52,8 +54,8 @@ mod __parse__Expression {
         ProblemObjective(ProblemObjective),
         Relation(Relation),
         Scalar(Scalar),
-        Term((Option<Scalar>, Option<String>)),
-        Variable(String),
+        Term((Option<Scalar>, Option<Var>)),
+        Variable(Var),
         ____Expression(LinearExpression),
         ____LINE__SEP(&'input str),
         ____LinearRelation(LinearRelation),
@@ -61,8 +63,8 @@ mod __parse__Expression {
         ____ProblemObjective(ProblemObjective),
         ____Relation(Relation),
         ____Scalar(Scalar),
-        ____Term((Option<Scalar>, Option<String>)),
-        ____Variable(String),
+        ____Term((Option<Scalar>, Option<Var>)),
+        ____Variable(Var),
     }
 
     // State 0
@@ -154,7 +156,7 @@ mod __parse__Expression {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -250,8 +252,8 @@ mod __parse__Expression {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
-        __sym1: &mut Option<((Option<Scalar>, Option<String>), &'input str)>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
+        __sym1: &mut Option<((Option<Scalar>, Option<Var>), &'input str)>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -352,8 +354,8 @@ mod __parse__Expression {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
-        __sym1: &mut Option<(Option<Scalar>, Option<String>)>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
+        __sym1: &mut Option<(Option<Scalar>, Option<Var>)>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -394,7 +396,7 @@ mod __parse__Expression {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<String>,
+        __sym0: &mut Option<Var>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -598,7 +600,7 @@ mod __parse__Expression {
         input: &'input str,
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
-        __sym0: &mut Option<(Option<Scalar>, Option<String>)>,
+        __sym0: &mut Option<(Option<Scalar>, Option<Var>)>,
         __sym1: &mut Option<&'input str>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
@@ -642,7 +644,7 @@ mod __parse__Expression {
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<Scalar>,
         __sym1: &mut Option<::std::option::Option<&'input str>>,
-        __sym2: &mut Option<String>,
+        __sym2: &mut Option<Var>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -672,6 +674,7 @@ mod __parse__LINE_SEP {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
+    use var::Var;
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_LINE_SEP<
@@ -702,8 +705,8 @@ mod __parse__LINE_SEP {
         _22_2a_22_3f(::std::option::Option<&'input str>),
         _28LINE__SEP_2b_20LinearRelation_29((::std::vec::Vec<&'input str>, LinearRelation)),
         _28LINE__SEP_2b_20LinearRelation_29_2a(::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>),
-        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<String>), &'input str)),
-        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>),
+        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<Var>), &'input str)),
+        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>),
         Expression(LinearExpression),
         LINE__SEP(&'input str),
         LINE__SEP_2b(::std::vec::Vec<&'input str>),
@@ -712,8 +715,8 @@ mod __parse__LINE_SEP {
         ProblemObjective(ProblemObjective),
         Relation(Relation),
         Scalar(Scalar),
-        Term((Option<Scalar>, Option<String>)),
-        Variable(String),
+        Term((Option<Scalar>, Option<Var>)),
+        Variable(Var),
         ____Expression(LinearExpression),
         ____LINE__SEP(&'input str),
         ____LinearRelation(LinearRelation),
@@ -721,8 +724,8 @@ mod __parse__LINE_SEP {
         ____ProblemObjective(ProblemObjective),
         ____Relation(Relation),
         ____Scalar(Scalar),
-        ____Term((Option<Scalar>, Option<String>)),
-        ____Variable(String),
+        ____Term((Option<Scalar>, Option<Var>)),
+        ____Variable(Var),
     }
 
     // State 0
@@ -846,6 +849,7 @@ mod __parse__LinearRelation {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
+    use var::Var;
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_LinearRelation<
@@ -876,8 +880,8 @@ mod __parse__LinearRelation {
         _22_2a_22_3f(::std::option::Option<&'input str>),
         _28LINE__SEP_2b_20LinearRelation_29((::std::vec::Vec<&'input str>, LinearRelation)),
         _28LINE__SEP_2b_20LinearRelation_29_2a(::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>),
-        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<String>), &'input str)),
-        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>),
+        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<Var>), &'input str)),
+        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>),
         Expression(LinearExpression),
         LINE__SEP(&'input str),
         LINE__SEP_2b(::std::vec::Vec<&'input str>),
@@ -886,8 +890,8 @@ mod __parse__LinearRelation {
         ProblemObjective(ProblemObjective),
         Relation(Relation),
         Scalar(Scalar),
-        Term((Option<Scalar>, Option<String>)),
-        Variable(String),
+        Term((Option<Scalar>, Option<Var>)),
+        Variable(Var),
         ____Expression(LinearExpression),
         ____LINE__SEP(&'input str),
         ____LinearRelation(LinearRelation),
@@ -895,8 +899,8 @@ mod __parse__LinearRelation {
         ____ProblemObjective(ProblemObjective),
         ____Relation(Relation),
         ____Scalar(Scalar),
-        ____Term((Option<Scalar>, Option<String>)),
-        ____Variable(String),
+        ____Term((Option<Scalar>, Option<Var>)),
+        ____Variable(Var),
     }
 
     // State 0
@@ -1029,7 +1033,7 @@ mod __parse__LinearRelation {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -1213,8 +1217,8 @@ mod __parse__LinearRelation {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
-        __sym1: &mut Option<((Option<Scalar>, Option<String>), &'input str)>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
+        __sym1: &mut Option<((Option<Scalar>, Option<Var>), &'input str)>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -1345,8 +1349,8 @@ mod __parse__LinearRelation {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
-        __sym1: &mut Option<(Option<Scalar>, Option<String>)>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
+        __sym1: &mut Option<(Option<Scalar>, Option<Var>)>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -1402,7 +1406,7 @@ mod __parse__LinearRelation {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<String>,
+        __sym0: &mut Option<Var>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -1943,7 +1947,7 @@ mod __parse__LinearRelation {
         input: &'input str,
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
-        __sym0: &mut Option<(Option<Scalar>, Option<String>)>,
+        __sym0: &mut Option<(Option<Scalar>, Option<Var>)>,
         __sym1: &mut Option<&'input str>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
@@ -2004,7 +2008,7 @@ mod __parse__LinearRelation {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -2116,7 +2120,7 @@ mod __parse__LinearRelation {
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<Scalar>,
         __sym1: &mut Option<::std::option::Option<&'input str>>,
-        __sym2: &mut Option<String>,
+        __sym2: &mut Option<Var>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -2223,8 +2227,8 @@ mod __parse__LinearRelation {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
-        __sym1: &mut Option<(Option<Scalar>, Option<String>)>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
+        __sym1: &mut Option<(Option<Scalar>, Option<Var>)>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -2265,7 +2269,7 @@ mod __parse__LinearRelation {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<String>,
+        __sym0: &mut Option<Var>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -2436,7 +2440,7 @@ mod __parse__LinearRelation {
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<Scalar>,
         __sym1: &mut Option<::std::option::Option<&'input str>>,
-        __sym2: &mut Option<String>,
+        __sym2: &mut Option<Var>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -2466,6 +2470,7 @@ mod __parse__Problem {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
+    use var::Var;
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_Problem<
@@ -2496,8 +2501,8 @@ mod __parse__Problem {
         _22_2a_22_3f(::std::option::Option<&'input str>),
         _28LINE__SEP_2b_20LinearRelation_29((::std::vec::Vec<&'input str>, LinearRelation)),
         _28LINE__SEP_2b_20LinearRelation_29_2a(::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>),
-        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<String>), &'input str)),
-        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>),
+        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<Var>), &'input str)),
+        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>),
         Expression(LinearExpression),
         LINE__SEP(&'input str),
         LINE__SEP_2b(::std::vec::Vec<&'input str>),
@@ -2506,8 +2511,8 @@ mod __parse__Problem {
         ProblemObjective(ProblemObjective),
         Relation(Relation),
         Scalar(Scalar),
-        Term((Option<Scalar>, Option<String>)),
-        Variable(String),
+        Term((Option<Scalar>, Option<Var>)),
+        Variable(Var),
         ____Expression(LinearExpression),
         ____LINE__SEP(&'input str),
         ____LinearRelation(LinearRelation),
@@ -2515,8 +2520,8 @@ mod __parse__Problem {
         ____ProblemObjective(ProblemObjective),
         ____Relation(Relation),
         ____Scalar(Scalar),
-        ____Term((Option<Scalar>, Option<String>)),
-        ____Variable(String),
+        ____Term((Option<Scalar>, Option<Var>)),
+        ____Variable(Var),
     }
 
     // State 0
@@ -2992,7 +2997,7 @@ mod __parse__Problem {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -3173,7 +3178,7 @@ mod __parse__Problem {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -3419,8 +3424,8 @@ mod __parse__Problem {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
-        __sym1: &mut Option<((Option<Scalar>, Option<String>), &'input str)>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
+        __sym1: &mut Option<((Option<Scalar>, Option<Var>), &'input str)>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -3521,8 +3526,8 @@ mod __parse__Problem {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
-        __sym1: &mut Option<(Option<Scalar>, Option<String>)>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
+        __sym1: &mut Option<(Option<Scalar>, Option<Var>)>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -3563,7 +3568,7 @@ mod __parse__Problem {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<String>,
+        __sym0: &mut Option<Var>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -3857,8 +3862,8 @@ mod __parse__Problem {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
-        __sym1: &mut Option<(Option<Scalar>, Option<String>)>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
+        __sym1: &mut Option<(Option<Scalar>, Option<Var>)>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -3914,7 +3919,7 @@ mod __parse__Problem {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<String>,
+        __sym0: &mut Option<Var>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -4528,7 +4533,7 @@ mod __parse__Problem {
         input: &'input str,
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
-        __sym0: &mut Option<(Option<Scalar>, Option<String>)>,
+        __sym0: &mut Option<(Option<Scalar>, Option<Var>)>,
         __sym1: &mut Option<&'input str>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
@@ -4655,7 +4660,7 @@ mod __parse__Problem {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -4884,7 +4889,7 @@ mod __parse__Problem {
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<Scalar>,
         __sym1: &mut Option<::std::option::Option<&'input str>>,
-        __sym2: &mut Option<String>,
+        __sym2: &mut Option<Var>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -4933,7 +4938,7 @@ mod __parse__Problem {
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<Scalar>,
         __sym1: &mut Option<::std::option::Option<&'input str>>,
-        __sym2: &mut Option<String>,
+        __sym2: &mut Option<Var>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -5046,8 +5051,8 @@ mod __parse__Problem {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
-        __sym1: &mut Option<(Option<Scalar>, Option<String>)>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
+        __sym1: &mut Option<(Option<Scalar>, Option<Var>)>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -5091,7 +5096,7 @@ mod __parse__Problem {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<String>,
+        __sym0: &mut Option<Var>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -5310,7 +5315,7 @@ mod __parse__Problem {
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<Scalar>,
         __sym1: &mut Option<::std::option::Option<&'input str>>,
-        __sym2: &mut Option<String>,
+        __sym2: &mut Option<Var>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -5341,6 +5346,7 @@ mod __parse__ProblemObjective {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
+    use var::Var;
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_ProblemObjective<
@@ -5371,8 +5377,8 @@ mod __parse__ProblemObjective {
         _22_2a_22_3f(::std::option::Option<&'input str>),
         _28LINE__SEP_2b_20LinearRelation_29((::std::vec::Vec<&'input str>, LinearRelation)),
         _28LINE__SEP_2b_20LinearRelation_29_2a(::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>),
-        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<String>), &'input str)),
-        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>),
+        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<Var>), &'input str)),
+        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>),
         Expression(LinearExpression),
         LINE__SEP(&'input str),
         LINE__SEP_2b(::std::vec::Vec<&'input str>),
@@ -5381,8 +5387,8 @@ mod __parse__ProblemObjective {
         ProblemObjective(ProblemObjective),
         Relation(Relation),
         Scalar(Scalar),
-        Term((Option<Scalar>, Option<String>)),
-        Variable(String),
+        Term((Option<Scalar>, Option<Var>)),
+        Variable(Var),
         ____Expression(LinearExpression),
         ____LINE__SEP(&'input str),
         ____LinearRelation(LinearRelation),
@@ -5390,8 +5396,8 @@ mod __parse__ProblemObjective {
         ____ProblemObjective(ProblemObjective),
         ____Relation(Relation),
         ____Scalar(Scalar),
-        ____Term((Option<Scalar>, Option<String>)),
-        ____Variable(String),
+        ____Term((Option<Scalar>, Option<Var>)),
+        ____Variable(Var),
     }
 
     // State 0
@@ -5634,7 +5640,7 @@ mod __parse__ProblemObjective {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -5766,8 +5772,8 @@ mod __parse__ProblemObjective {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
-        __sym1: &mut Option<((Option<Scalar>, Option<String>), &'input str)>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
+        __sym1: &mut Option<((Option<Scalar>, Option<Var>), &'input str)>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -5868,8 +5874,8 @@ mod __parse__ProblemObjective {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>>,
-        __sym1: &mut Option<(Option<Scalar>, Option<String>)>,
+        __sym0: &mut Option<::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>>,
+        __sym1: &mut Option<(Option<Scalar>, Option<Var>)>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -5910,7 +5916,7 @@ mod __parse__ProblemObjective {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<String>,
+        __sym0: &mut Option<Var>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -6194,7 +6200,7 @@ mod __parse__ProblemObjective {
         input: &'input str,
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
-        __sym0: &mut Option<(Option<Scalar>, Option<String>)>,
+        __sym0: &mut Option<(Option<Scalar>, Option<Var>)>,
         __sym1: &mut Option<&'input str>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
@@ -6238,7 +6244,7 @@ mod __parse__ProblemObjective {
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<Scalar>,
         __sym1: &mut Option<::std::option::Option<&'input str>>,
-        __sym2: &mut Option<String>,
+        __sym2: &mut Option<Var>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -6268,6 +6274,7 @@ mod __parse__Relation {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
+    use var::Var;
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_Relation<
@@ -6298,8 +6305,8 @@ mod __parse__Relation {
         _22_2a_22_3f(::std::option::Option<&'input str>),
         _28LINE__SEP_2b_20LinearRelation_29((::std::vec::Vec<&'input str>, LinearRelation)),
         _28LINE__SEP_2b_20LinearRelation_29_2a(::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>),
-        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<String>), &'input str)),
-        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>),
+        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<Var>), &'input str)),
+        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>),
         Expression(LinearExpression),
         LINE__SEP(&'input str),
         LINE__SEP_2b(::std::vec::Vec<&'input str>),
@@ -6308,8 +6315,8 @@ mod __parse__Relation {
         ProblemObjective(ProblemObjective),
         Relation(Relation),
         Scalar(Scalar),
-        Term((Option<Scalar>, Option<String>)),
-        Variable(String),
+        Term((Option<Scalar>, Option<Var>)),
+        Variable(Var),
         ____Expression(LinearExpression),
         ____LINE__SEP(&'input str),
         ____LinearRelation(LinearRelation),
@@ -6317,8 +6324,8 @@ mod __parse__Relation {
         ____ProblemObjective(ProblemObjective),
         ____Relation(Relation),
         ____Scalar(Scalar),
-        ____Term((Option<Scalar>, Option<String>)),
-        ____Variable(String),
+        ____Term((Option<Scalar>, Option<Var>)),
+        ____Variable(Var),
     }
 
     // State 0
@@ -6657,6 +6664,7 @@ mod __parse__Scalar {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
+    use var::Var;
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_Scalar<
@@ -6687,8 +6695,8 @@ mod __parse__Scalar {
         _22_2a_22_3f(::std::option::Option<&'input str>),
         _28LINE__SEP_2b_20LinearRelation_29((::std::vec::Vec<&'input str>, LinearRelation)),
         _28LINE__SEP_2b_20LinearRelation_29_2a(::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>),
-        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<String>), &'input str)),
-        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>),
+        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<Var>), &'input str)),
+        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>),
         Expression(LinearExpression),
         LINE__SEP(&'input str),
         LINE__SEP_2b(::std::vec::Vec<&'input str>),
@@ -6697,8 +6705,8 @@ mod __parse__Scalar {
         ProblemObjective(ProblemObjective),
         Relation(Relation),
         Scalar(Scalar),
-        Term((Option<Scalar>, Option<String>)),
-        Variable(String),
+        Term((Option<Scalar>, Option<Var>)),
+        Variable(Var),
         ____Expression(LinearExpression),
         ____LINE__SEP(&'input str),
         ____LinearRelation(LinearRelation),
@@ -6706,8 +6714,8 @@ mod __parse__Scalar {
         ____ProblemObjective(ProblemObjective),
         ____Relation(Relation),
         ____Scalar(Scalar),
-        ____Term((Option<Scalar>, Option<String>)),
-        ____Variable(String),
+        ____Term((Option<Scalar>, Option<Var>)),
+        ____Variable(Var),
     }
 
     // State 0
@@ -6831,13 +6839,14 @@ mod __parse__Term {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
+    use var::Var;
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_Term<
         'input,
     >(
         input: &'input str,
-    ) -> Result<(Option<Scalar>, Option<String>), __ParseError<usize,(usize, &'input str),()>>
+    ) -> Result<(Option<Scalar>, Option<Var>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __tokens = super::__intern_token::__Matcher::new(input);
         let __lookahead = match __tokens.next() {
@@ -6861,8 +6870,8 @@ mod __parse__Term {
         _22_2a_22_3f(::std::option::Option<&'input str>),
         _28LINE__SEP_2b_20LinearRelation_29((::std::vec::Vec<&'input str>, LinearRelation)),
         _28LINE__SEP_2b_20LinearRelation_29_2a(::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>),
-        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<String>), &'input str)),
-        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>),
+        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<Var>), &'input str)),
+        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>),
         Expression(LinearExpression),
         LINE__SEP(&'input str),
         LINE__SEP_2b(::std::vec::Vec<&'input str>),
@@ -6871,8 +6880,8 @@ mod __parse__Term {
         ProblemObjective(ProblemObjective),
         Relation(Relation),
         Scalar(Scalar),
-        Term((Option<Scalar>, Option<String>)),
-        Variable(String),
+        Term((Option<Scalar>, Option<Var>)),
+        Variable(Var),
         ____Expression(LinearExpression),
         ____LINE__SEP(&'input str),
         ____LinearRelation(LinearRelation),
@@ -6880,8 +6889,8 @@ mod __parse__Term {
         ____ProblemObjective(ProblemObjective),
         ____Relation(Relation),
         ____Scalar(Scalar),
-        ____Term((Option<Scalar>, Option<String>)),
-        ____Variable(String),
+        ____Term((Option<Scalar>, Option<Var>)),
+        ____Variable(Var),
     }
 
     // State 0
@@ -7024,7 +7033,7 @@ mod __parse__Term {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(Option<Scalar>, Option<String>)>,
+        __sym0: &mut Option<(Option<Scalar>, Option<Var>)>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -7056,7 +7065,7 @@ mod __parse__Term {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<String>,
+        __sym0: &mut Option<Var>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -7252,7 +7261,7 @@ mod __parse__Term {
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<Scalar>,
         __sym1: &mut Option<::std::option::Option<&'input str>>,
-        __sym2: &mut Option<String>,
+        __sym2: &mut Option<Var>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -7281,13 +7290,14 @@ mod __parse__Variable {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
+    use var::Var;
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_Variable<
         'input,
     >(
         input: &'input str,
-    ) -> Result<String, __ParseError<usize,(usize, &'input str),()>>
+    ) -> Result<Var, __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __tokens = super::__intern_token::__Matcher::new(input);
         let __lookahead = match __tokens.next() {
@@ -7311,8 +7321,8 @@ mod __parse__Variable {
         _22_2a_22_3f(::std::option::Option<&'input str>),
         _28LINE__SEP_2b_20LinearRelation_29((::std::vec::Vec<&'input str>, LinearRelation)),
         _28LINE__SEP_2b_20LinearRelation_29_2a(::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>),
-        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<String>), &'input str)),
-        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>),
+        _28Term_20_22_2b_22_29(((Option<Scalar>, Option<Var>), &'input str)),
+        _28Term_20_22_2b_22_29_2a(::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>),
         Expression(LinearExpression),
         LINE__SEP(&'input str),
         LINE__SEP_2b(::std::vec::Vec<&'input str>),
@@ -7321,8 +7331,8 @@ mod __parse__Variable {
         ProblemObjective(ProblemObjective),
         Relation(Relation),
         Scalar(Scalar),
-        Term((Option<Scalar>, Option<String>)),
-        Variable(String),
+        Term((Option<Scalar>, Option<Var>)),
+        Variable(Var),
         ____Expression(LinearExpression),
         ____LINE__SEP(&'input str),
         ____LinearRelation(LinearRelation),
@@ -7330,8 +7340,8 @@ mod __parse__Variable {
         ____ProblemObjective(ProblemObjective),
         ____Relation(Relation),
         ____Scalar(Scalar),
-        ____Term((Option<Scalar>, Option<String>)),
-        ____Variable(String),
+        ____Term((Option<Scalar>, Option<Var>)),
+        ____Variable(Var),
     }
 
     // State 0
@@ -7392,7 +7402,7 @@ mod __parse__Variable {
         __lookbehind: Option<usize>,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<String>,
+        __sym0: &mut Option<Var>,
     ) -> Result<(Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<usize>, Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -13573,8 +13583,8 @@ pub fn __action1<
     'input,
 >(
     input: &'input str,
-    __0: String,
-) -> String
+    __0: Var,
+) -> Var
 {
     (__0)
 }
@@ -13583,8 +13593,8 @@ pub fn __action2<
     'input,
 >(
     input: &'input str,
-    __0: (Option<Scalar>, Option<String>),
-) -> (Option<Scalar>, Option<String>)
+    __0: (Option<Scalar>, Option<Var>),
+) -> (Option<Scalar>, Option<Var>)
 {
     (__0)
 }
@@ -13664,9 +13674,9 @@ pub fn __action10<
 >(
     input: &'input str,
     s: &'input str,
-) -> String
+) -> Var
 {
-    String::from(s)
+    Var::from(s)
 }
 
 pub fn __action11<
@@ -13674,7 +13684,7 @@ pub fn __action11<
 >(
     input: &'input str,
     s: Scalar,
-) -> (Option<Scalar>, Option<String>)
+) -> (Option<Scalar>, Option<Var>)
 {
     (Some(s), None)
 }
@@ -13683,8 +13693,8 @@ pub fn __action12<
     'input,
 >(
     input: &'input str,
-    v: String,
-) -> (Option<Scalar>, Option<String>)
+    v: Var,
+) -> (Option<Scalar>, Option<Var>)
 {
     (None, Some(v))
 }
@@ -13695,8 +13705,8 @@ pub fn __action13<
     input: &'input str,
     s: Scalar,
     _: ::std::option::Option<&'input str>,
-    v: String,
-) -> (Option<Scalar>, Option<String>)
+    v: Var,
+) -> (Option<Scalar>, Option<Var>)
 {
     (Some(s), Some(v))
 }
@@ -13705,13 +13715,13 @@ pub fn __action14<
     'input,
 >(
     input: &'input str,
-    e: ::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>,
-    u: (Option<Scalar>, Option<String>),
+    e: ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>,
+    u: (Option<Scalar>, Option<Var>),
 ) -> LinearExpression
 {
     {
     let mut expr = LinearExpression::new();
-    let mut terms: Vec<(Option<Scalar>, Option<String>)> = e.into_iter().map(|t| t.0).collect();
+    let mut terms: Vec<(Option<Scalar>, Option<Var>)> = e.into_iter().map(|t| t.0).collect();
     terms.push(u);
     for (scalar, var) in terms.into_iter() {
       let term = match (scalar, var) {
@@ -13905,7 +13915,7 @@ pub fn __action31<
     'input,
 >(
     input: &'input str,
-) -> ::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>
+) -> ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>
 {
     vec![]
 }
@@ -13914,9 +13924,9 @@ pub fn __action32<
     'input,
 >(
     input: &'input str,
-    v: ::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>,
-    e: ((Option<Scalar>, Option<String>), &'input str),
-) -> ::std::vec::Vec<((Option<Scalar>, Option<String>), &'input str)>
+    v: ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>,
+    e: ((Option<Scalar>, Option<Var>), &'input str),
+) -> ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>
 {
     { let mut v = v; v.push(e); v }
 }
@@ -13925,9 +13935,9 @@ pub fn __action33<
     'input,
 >(
     input: &'input str,
-    __0: (Option<Scalar>, Option<String>),
+    __0: (Option<Scalar>, Option<Var>),
     __1: &'input str,
-) -> ((Option<Scalar>, Option<String>), &'input str)
+) -> ((Option<Scalar>, Option<Var>), &'input str)
 {
     (__0, __1)
 }

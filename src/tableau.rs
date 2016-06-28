@@ -7,6 +7,8 @@ use prettytable::Table;
 use prettytable::row::Row;
 use prettytable::cell::Cell;
 
+use var::Var;
+
 pub const TABLEAU_OBJECTIVE_VARIABLE: &'static str = "z";
 
 pub enum ProblemDirection {
@@ -16,9 +18,9 @@ pub enum ProblemDirection {
 
 pub struct Tableau {
   direction: ProblemDirection,
-  rows: HashMap<String, LinearExpression>,
-  columns: HashMap<String, HashSet<String>>,
-  restricted: HashSet<String>
+  rows: HashMap<Var, LinearExpression>,
+  columns: HashMap<Var, HashSet<Var>>,
+  restricted: HashSet<Var>
 }
 
 impl Tableau {
@@ -46,7 +48,7 @@ impl Tableau {
       columns: HashMap::new(),
       restricted: HashSet::new(),
     };
-    t.rows.insert(String::from(TABLEAU_OBJECTIVE_VARIABLE), LinearExpression::new());
+    t.rows.insert(Var::from(TABLEAU_OBJECTIVE_VARIABLE), LinearExpression::new());
     t
   }
 
@@ -68,8 +70,8 @@ impl Tableau {
   /// ```
   pub fn get_objective<'s>(&'s self) -> ProblemObjective {
     match self.direction {
-      ProblemDirection::Maximize => ProblemObjective::Maximize(self.rows.get(TABLEAU_OBJECTIVE_VARIABLE).unwrap().clone()),
-      ProblemDirection::Minimize => ProblemObjective::Minimize(self.rows.get(TABLEAU_OBJECTIVE_VARIABLE).unwrap().clone())
+      ProblemDirection::Maximize => ProblemObjective::Maximize(self.rows.get(&Var::from(TABLEAU_OBJECTIVE_VARIABLE)).unwrap().clone()),
+      ProblemDirection::Minimize => ProblemObjective::Minimize(self.rows.get(&Var::from(TABLEAU_OBJECTIVE_VARIABLE)).unwrap().clone())
     }
   }
 
@@ -83,22 +85,23 @@ impl Tableau {
   /// use constraint::expr::{approx_eq, LinearExpression};
   /// use constraint::tableau::Tableau;
   /// use constraint::problem::ProblemObjective;
+  /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   tableau.set_objective(ProblemObjective::Maximize(LinearExpression::from(String::from("x"))));
-  ///   assert!(approx_eq(1.0, tableau.get_objective().get_expr().get_coefficient(&String::from("x"))));
+  ///   tableau.set_objective(ProblemObjective::Maximize(LinearExpression::from(Var::from("x"))));
+  ///   assert!(approx_eq(1.0, tableau.get_objective().get_expr().get_coefficient(&Var::from("x"))));
   /// }
   /// ```
   pub fn set_objective(&mut self, f: ProblemObjective) {
     match f {
       ProblemObjective::Maximize(e) => {
         self.direction = ProblemDirection::Maximize;
-        self.rows.insert(String::from(TABLEAU_OBJECTIVE_VARIABLE), e);
+        self.rows.insert(Var::from(TABLEAU_OBJECTIVE_VARIABLE), e);
       }
       ProblemObjective::Minimize(e) => {
         self.direction = ProblemDirection::Minimize;
-        self.rows.insert(String::from(TABLEAU_OBJECTIVE_VARIABLE), e);
+        self.rows.insert(Var::from(TABLEAU_OBJECTIVE_VARIABLE), e);
       }
     }
   }
@@ -112,15 +115,16 @@ impl Tableau {
   /// extern crate constraint;
   /// use constraint::expr::LinearExpression;
   /// use constraint::tableau::Tableau;
+  /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(String::from("x"), LinearExpression::from(String::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   assert!(tableau.is_basic(&String::from("x")));
-  ///   assert!(!tableau.is_basic(&String::from("s1")));
+  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.is_basic(&Var::from("x")));
+  ///   assert!(!tableau.is_basic(&Var::from("s1")));
   /// }
   /// ```
-  pub fn is_basic(&self, var: &String) -> bool {
+  pub fn is_basic(&self, var: &Var) -> bool {
     self.rows.contains_key(var)
   }
 
@@ -133,15 +137,17 @@ impl Tableau {
   /// extern crate constraint;
   /// use constraint::expr::LinearExpression;
   /// use constraint::tableau::Tableau;
+  /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(String::from("x"), LinearExpression::from(String::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   assert!(!tableau.is_parametric(&String::from("x")));
-  ///   assert!(tableau.is_parametric(&String::from("s1")));
+  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(!tableau.is_parametric(&Var::from("x")));
+  ///   assert!(tableau.is_parametric(&Var::from("s1")));
+  ///   assert!(!tableau.is_parametric(&Var::from("c")));
   /// }
   /// ```
-  pub fn is_parametric(&self, var: &String) -> bool {
+  pub fn is_parametric(&self, var: &Var) -> bool {
     self.columns.contains_key(var)
   }
 
@@ -154,16 +160,17 @@ impl Tableau {
   /// extern crate constraint;
   /// use constraint::expr::{approx_eq, LinearExpression};
   /// use constraint::tableau::Tableau;
+  /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(String::from("x"), LinearExpression::from(String::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   let basic = tableau.get_basic(&String::from("x")).unwrap();
-  ///   assert!(approx_eq(1.0, basic.get_coefficient(&String::from("s1"))));
+  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   let basic = tableau.get_basic(&Var::from("x")).unwrap();
+  ///   assert!(approx_eq(1.0, basic.get_coefficient(&Var::from("s1"))));
   ///   assert!(approx_eq(10.0, basic.get_constant()));
   /// }
   /// ```
-  pub fn get_basic<'s>(&'s self, var: &String) -> Option<&'s LinearExpression> {
+  pub fn get_basic<'s>(&'s self, var: &Var) -> Option<&'s LinearExpression> {
     self.rows.get(var)
   }
 
@@ -176,17 +183,41 @@ impl Tableau {
   /// extern crate constraint;
   /// use constraint::expr::LinearExpression;
   /// use constraint::tableau::Tableau;
+  /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(String::from("x"), LinearExpression::from(String::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   let keys: Vec<String> = tableau.parametric_vars_iter().map(|s|s.clone()).collect();
+  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   let keys: Vec<Var> = tableau.parametric_vars_iter().map(|s|s.clone()).collect();
   ///   assert_eq!(1, keys.len());
-  ///   assert_eq!(keys[0], String::from("s1"));
+  ///   assert_eq!(keys[0], Var::from("s1"));
   /// }
   /// ```
-  pub fn parametric_vars_iter<'s>(&'s self) -> hash_map::Keys<'s, String, HashSet<String>> {
+  pub fn parametric_vars_iter<'s>(&'s self) -> hash_map::Keys<'s, Var, HashSet<Var>> {
     self.columns.keys()
+  }
+
+  ///
+  /// Get an the parametric vars in a set.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::LinearExpression;
+  /// use constraint::tableau::Tableau;
+  /// use constraint::var::Var;
+  ///
+  /// fn main() {
+  ///   let mut tableau = Tableau::new();
+  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   let keys: Vec<Var> = tableau.parametric_vars_iter().map(|s|s.clone()).collect();
+  ///   assert_eq!(1, keys.len());
+  ///   assert_eq!(keys[0], Var::from("s1"));
+  /// }
+  /// ```
+  pub fn get_parametric_vars(&self) -> HashSet<Var> {
+    self.parametric_vars_iter().map(|s|s.clone()).collect()
   }
 
   ///
@@ -198,22 +229,23 @@ impl Tableau {
   /// extern crate constraint;
   /// use constraint::expr::LinearExpression;
   /// use constraint::tableau::Tableau;
+  /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(String::from("x"), LinearExpression::from(String::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   let vars = tableau.get_basic_vars_for_param(&String::from("s1")).unwrap();
+  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   let vars = tableau.get_basic_vars_for_param(&Var::from("s1")).unwrap();
   ///   assert_eq!(1, vars.len());
   ///   for var in vars.iter() {
-  ///     assert_eq!(var, &String::from("x"));
+  ///     assert_eq!(var, &Var::from("x"));
   ///   }
   /// }
   /// ```
-  pub fn get_basic_vars_for_param<'s>(&'s self, var: &String) -> Option<&'s HashSet<String>> {
+  pub fn get_basic_vars_for_param<'s>(&'s self, var: &Var) -> Option<&'s HashSet<Var>> {
     self.columns.get(var)
   }
 
-  fn note_added_variable(&mut self, basic: &String, parametric: &String) -> Result<(), String> {
+  fn note_added_variable(&mut self, basic: &Var, parametric: &Var) -> Result<(), Var> {
     if self.columns.contains_key(parametric) {
       self.columns.get_mut(parametric).unwrap().insert(basic.clone());
     } else {
@@ -224,7 +256,7 @@ impl Tableau {
     Ok(())
   }
 
-  fn note_removed_variable(&mut self, basic: &String, parametric: &String) -> Result<(), String> {
+  fn note_removed_variable(&mut self, basic: &Var, parametric: &Var) -> Result<(), Var> {
     if !self.columns.contains_key(parametric) {
       return Ok(());
     }
@@ -248,18 +280,19 @@ impl Tableau {
   /// extern crate constraint;
   /// use constraint::expr::{approx_eq, LinearExpression};
   /// use constraint::tableau::Tableau;
+  /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(String::from("x"), LinearExpression::from(String::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   let basic = tableau.get_basic(&String::from("x")).unwrap();
-  ///   assert!(approx_eq(1.0, basic.get_coefficient(&String::from("s1"))));
+  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   let basic = tableau.get_basic(&Var::from("x")).unwrap();
+  ///   assert!(approx_eq(1.0, basic.get_coefficient(&Var::from("s1"))));
   ///   assert!(approx_eq(10.0, basic.get_constant()));
   /// }
   /// ```
-  pub fn add_row(&mut self, var: String, e: LinearExpression, restricted: bool) -> Result<(), String> {
+  pub fn add_row(&mut self, var: Var, e: LinearExpression, restricted: bool) -> Result<(), String> {
     assert!(!self.rows.contains_key(&var));
-    let vars: HashSet<String> = e.terms().keys().map(|s| s.clone()).collect();
+    let vars: HashSet<Var> = e.terms().keys().map(|s| s.clone()).collect();
     self.rows.insert(var.clone(), e);
     for parameter in vars.iter() {
       self.note_added_variable(&var, parameter).unwrap();
@@ -279,22 +312,23 @@ impl Tableau {
   /// extern crate constraint;
   /// use constraint::expr::{approx_eq, LinearExpression};
   /// use constraint::tableau::Tableau;
+  /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(String::from("x"), LinearExpression::from(String::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
   ///   {
-  ///     let basic = tableau.get_basic(&String::from("x")).unwrap();
-  ///     assert!(approx_eq(1.0, basic.get_coefficient(&String::from("s1"))));
+  ///     let basic = tableau.get_basic(&Var::from("x")).unwrap();
+  ///     assert!(approx_eq(1.0, basic.get_coefficient(&Var::from("s1"))));
   ///     assert!(approx_eq(10.0, basic.get_constant()));
   ///   }
-  ///   assert!(tableau.remove_row(&String::from("x")).is_ok());
-  ///   assert!(tableau.get_basic(&String::from("x")).is_none());
+  ///   assert!(tableau.remove_row(&Var::from("x")).is_ok());
+  ///   assert!(tableau.get_basic(&Var::from("x")).is_none());
   /// }
   /// ```
-  pub fn remove_row(&mut self, var: &String) -> Result<(), String> {
+  pub fn remove_row(&mut self, var: &Var) -> Result<(), String> {
     for e in self.rows.remove(var) {
-      let vars: HashSet<&String> = e.terms().keys().collect();
+      let vars: HashSet<&Var> = e.terms().keys().collect();
       for parameter in vars {
         let _ = self.note_removed_variable(var, parameter);
       }
@@ -303,7 +337,7 @@ impl Tableau {
     Ok(())
   }
 
-  fn remove_parameter(&mut self, var: &String) -> Result<(), String> {
+  fn remove_parameter(&mut self, var: &Var) -> Result<(), String> {
     Err(String::from("Dunno what to do"))
   }
 
@@ -316,17 +350,18 @@ impl Tableau {
   /// extern crate constraint;
   /// use constraint::expr::{approx_eq, LinearExpression};
   /// use constraint::tableau::Tableau;
+  /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(String::from("x"), LinearExpression::from(String::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   assert!(tableau.substitute(&String::from("s1"), &LinearExpression::from(-8.0)).is_ok());
-  ///   let basic = tableau.get_basic(&String::from("x")).unwrap();
-  ///   assert!(approx_eq(0.0, basic.get_coefficient(&String::from("s1"))));
+  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.substitute(&Var::from("s1"), &LinearExpression::from(-8.0)).is_ok());
+  ///   let basic = tableau.get_basic(&Var::from("x")).unwrap();
+  ///   assert!(approx_eq(0.0, basic.get_coefficient(&Var::from("s1"))));
   ///   assert!(approx_eq(2.0, basic.get_constant()));
   /// }
   /// ```
-  pub fn substitute(&mut self, var: &String, e: &LinearExpression) -> Result<(), String> {
+  pub fn substitute(&mut self, var: &Var, e: &LinearExpression) -> Result<(), String> {
     for (_, row_expr) in self.rows.iter_mut() {
       row_expr.substitute(var, e);
     }
@@ -342,23 +377,24 @@ impl Tableau {
   /// extern crate constraint;
   /// use constraint::expr::{approx_eq, LinearExpression};
   /// use constraint::tableau::Tableau;
+  /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(String::from("x"),
-  ///           LinearExpression::from(String::from("s1")).
+  ///   assert!(tableau.add_row(Var::from("x"),
+  ///           LinearExpression::from(Var::from("s1")).
   ///             plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   assert!(tableau.add_row(String::from("y"),
-  ///           LinearExpression::from(String::from("s1")).
-  ///             plus(&LinearExpression::term(String::from("s2"), 5.2)).
+  ///   assert!(tableau.add_row(Var::from("y"),
+  ///           LinearExpression::from(Var::from("s1")).
+  ///             plus(&LinearExpression::term(Var::from("s2"), 5.2)).
   ///             plus(&LinearExpression::from(-72.3)), false).is_ok());
   ///   let solution = tableau.get_basic_feasible_solution();
   ///   assert_eq!(solution.len(), 5); // two basics + two parameters + the objective variable.
-  ///   assert!(approx_eq(10.0, *solution.get(&String::from("x")).unwrap()));
-  ///   assert!(approx_eq(-72.3, *solution.get(&String::from("y")).unwrap()));
+  ///   assert!(approx_eq(10.0, *solution.get(&Var::from("x")).unwrap()));
+  ///   assert!(approx_eq(-72.3, *solution.get(&Var::from("y")).unwrap()));
   /// }
   /// ```
-  pub fn get_basic_feasible_solution(&self) -> HashMap<String, Scalar> {
+  pub fn get_basic_feasible_solution(&self) -> HashMap<Var, Scalar> {
     let basic_bindings = self.rows.iter().map(|(k,v)|(k.clone(), v.get_constant()));
     let parametric_bindings = self.columns.keys().map(|k|(k.clone(), 0.0));
     basic_bindings.chain(parametric_bindings).collect()
@@ -368,9 +404,9 @@ impl Tableau {
   /// Print the tableau to stdout prettily.
   ///
   pub fn print(&self) {
-    let basic_vars: BTreeSet<String> = self.rows.keys().map(|c|c.clone()).collect();
-    let parametric_vars: BTreeSet<String> = self.columns.keys().map(|c|c.clone()).collect();
-    let header_row: Vec<Cell> = vec![String::from(""), String::from("c")].iter().chain(parametric_vars.iter()).map(|s|Cell::from(s)).collect();
+    let basic_vars: BTreeSet<Var> = self.rows.keys().map(|c|c.clone()).collect();
+    let parametric_vars: BTreeSet<Var> = self.columns.keys().map(|c|c.clone()).collect();
+    let header_row: Vec<Cell> = vec![Var::from(""), Var::from("c")].iter().chain(parametric_vars.iter()).map(|s|Cell::from(s)).collect();
     let mut table = Table::new();
     table.add_row(Row::new(header_row));
 

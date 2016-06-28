@@ -3,6 +3,7 @@ use std::fmt::{Display, Error, Formatter};
 use std::collections::{HashMap, HashSet, LinkedList};
 use state::*;
 use tableau::*;
+use var::*;
 
 #[derive(Clone)]
 pub enum ProblemObjective {
@@ -20,10 +21,11 @@ impl ProblemObjective {
   /// extern crate constraint;
   /// use constraint::expr::{approx_eq, LinearExpression};
   /// use constraint::problem::ProblemObjective;
+  /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let objective = ProblemObjective::Minimize(LinearExpression::from(String::from("x")));
-  ///   assert!(approx_eq(1.0, objective.get_expr().get_coefficient(&String::from("x"))));
+  ///   let objective = ProblemObjective::Minimize(LinearExpression::from(Var::from("x")));
+  ///   assert!(approx_eq(1.0, objective.get_expr().get_coefficient(&Var::from("x"))));
   ///   assert!(approx_eq(0.0, objective.get_expr().get_constant()));
   /// }
   /// ```
@@ -43,12 +45,13 @@ impl ProblemObjective {
   /// extern crate constraint;
   /// use constraint::expr::{approx_eq, LinearExpression};
   /// use constraint::problem::ProblemObjective;
+  /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut objective = ProblemObjective::Minimize(LinearExpression::new());
-  ///   assert!(approx_eq(0.0, objective.get_expr().get_coefficient(&String::from("x"))));
-  ///   objective.set_expr(LinearExpression::from(String::from("x")));
-  ///   assert!(approx_eq(1.0, objective.get_expr().get_coefficient(&String::from("x"))));
+  ///   assert!(approx_eq(0.0, objective.get_expr().get_coefficient(&Var::from("x"))));
+  ///   objective.set_expr(LinearExpression::from(Var::from("x")));
+  ///   assert!(approx_eq(1.0, objective.get_expr().get_coefficient(&Var::from("x"))));
   /// }
   /// ```
   pub fn set_expr(&mut self, expr: LinearExpression) {
@@ -58,7 +61,7 @@ impl ProblemObjective {
     }
   }
 
-  fn substitute(&mut self, v: &String, e: &LinearExpression) {
+  fn substitute(&mut self, v: &Var, e: &LinearExpression) {
     let mut f_e = self.get_mut_expr();
     f_e.substitute(v, e);
   }
@@ -97,10 +100,11 @@ impl Problem {
   /// extern crate constraint;
   /// use constraint::expr::{LinearExpression, LinearRelation, Relation};
   /// use constraint::problem::{Problem, ProblemObjective};
+  /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let objective = ProblemObjective::Minimize(LinearExpression::from(String::from("x")));
-  ///   let constraints = vec!(LinearRelation::new(LinearExpression::from("x"), Relation::EQ, LinearExpression::from(5.0)));
+  ///   let objective = ProblemObjective::Minimize(LinearExpression::from(Var::from("x")));
+  ///   let constraints = vec!(LinearRelation::new(LinearExpression::from(Var::from("x")), Relation::EQ, LinearExpression::from(5.0)));
   ///   let _ = Problem::new(objective, constraints);
   /// }
   /// ```
@@ -125,7 +129,7 @@ impl Problem {
   }
 
   // Returns true iff lr is (0 <= VAR)
-  fn get_restrained_var<'s, 'r>(&'s self, lr: &'r LinearRelation) -> Option<String> {
+  fn get_restrained_var<'s, 'r>(&'s self, lr: &'r LinearRelation) -> Option<Var> {
     let lhs_valid = lr.lhs.terms().is_empty() && approx_eq(0.0, lr.lhs.get_constant());
     let op_valid = lr.op == Relation::LEQ;
     let rhs_valid = lr.rhs.terms().len() == 1 && *lr.rhs.terms().values().next().unwrap() >= 0.0;
@@ -141,13 +145,13 @@ impl Problem {
   // 0 == rhs - lhs - s_n, 0 <= s_n
   // 0 >= (rhs - lhs - + s_n), 0 <= s_n
   // 0 == (rhs - lhs), 0 <= s_n
-  fn convert_leq_to_eq<'s, 'r>(&'s self, lr: &'r mut LinearRelation, namer: &mut Namer) -> Option<String> {
+  fn convert_leq_to_eq<'s, 'r>(&'s self, lr: &'r mut LinearRelation, namer: &mut Namer) -> Option<Var> {
     if lr.op == Relation::LEQ {
-      let slack = namer.vend();
-      lr.lhs.plus_this(&LinearExpression::from(slack.as_ref()));
+      let slack = Var(namer.vend(), true);
+      lr.lhs.plus_this(&LinearExpression::from(slack.clone()));
       lr.lhs.times_this(-1.0);
       lr.rhs.plus_this(&lr.lhs);
-      lr.lhs = LinearExpression::new(); 
+      lr.lhs = LinearExpression::new();
 
       lr.op = Relation::EQ;
       Some(slack)
@@ -165,14 +169,15 @@ impl Problem {
   /// extern crate constraint;
   /// use constraint::expr::{approx_eq, LinearExpression, LinearRelation, Relation};
   /// use constraint::problem::{Problem, ProblemObjective};
+  /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let objective = ProblemObjective::Minimize(LinearExpression::from(String::from("x")));
-  ///   let constraints = vec!(LinearRelation::new(LinearExpression::from("x"), Relation::EQ, LinearExpression::from(5.0)));
+  ///   let objective = ProblemObjective::Minimize(LinearExpression::from(Var::from("x")));
+  ///   let constraints = vec!(LinearRelation::new(LinearExpression::from(Var::from("x")), Relation::EQ, LinearExpression::from(5.0)));
   ///   let problem = Problem::new(objective, constraints);
   ///   let tableau = problem.augmented_simplex().unwrap();
   ///   let basic_feasible_solution = tableau.get_basic_feasible_solution();
-  ///   assert!(approx_eq(5.0, *basic_feasible_solution.get(&String::from("x")).unwrap()));
+  ///   assert!(approx_eq(5.0, *basic_feasible_solution.get(&Var::from("x")).unwrap()));
   /// }
   pub fn augmented_simplex(&self) -> Result<Tableau, String> {
     let mut slack_namer = Namer::init("s_");
@@ -184,10 +189,10 @@ impl Problem {
   // 2: Note if this forms a `restrained` constraint for a specific variable: 0 <= var. Special case. Else, treat like normal slack: -var + s_n <= 0.
   // 3: Convert LEQs to equations, generating a slack variable. Add to restricted variables.
   // 4: Return: <equations, slack variables>
-  fn augmented_simplex_phase_one(&self, slack_namer: &mut Namer) -> (LinkedList<LinearRelation>, HashSet<String>) {
+  fn augmented_simplex_phase_one(&self, slack_namer: &mut Namer) -> (LinkedList<LinearRelation>, HashSet<Var>) {
     let raw_constraints: LinkedList<LinearRelation> = self.subject_to.iter().map(|c|{c.clone()}).collect();
     let mut normalized_constraints = LinkedList::<LinearRelation>::new();
-    let mut restrained_vars = HashSet::<String>::new();
+    let mut restrained_vars = HashSet::<Var>::new();
 
     for mut constraint in raw_constraints.into_iter() {
       match constraint.op {
@@ -246,14 +251,14 @@ impl Problem {
   //      Move resulting equation into c_u.
   fn augmented_simplex_phase_two(&self,
                                      constraints: &LinkedList<LinearRelation>,
-                                     restrained_variables: &HashSet<String>) -> Result<Tableau, String> {
+                                     restrained_variables: &HashSet<Var>) -> Result<Tableau, String> {
     let mut c_e = constraints.clone();
     let mut c_s = Vec::<LinearRelation>::new();
-    let mut c_u = HashMap::<String, LinearExpression>::new();
+    let mut c_u = HashMap::<Var, LinearExpression>::new();
     let mut new_f = self.objective.clone();
 
     for ref mut constraint in c_e.iter_mut() {
-      let mut vars: HashSet<String> = constraint.lhs.terms().keys().chain(constraint.rhs.terms().keys()).map(|s| s.clone()).collect();
+      let mut vars: HashSet<Var> = constraint.lhs.terms().keys().chain(constraint.rhs.terms().keys()).map(|s| s.clone()).collect();
 
       // first substitute any pending changes.
       for ref var in vars.iter() {
@@ -299,7 +304,7 @@ impl Problem {
       println!("{}", r);
     }
     println!("with restrained variables:");
-    let vars: Vec<&str> = restrained_variables.iter().map(|s|s.as_ref()).collect();
+    let vars: Vec<&str> = restrained_variables.iter().map(|s|s.name().as_ref()).collect();
     println!("0 <= {}", vars.join(", "));
 
     let mut tableau = Tableau::new();
@@ -309,7 +314,7 @@ impl Problem {
     }
 
     for constraint in c_s.into_iter() {
-      let p_vars: HashSet<String> = tableau.parametric_vars_iter().map(|s| s.clone()).collect();
+      let p_vars: HashSet<Var> = tableau.parametric_vars_iter().map(|s| s.clone()).collect();
       let o_var = constraint.lhs.terms().keys().chain(constraint.rhs.terms().keys()).find(|s| !p_vars.contains(s.clone()));
       if o_var.is_none() {
         return Err(format!("{} is not a viable simplex equation", constraint));
@@ -338,6 +343,30 @@ impl Display for Problem {
 #[cfg(test)]
 mod test {
   use grammar::*;
+  use expr::*;
+  use problem::*;
+  use var::Var;
+
+  #[test]
+  fn const_equation() {
+    let objective = ProblemObjective::Minimize(LinearExpression::from(Var::from("x")));
+    let constraints = vec!(LinearRelation::new(LinearExpression::from(Var::from("x")), Relation::EQ, LinearExpression::from(5.0)));
+    let problem = Problem::new(objective, constraints);
+    let tableau = problem.augmented_simplex().unwrap();
+    let basic_feasible_solution = tableau.get_basic_feasible_solution();
+    assert!(approx_eq(5.0, *basic_feasible_solution.get(&Var::from("x")).unwrap()));
+  }
+
+  #[test]
+  fn one_slack() {
+    let objective = ProblemObjective::Minimize(LinearExpression::from(Var::from("x")));
+    let constraints = vec!(LinearRelation::new(LinearExpression::from(Var::from("x")), Relation::LEQ, LinearExpression::from(-5.0)));
+    let problem = Problem::new(objective, constraints);
+    let tableau = problem.augmented_simplex().unwrap();
+    tableau.print();
+    assert_eq!(1, tableau.get_parametric_vars().len());
+    assert!(tableau.is_parametric(&Var::from("s_1")));
+  }
 
   #[test]
   fn test_problem_parse() {

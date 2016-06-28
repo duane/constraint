@@ -8,5 +8,6 @@ pub mod state;
 pub mod problem;
 pub mod grammar;
 pub mod tableau;
+pub mod var;
 
 mod grammar_test;
