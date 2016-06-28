@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap};
 use std::iter::Iterator;
 use std::fmt::{Display, Formatter, Error};
 use std::mem::swap;
@@ -56,6 +56,24 @@ pub struct LinearRelation {
 }
 
 impl LinearRelation {
+  ///
+  /// Relate two expressions
+  ///
+  /// # Examples
+  ///
+  /// ```
+  ///   extern crate constraint;
+  ///   use constraint::expr::{approx_eq, LinearExpression, LinearRelation, Relation};
+  ///
+  ///   fn main() {
+  ///     let relation = LinearRelation::new(LinearExpression::term(String::from("x"), -0.5), Relation::GEQ, LinearExpression::from(3.0));
+  ///     assert_eq!(Relation::GEQ, relation.op);
+  ///     assert_eq!(1, relation.lhs.terms().len());
+  ///     assert!(relation.rhs.terms().is_empty());
+  ///     assert!(approx_eq(3.0, relation.rhs.get_constant()));
+  ///   }
+  /// ```
+  ///
   pub fn new(lhs: LinearExpression, op: Relation, rhs: LinearExpression) -> LinearRelation {
     LinearRelation{
       lhs: lhs,
@@ -64,11 +82,47 @@ impl LinearRelation {
     }
   }
 
+  ///
+  /// Reverses both the lhs and the rhs and the relation itself
+  ///
+  /// # Examples
+  ///
+  /// ```
+  ///   extern crate constraint;
+  ///   use constraint::expr::{approx_eq, LinearExpression, LinearRelation, Relation};
+  ///
+  ///   fn main() {
+  ///     let mut relation = LinearRelation::new(LinearExpression::from(4.2), Relation::GEQ, LinearExpression::from(3.1));
+  ///     relation.reverse();
+  ///     assert_eq!(relation.op, Relation::LEQ);
+  ///     assert!(approx_eq(relation.lhs.get_constant(), 3.1));
+  ///     assert!(approx_eq(relation.rhs.get_constant(), 4.2));
+  ///   }
+  /// ```
   pub fn reverse(&mut self) {
     swap(&mut self.lhs, &mut self.rhs);
     self.op.reverse();
   }
 
+  ///
+  /// Mutates the relation in place by adding the expression to both sides.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  ///   extern crate constraint;
+  ///   use constraint::expr::{approx_eq, LinearExpression, LinearRelation, Relation};
+  ///
+  ///   fn main() {
+  ///     let mut relation = LinearRelation::new(LinearExpression::term(String::from("x"), 2.3), Relation::EQ, LinearExpression::from(3.7));
+  ///     relation.plus_this(&LinearExpression::term(String::from("y"), 8.2).plus(&LinearExpression::from(4.1)));
+  ///     assert_eq!(relation.op, Relation::EQ);
+  ///     assert_eq!(relation.lhs.terms().len(), 2);
+  ///     assert_eq!(relation.rhs.terms().len(), 1);
+  ///     assert!(approx_eq(relation.lhs.get_constant(), 4.1));
+  ///     assert!(approx_eq(relation.rhs.get_constant(), 7.8));
+  ///   }
+  /// ```
   pub fn plus_this(&mut self, expr: &LinearExpression) {
     self.lhs.plus_this(expr);
     self.rhs.plus_this(expr);
@@ -94,6 +148,8 @@ impl LinearRelation {
     self.rhs.substitute(v, e);
   }
 
+  ///
+  /// Examples
   ///
   /// # Examples
   ///
@@ -146,6 +202,23 @@ pub struct LinearExpression {
 }
 
 impl LinearExpression {
+
+  ///
+  /// Creates an expression equal to 0.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  ///   extern crate constraint;
+  ///   use constraint::expr::{approx_eq, LinearExpression};
+  ///
+  ///   fn main() {
+  ///     let expr = LinearExpression::new();
+  ///     assert!(expr.terms().is_empty());
+  ///     assert!(approx_eq(0.0, expr.get_constant()));
+  ///   }
+  /// ```
+  ///
   pub fn new() -> LinearExpression {
     LinearExpression{
       constant: 0.0,
@@ -153,20 +226,63 @@ impl LinearExpression {
     }
   }
 
-  pub fn eval(&self, bindings: &HashMap<String, Scalar>) -> Result<Scalar, String> {
-    let undefined_bindings: HashSet<String> = self.terms.keys().filter(|v|!bindings.contains_key(v.clone())).map(|v|v.clone()).collect();
-    if undefined_bindings.is_empty() {
-      let mut sum = 0.0f64;
-      for (var, coef) in self.terms.iter() {
-        sum += coef * *bindings.get(var).unwrap();
-      }
-      Ok(sum + self.constant)
+  ///
+  /// Evaluate an expression against a set of bindings.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  ///   extern crate constraint;
+  ///   use constraint::expr::{approx_eq, LinearExpression, Scalar};
+  ///   use std::collections::HashMap;
+  ///
+  ///   fn main() {
+  ///     let expr = LinearExpression::term(String::from("x"), 2.0);
+  ///     let mut bindings: HashMap<String, Scalar> = HashMap::new();
+  ///     bindings.insert(String::from("x"), 1.3);
+  ///     let result = expr.eval(&bindings);
+  ///     assert!(approx_eq(2.6, result.get_constant()));
+  ///     assert!(result.terms().is_empty());
+  ///   }
+  /// ```
+  ///
+  pub fn eval(&self, bindings: &HashMap<String, Scalar>) -> LinearExpression {
+    let (defined, undefined) = self.terms.iter().map(|(k,v)|(k.clone(), *v)).partition(|&(ref k,v)|bindings.contains_key(k));
+    let mut result = self.constant;
+    for (ref var, coef) in defined {
+      result += coef * *bindings.get(var).unwrap();
+    }
+    LinearExpression::from_constant_and_terms(result, undefined)
+  }
+
+  ///
+  /// Evaluate an expression against a set of bindings.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  ///   extern crate constraint;
+  ///   use constraint::expr::{approx_eq, LinearExpression, Scalar};
+  ///   use std::collections::HashMap;
+  ///
+  ///   fn main() {
+  ///     let expr = LinearExpression::term(String::from("x"), 2.0);
+  ///     let mut bindings: HashMap<String, Scalar> = HashMap::new();
+  ///     bindings.insert(String::from("x"), 1.3);
+  ///     assert!(approx_eq(2.6, expr.full_eval(&bindings).unwrap()));
+  ///   }
+  /// ```
+  ///
+  pub fn full_eval(&self, bindings: &HashMap<String, Scalar>) -> Result<Scalar, String> {
+    let result = self.eval(bindings);
+    if result.terms().is_empty() {
+      Ok(result.get_constant())
     } else {
-      Err(format!("cannot evaluate undefined variables: {:?}", undefined_bindings))
+      Err(format!("The following terms are undefined: {:?}", result.terms().keys().collect::<Vec<&String>>()))
     }
   }
 
-  pub fn coefficient_transform<'t, F>(&'t mut self, operation: F)
+  fn coefficient_transform<'t, F>(&'t mut self, operation: F)
     where F : Fn(Scalar) -> Scalar {
     for (_, value) in self.terms.iter_mut() {
       *value = operation(*value);
@@ -174,7 +290,7 @@ impl LinearExpression {
     self.constant = operation(self.constant);
   }
 
-  pub fn coefficient_merge<'a, 'b, F>(&'a mut self, other: &'b LinearExpression, merge_fun: F)
+  fn coefficient_merge<'a, 'b, F>(&'a mut self, other: &'b LinearExpression, merge_fun: F)
     where F : Fn(Scalar, Scalar) -> Scalar {
     for (name, coef) in other.terms.iter() {
       let existing_coef = self.terms.get(name).map(|c|{*c}).unwrap_or(0.0);
@@ -191,20 +307,88 @@ impl LinearExpression {
     self.constant = merge_fun(self.constant, other.constant);
   }
 
+  ///
+  /// Get the mutable terms. The keys are the variable names; the values are the coefficients. This does not include the constant.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::{approx_eq, LinearExpression};
+  ///
+  /// fn main() {
+  ///   let mut expr = LinearExpression::term(String::from("x"), 2.4);
+  ///   expr.plus_this(&LinearExpression::term(String::from("y"), -2.0));
+  ///   for (_, coef) in expr.mut_terms().iter_mut() {
+  ///     *coef *= 2.0;
+  ///   }
+  ///   assert!(approx_eq(4.8, expr.get_coefficient(&String::from("x"))));
+  ///   assert!(approx_eq(-4.0, expr.get_coefficient(&String::from("y"))));
+  /// }
+  /// ```
   pub fn mut_terms<'t>(&'t mut self) -> &'t mut BTreeMap<String, Scalar> {
     &mut self.terms
   }
-  
+
+
+  ///
+  /// Get the terms. The keys are the variable names; the values are the coefficients. This does not include the constant.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::{approx_eq, LinearExpression};
+  ///
+  /// fn main() {
+  ///   let expr = LinearExpression::term(String::from("x"), 9.4);
+  ///   let terms = expr.terms();
+  ///   assert_eq!(1, terms.len());
+  ///   assert!(approx_eq(9.4, *terms.get(&String::from("x")).unwrap()));
+  /// }
+  /// ```
   pub fn terms<'t>(&'t self) -> &'t BTreeMap<String, Scalar> {
     &self.terms
   }
 
+  ///
+  /// Construct an expression from a single term coefficient * scalar.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::{approx_eq, LinearExpression};
+  ///
+  /// fn main() {
+  ///   let expr = LinearExpression::term(String::from("x"), 42.7);
+  ///   assert!(approx_eq(42.7, expr.get_coefficient(&String::from("x"))));
+  /// }
+  /// ```
   pub fn term(variable: String, coefficient: Scalar) -> LinearExpression {
     let mut expr = LinearExpression::new();
     expr.set_coefficient(variable, coefficient);
     expr
   }
 
+  ///
+  /// Construct an expression from many terms value (coefficient) * key (variable) + constant.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::{approx_eq, LinearExpression};
+  /// use std::collections::BTreeMap;
+  ///
+  /// fn main() {
+  ///   let mut terms = BTreeMap::new();
+  ///   terms.insert(String::from("x"), 1.0);
+  ///   let expr = LinearExpression::from_constant_and_terms(1.2, terms);
+  ///   assert!(approx_eq(expr.get_constant(), 1.2));
+  ///   assert!(approx_eq(expr.get_coefficient(&String::from("x")), 1.0));
+  /// }
+  /// ```
   pub fn from_constant_and_terms(constant: Scalar, terms: BTreeMap<String, Scalar>) -> LinearExpression {
     LinearExpression{
       constant: constant,
@@ -212,22 +396,100 @@ impl LinearExpression {
     }
   }
 
+  ///
+  /// Get the coefficient of a particular variable.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::{approx_eq, LinearExpression};
+  ///
+  /// fn main() {
+  ///   let expr = LinearExpression::term(String::from("x"), 1.0);
+  ///   assert!(approx_eq(expr.get_coefficient(&String::from("x")), 1.0));
+  /// }
+  /// ```
   pub fn get_coefficient<'s, 'v>(&'s self, v: &String) -> Scalar {
     self.terms.get(v).map(|t| *t).unwrap_or(0.0)
   }
 
+  ///
+  /// Get the coefficient of a particular variable.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::{approx_eq, LinearExpression};
+  ///
+  /// fn main() {
+  ///   let mut expr = LinearExpression::new();
+  ///   assert!(approx_eq(0.0, expr.get_coefficient(&String::from("x"))));
+  ///   expr.set_coefficient(String::from("x"), 1.5);
+  ///   assert!(approx_eq(expr.get_coefficient(&String::from("x")), 1.5));
+  /// }
+  /// ```
   pub fn set_coefficient(&mut self, v: String, coefficient: Scalar) {
     self.terms.insert(v, coefficient);
   }
 
+  ///
+  /// Get the constant of an expression.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::{approx_eq, LinearExpression};
+  ///
+  /// fn main() {
+  ///   let mut expr = LinearExpression::new();
+  ///   assert!(approx_eq(0.0, expr.get_constant()));
+  ///   expr.set_constant(1.7);
+  ///   assert!(approx_eq(1.7, expr.get_constant()));
+  /// }
+  /// ```
   pub fn get_constant(&self) -> Scalar {
     self.constant
   }
 
+  ///
+  /// Set the constant of an expression.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::{approx_eq, LinearExpression};
+  ///
+  /// fn main() {
+  ///   let mut expr = LinearExpression::new();
+  ///   assert!(approx_eq(0.0, expr.get_constant()));
+  ///   expr.set_constant(1.7);
+  ///   assert!(approx_eq(1.7, expr.get_constant()));
+  /// }
+  /// ```
   pub fn set_constant(&mut self, constant: Scalar) {
     self.constant = constant;
   }
 
+  ///
+  /// For an expression ax+...+c and factor f, return f*(ax+...+c).
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::{approx_eq, LinearExpression};
+  ///
+  /// fn main() {
+  ///   let expr = LinearExpression::term(String::from("x"), 2.1).plus(&LinearExpression::from(2.3));
+  ///   let product = expr.times(-2.0);
+  ///   assert!(approx_eq(-4.2, product.get_coefficient(&String::from("x"))));
+  ///   assert!(approx_eq(-4.6, product.get_constant()));
+  /// }
+  /// ```
   pub fn times(&self, constant: Scalar) -> LinearExpression {
     LinearExpression::from_constant_and_terms(self.constant * constant,
                                               self.terms.iter().map(|(name, scalar)| {
@@ -235,10 +497,43 @@ impl LinearExpression {
                                               }).collect())
   }
 
+  ///
+  /// Mutate this expression to be the result of adding each term and constant with the argument.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::{approx_eq, LinearExpression};
+  ///
+  /// fn main() {
+  ///   let mut expr = LinearExpression::term(String::from("x"), 2.1).plus(&LinearExpression::from(2.3));
+  ///   let expr2 = LinearExpression::term(String::from("x"), 1.6).plus(&LinearExpression::from(-8.7));
+  ///   expr.plus_this(&expr2);
+  ///   assert!(approx_eq(3.7, expr.get_coefficient(&String::from("x"))));
+  ///   assert!(approx_eq(-6.4, expr.get_constant()));
+  /// }
+  /// ```
   pub fn plus_this(&mut self, expr: &LinearExpression) {
     self.coefficient_merge(expr, |a, b| a + b);
   }
 
+  ///
+  /// Mutate this expression to be the result of multiplying each term and constant by a constant.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::{approx_eq, LinearExpression};
+  ///
+  /// fn main() {
+  ///   let mut expr = LinearExpression::term(String::from("x"), 1.6).plus(&LinearExpression::from(0.3));
+  ///   expr.times_this(-1.7);
+  ///   assert!(approx_eq(-2.72, expr.get_coefficient(&String::from("x"))));
+  ///   assert!(approx_eq(-0.51, expr.get_constant()));
+  /// }
+  /// ```
   pub fn times_this(&mut self, scalar: Scalar) {
     if approx_eq(0.0, scalar) {
       self.terms.clear();
@@ -248,32 +543,132 @@ impl LinearExpression {
     }
   }
 
+  ///
+  /// Mutate this expression to be the result of dividing each term and constant by a constant.
+  /// It is not valid to call this function with a scalar of 0.0.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::{approx_eq, LinearExpression};
+  ///
+  /// fn main() {
+  ///   let mut expr = LinearExpression::term(String::from("x"), 81.42).plus(&LinearExpression::from(-114.0));
+  ///   expr.div_this(-2.0);
+  ///   assert!(approx_eq(-40.71, expr.get_coefficient(&String::from("x"))));
+  ///   assert!(approx_eq(57.0, expr.get_constant()));
+  /// }
+  /// ```
   pub fn div_this(&mut self, scalar: Scalar) {
     assert!(!approx_eq(0.0, scalar));
     self.coefficient_transform(|a| a / scalar);
   }
-  
+
+  ///
+  /// Give the result of adding each term and constant with each term and constant of the given expression.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::{approx_eq, LinearExpression};
+  ///
+  /// fn main() {
+  ///   let expr = LinearExpression::term(String::from("x"), 0.7).plus(&LinearExpression::from(1.8));
+  ///   assert!(approx_eq(0.7, expr.get_coefficient(&String::from("x"))));
+  ///   assert!(approx_eq(1.8, expr.get_constant()));
+  /// }
+  /// ```
   pub fn plus(&self, expr: &LinearExpression) -> LinearExpression {
     let mut result = self.clone();
     result.plus_this(expr);
     result
   }
 
+  ///
+  /// Give the result of subtracting each term and constant with each term and constant of the given expression.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::{approx_eq, LinearExpression};
+  ///
+  /// fn main() {
+  ///   let expr = LinearExpression::term(String::from("x"), 1.7).plus(&LinearExpression::from(8.1));
+  ///   let expr2 = expr.minus(&LinearExpression::term(String::from("y"), 42.7));
+  ///   assert!(approx_eq(1.7, expr2.get_coefficient(&String::from("x"))));
+  ///   assert!(approx_eq(-42.7, expr2.get_coefficient(&String::from("y"))));
+  ///   assert!(approx_eq(8.1, expr2.get_constant()));
+  /// }
+  /// ```
   pub fn minus(&self, expr: &LinearExpression) -> LinearExpression {
     let mut new = expr.times(-1.0);
     new.plus_this(self);
     new
   }
 
+  ///
+  /// Mutate this expression to be the result of adding each term and constant with the argument.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::{approx_eq, LinearExpression};
+  ///
+  /// fn main() {
+  ///   let mut expr = LinearExpression::term(String::from("x"), 2.1).plus(&LinearExpression::from(2.3));
+  ///   let expr2 = LinearExpression::term(String::from("x"), 1.6).plus(&LinearExpression::from(-8.7));
+  ///   expr.minus_this(&expr2);
+  ///   assert!(approx_eq(0.5, expr.get_coefficient(&String::from("x"))));
+  ///   assert!(approx_eq(11.0, expr.get_constant()));
+  /// }
+  /// ```
   pub fn minus_this(&mut self, expr: &LinearExpression) {
     self.coefficient_merge(expr, |a, b| a - b);
   }
 
+  ///
+  /// For an expression ax+...+c and divisor d, return (ax+...+c)/d.
+  /// It is not valid to call this function with a divisor of 0.0.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::{approx_eq, LinearExpression};
+  ///
+  /// fn main() {
+  ///   let expr = LinearExpression::term(String::from("x"), 2.1).plus(&LinearExpression::from(2.3));
+  ///   let product = expr.div(-2.0);
+  ///   assert!(approx_eq(-1.05, product.get_coefficient(&String::from("x"))));
+  ///   assert!(approx_eq(-1.15, product.get_constant()));
+  /// }
+  /// ```
   pub fn div(&self, constant: Scalar) -> LinearExpression {
     assert!(!approx_eq(constant, 0.0));
     self.times(1.0 / constant)
   }
 
+  ///
+  /// For an expression ax+...+c, substitution variable q, and substituted expression e, return an expression with a all instances of q in expression ax+...+c replaced with e.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::{approx_eq, LinearExpression};
+  ///
+  /// fn main() {
+  ///   let mut expr = LinearExpression::term(String::from("x"), 2.1).plus(&LinearExpression::from(2.3));
+  ///   expr.substitute(&String::from("x"), &LinearExpression::term(String::from("y"), 1.2).plus(&LinearExpression::from(7.5)));
+  ///   assert!(approx_eq(0.0, expr.get_coefficient(&String::from("x"))));
+  ///   assert!(approx_eq(2.52, expr.get_coefficient(&String::from("y"))));
+  ///   assert!(approx_eq(18.05, expr.get_constant()));
+  /// }
+  /// ```
   pub fn substitute(&mut self, var: &String, e: &LinearExpression) {
     let o_coef = self.terms.remove(var);
     if o_coef.is_none() {
@@ -411,12 +806,12 @@ mod test {
 
   #[test]
   fn eval_zero() {
-    assert!(approx_eq(0.0, LinearExpression::new().eval(&HashMap::new()).unwrap()));
+    assert!(approx_eq(0.0, LinearExpression::new().full_eval(&HashMap::new()).unwrap()));
   }
 
   #[test]
   fn eval_constant() {
-    assert!(approx_eq(10.0, LinearExpression::from(10.0).eval(&HashMap::new()).unwrap()));
+    assert!(approx_eq(10.0, LinearExpression::from(10.0).full_eval(&HashMap::new()).unwrap()));
   }
 
   #[test]
@@ -424,7 +819,7 @@ mod test {
     let expr = LinearExpression::term(String::from("x"), -2.0);
     let mut bindings: HashMap<String, Scalar> = HashMap::new();
     bindings.insert(String::from("x"), -21.0);
-    assert!(approx_eq(42.0, expr.eval(&bindings).unwrap()));
+    assert!(approx_eq(42.0, expr.full_eval(&bindings).unwrap()));
   }
 
   #[test]
@@ -433,7 +828,7 @@ mod test {
     let mut bindings: HashMap<String, Scalar> = HashMap::new();
     bindings.insert(String::from("x"), -21.0);
     bindings.insert(String::from("y"), -6.0);
-    assert!(approx_eq(21.6, expr.eval(&bindings).unwrap()));
+    assert!(approx_eq(21.6, expr.full_eval(&bindings).unwrap()));
   }
 
   #[test]
@@ -442,19 +837,19 @@ mod test {
     let mut bindings: HashMap<String, Scalar> = HashMap::new();
     bindings.insert(String::from("x"), -21.0);
     bindings.insert(String::from("y"), -6.0);
-    assert!(approx_eq(28.8, expr.eval(&bindings).unwrap()));
+    assert!(approx_eq(28.8, expr.full_eval(&bindings).unwrap()));
   }
 
   #[test]
   fn eval_unbound_val() {
-    assert!(LinearExpression::term(String::from("x"), -2.0).eval(&HashMap::new()).is_err());
+    assert!(LinearExpression::term(String::from("x"), -2.0).full_eval(&HashMap::new()).is_err());
   }
 
   #[test]
   fn no_substitute() {
     let mut expr = LinearExpression::new();
     expr.substitute(&String::from("x"), &LinearExpression::from(2.0));
-    assert!(approx_eq(0.0, expr.eval(&HashMap::new()).unwrap()));
+    assert!(approx_eq(0.0, expr.full_eval(&HashMap::new()).unwrap()));
     assert!(expr.terms().len() == 0);
   }
 
@@ -466,7 +861,7 @@ mod test {
     assert!(expr.terms().len() == 1);
     let mut bindings: HashMap<String, Scalar> = HashMap::new();
     bindings.insert(String::from("y"), 1.6);
-    assert!(approx_eq(-2.4, expr.eval(&bindings).unwrap()));
+    assert!(approx_eq(-2.4, expr.full_eval(&bindings).unwrap()));
   }
 
   #[test]
@@ -479,7 +874,7 @@ mod test {
     let mut bindings: HashMap<String, Scalar> = HashMap::new();
     bindings.insert(String::from("z"), 1.3);
     bindings.insert(String::from("y"), 1.6);
-    assert!(approx_eq(-15.2, expr.eval(&bindings).unwrap()));
+    assert!(approx_eq(-15.2, expr.full_eval(&bindings).unwrap()));
   }
 
   #[test]
@@ -497,6 +892,6 @@ mod test {
     bindings.insert(String::from("z"), 1.3);
     bindings.insert(String::from("y"), 1.6);
     bindings.insert(String::from("w"), -2.7);
-    assert!(approx_eq(2.88, expr1.eval(&bindings).unwrap()));
+    assert!(approx_eq(2.88, expr1.full_eval(&bindings).unwrap()));
   }
 }
