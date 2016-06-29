@@ -4,12 +4,19 @@ use std::fmt::{Display, Formatter, Error};
 use std::mem::swap;
 use var::Var;
 
-pub type Scalar = f64;
-pub const SCALAR_EPSILON: Scalar = 0.000001;
+pub type Scalar = scalar::Scalar;
+
+pub mod scalar {
+  use std::f64;
+
+  pub type Scalar = f64;
+  pub const EPSILON: super::Scalar = 0.000001;
+  pub const MAX: super::Scalar = f64::MAX;
+}
 
 pub fn approx_eq(a: Scalar, b: Scalar) -> bool {
   let delta = (a - b).abs();
-  delta < SCALAR_EPSILON
+  delta < scalar::EPSILON
 }
 
 #[derive(Debug,Eq,PartialEq,Clone)]

@@ -188,13 +188,37 @@ impl Tableau {
   /// fn main() {
   ///   let mut tableau = Tableau::new();
   ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   let keys: Vec<Var> = tableau.parametric_vars_iter().map(|s|s.clone()).collect();
+  ///   let keys = tableau.get_parametric_vars();
   ///   assert_eq!(1, keys.len());
-  ///   assert_eq!(keys[0], Var::from("s1"));
+  ///   assert!(keys.contains(&Var::from("s1")));
   /// }
   /// ```
-  pub fn parametric_vars_iter<'s>(&'s self) -> hash_map::Keys<'s, Var, HashSet<Var>> {
+  pub fn parametric_vars<'s>(&'s self) -> hash_map::Keys<'s, Var, HashSet<Var>> {
     self.columns.keys()
+  }
+
+  ///
+  /// Get an iterator to the parametric vars.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::expr::LinearExpression;
+  /// use constraint::tableau::Tableau;
+  /// use constraint::var::Var;
+  ///
+  /// fn main() {
+  ///   let mut tableau = Tableau::new();
+  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   let keys: Vec<Var> = tableau.basic_vars().map(|s|s.clone()).collect();
+  ///   assert_eq!(2, keys.len());
+  ///   assert!(keys.contains(&Var::from("x")));
+  ///   assert!(keys.contains(&Var::from("z")));
+  /// }
+  /// ```
+  pub fn basic_vars<'s>(&'s self) -> hash_map::Keys<'s, Var, LinearExpression> {
+    self.rows.keys()
   }
 
   ///
@@ -211,13 +235,13 @@ impl Tableau {
   /// fn main() {
   ///   let mut tableau = Tableau::new();
   ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   let keys: Vec<Var> = tableau.parametric_vars_iter().map(|s|s.clone()).collect();
+  ///   let keys = tableau.get_parametric_vars();
   ///   assert_eq!(1, keys.len());
-  ///   assert_eq!(keys[0], Var::from("s1"));
+  ///   assert!(keys.contains(&Var::from("s1")));
   /// }
   /// ```
   pub fn get_parametric_vars(&self) -> HashSet<Var> {
-    self.parametric_vars_iter().map(|s|s.clone()).collect()
+    self.parametric_vars().map(|s|s.clone()).collect()
   }
 
   ///
@@ -234,15 +258,13 @@ impl Tableau {
   /// fn main() {
   ///   let mut tableau = Tableau::new();
   ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   let vars = tableau.get_basic_vars_for_param(&Var::from("s1")).unwrap();
+  ///   let vars = tableau.get_basic_vars_for_param(&Var::from("s1"));
   ///   assert_eq!(1, vars.len());
-  ///   for var in vars.iter() {
-  ///     assert_eq!(var, &Var::from("x"));
-  ///   }
+  ///   assert!(vars.contains(&Var::from("x")));
   /// }
   /// ```
-  pub fn get_basic_vars_for_param<'s>(&'s self, var: &Var) -> Option<&'s HashSet<Var>> {
-    self.columns.get(var)
+  pub fn get_basic_vars_for_param<'s>(&'s self, var: &Var) -> HashSet<Var> {
+    self.columns.get(var).map(|c|c.clone()).unwrap_or(HashSet::new())
   }
 
   fn note_added_variable(&mut self, basic: &Var, parametric: &Var) -> Result<(), Var> {
@@ -326,15 +348,19 @@ impl Tableau {
   ///   assert!(tableau.get_basic(&Var::from("x")).is_none());
   /// }
   /// ```
-  pub fn remove_row(&mut self, var: &Var) -> Result<(), String> {
-    for e in self.rows.remove(var) {
-      let vars: HashSet<&Var> = e.terms().keys().collect();
+  pub fn remove_row(&mut self, var: &Var) -> Result<LinearExpression, String> {
+    let removed = match self.rows.remove(var) {
+      Some(expr) => expr,
+      None => return Err(String::from("Cannot remove variable from tableau that does not exist"))
+    };
+    {
+      let vars: HashSet<&Var> = removed.terms().keys().collect();
       for parameter in vars {
         let _ = self.note_removed_variable(var, parameter);
       }
     }
     self.restricted.remove(var);
-    Ok(())
+    Ok(removed)
   }
 
   fn remove_parameter(&mut self, var: &Var) -> Result<(), String> {
@@ -398,6 +424,61 @@ impl Tableau {
     let basic_bindings = self.rows.iter().map(|(k,v)|(k.clone(), v.get_constant()));
     let parametric_bindings = self.columns.keys().map(|k|(k.clone(), 0.0));
     basic_bindings.chain(parametric_bindings).collect()
+  }
+
+  pub fn pivot(&mut self, entry_var: &Var, exit_var: &Var) -> Result<(), String> {
+    let expr = match self.remove_row(exit_var) {
+      Ok(expr) => expr,
+      Err(s) => return Err(s)
+    };
+    let relation = LinearRelation::new(LinearExpression::from(exit_var.clone()), Relation::EQ, expr);
+    let solved_for_entry = match relation.solve_for(entry_var) {
+      Ok((_, expr)) => expr,
+      Err(s) => return Err(s)
+    };
+    self.substitute(entry_var, &solved_for_entry).unwrap();
+    self.add_row(entry_var.clone(), solved_for_entry, false).unwrap();
+    Ok(())
+  }
+
+  pub fn simplex(&mut self) {
+    let min_objective_coefficient = scalar::MAX;
+    let initial: Option<(Var, Scalar)> = None;
+    let o_entry_var = self.get_objective().get_expr().terms().iter().fold(initial, |found, (k,v)| {
+      if *v < found.clone().map(|t|t.1).unwrap_or(0.0) {
+        Some((k.clone(),*v))
+      } else {
+        found
+      }
+    });
+    let (entry_var, zc) = match o_entry_var {
+      Some(tuple) => tuple,
+      None => return
+    };
+    assert!(entry_var.is_pivotable());
+    let exit_candidates_exprs: HashMap<Var, LinearExpression> = self.get_basic_vars_for_param(&entry_var).
+      iter().
+      filter(|v|v.is_pivotable()).
+      map(|v|(v.clone(),self.get_basic(v).unwrap().clone())).
+      collect();
+    if !exit_candidates_exprs.values().any(|e|e.get_coefficient(&entry_var) < 0.0) {
+      panic!("Unbounded");
+    }
+    let initial_state: Option<(Var, Scalar)> = None;
+    let o_exit_var = exit_candidates_exprs.iter().fold(initial_state, |state, (k,e)| {
+      let a_ij = e.get_coefficient(&entry_var);
+      let ratio = -e.get_constant() / a_ij;
+      if state.is_none() || ratio < state.clone().unwrap().1 {
+        Some((k.clone(),ratio))
+      } else {
+        state
+      }
+    });
+    let exit_var = match o_exit_var {
+      Some((v, r)) => v,
+      None => return
+    };
+    self.pivot(&entry_var, &exit_var).unwrap();
   }
 
   ///

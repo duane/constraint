@@ -123,7 +123,7 @@ impl Problem {
       }
     }
     if lr.op == Relation::LT {
-      lr.rhs.plus_this(&LinearExpression::from(SCALAR_EPSILON * 2.0));
+      lr.rhs.plus_this(&LinearExpression::from(scalar::EPSILON * 2.0));
       lr.op = Relation::LEQ;
     }
   }
@@ -222,24 +222,6 @@ impl Problem {
       normalized_constraints.push_back(constraint);
     }
 
-    println!("phase one: {}", self.objective);
-    println!("subject to:");
-    for constraint in normalized_constraints.iter() {
-      println!("{}", constraint);
-    }
-    println!("and restrained variables:");
-    print!("0 <= ");
-    let mut first = true;
-    for variable in restrained_vars.iter() {
-      if !first {
-        print!(", ");
-      } else {
-        first = false;
-      }
-      print!("{}", variable);
-    }
-    println!("");
-
     (normalized_constraints, restrained_vars)
   }
 
@@ -293,20 +275,6 @@ impl Problem {
       }
     }
 
-    println!("{}", new_f);
-    println!("phase two: {}", new_f);
-    println!("subject to:");
-    for (v, e) in c_u.iter() {
-      println!("{} == {}", v, e);
-    }
-    println!("------------------------------------------------------------");
-    for r in c_s.iter() {
-      println!("{}", r);
-    }
-    println!("with restrained variables:");
-    let vars: Vec<&str> = restrained_variables.iter().map(|s|s.name().as_ref()).collect();
-    println!("0 <= {}", vars.join(", "));
-
     let mut tableau = Tableau::new();
     tableau.set_objective(new_f);
     for (var, e) in c_u.into_iter() {
@@ -314,7 +282,7 @@ impl Problem {
     }
 
     for constraint in c_s.into_iter() {
-      let p_vars: HashSet<Var> = tableau.parametric_vars_iter().map(|s| s.clone()).collect();
+      let p_vars: HashSet<Var> = tableau.parametric_vars().map(|s| s.clone()).collect();
       let o_var = constraint.lhs.terms().keys().chain(constraint.rhs.terms().keys()).find(|s| !p_vars.contains(s.clone()));
       if o_var.is_none() {
         return Err(format!("{} is not a viable simplex equation", constraint));
@@ -363,7 +331,6 @@ mod test {
     let constraints = vec!(LinearRelation::new(LinearExpression::from(Var::from("x")), Relation::LEQ, LinearExpression::from(-5.0)));
     let problem = Problem::new(objective, constraints);
     let tableau = problem.augmented_simplex().unwrap();
-    tableau.print();
     assert_eq!(1, tableau.get_parametric_vars().len());
     assert!(tableau.is_parametric(&Var::from("s_1")));
   }
@@ -372,9 +339,8 @@ mod test {
   fn test_problem_parse() {
     let buf = r#"minimize(x_m+-1.0x_l);2x_m==x_l+x_r;x_l+10<=x_r;x_l>=-10;x_r<=100"#;
     let problem = parse_Problem(buf).unwrap();
-    println!("before problem: {}", problem);
-    println!("");
-    let tableau = problem.augmented_simplex().unwrap();
+    let mut tableau = problem.augmented_simplex().unwrap();
+    tableau.simplex();
     tableau.print();
   }
 }
