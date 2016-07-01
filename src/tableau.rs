@@ -9,7 +9,7 @@ use prettytable::cell::Cell;
 
 use var::Var;
 
-pub const TABLEAU_OBJECTIVE_VARIABLE: &'static str = "z";
+pub const TABLEAU_OBJECTIVE_VARIABLE: &'static str = "OMGIAMANOBJECTIVE";
 
 pub enum ProblemDirection {
   Maximize,
@@ -205,7 +205,7 @@ impl Tableau {
   /// ```
   /// extern crate constraint;
   /// use constraint::expr::LinearExpression;
-  /// use constraint::tableau::Tableau;
+  /// use constraint::tableau::{TABLEAU_OBJECTIVE_VARIABLE, Tableau};
   /// use constraint::var::Var;
   ///
   /// fn main() {
@@ -214,7 +214,7 @@ impl Tableau {
   ///   let keys: Vec<Var> = tableau.basic_vars().map(|s|s.clone()).collect();
   ///   assert_eq!(2, keys.len());
   ///   assert!(keys.contains(&Var::from("x")));
-  ///   assert!(keys.contains(&Var::from("z")));
+  ///   assert!(keys.contains(&Var::from(TABLEAU_OBJECTIVE_VARIABLE)));
   /// }
   /// ```
   pub fn basic_vars<'s>(&'s self) -> hash_map::Keys<'s, Var, LinearExpression> {
@@ -363,6 +363,19 @@ impl Tableau {
     Ok(removed)
   }
 
+  pub fn remove_column(&mut self, var: &Var) -> Result<(), String> {
+    match self.columns.get(var) {
+      Some(basic_vars) => {
+        if !basic_vars.iter().all(|e| approx_eq(0.0, self.get_basic(e).unwrap().get_coefficient(var))) {
+          return Err(String::from("Parametric var still has weight"));
+        }
+      }
+      None => return Err(String::from("column does not exist"))
+    };
+    let _ = self.columns.remove(var);
+    Ok(())
+  }
+
   fn remove_parameter(&mut self, var: &Var) -> Result<(), String> {
     Err(String::from("Dunno what to do"))
   }
@@ -438,47 +451,55 @@ impl Tableau {
     };
     self.substitute(entry_var, &solved_for_entry).unwrap();
     self.add_row(entry_var.clone(), solved_for_entry, false).unwrap();
+    self.remove_column(entry_var).unwrap();
     Ok(())
   }
 
-  pub fn simplex(&mut self) {
-    let min_objective_coefficient = scalar::MAX;
-    let initial: Option<(Var, Scalar)> = None;
-    let o_entry_var = self.get_objective().get_expr().terms().iter().fold(initial, |found, (k,v)| {
-      if *v < found.clone().map(|t|t.1).unwrap_or(0.0) {
-        Some((k.clone(),*v))
-      } else {
-        found
+  pub fn simplex(&mut self) -> Result<(), String> {
+    loop {
+      let min_objective_coefficient = scalar::MAX;
+      let initial: Option<(Var, Scalar)> = None;
+      let o_entry_var = self.get_objective().
+        get_expr().
+        terms().
+        iter().
+        filter(|&(k, _)| k.is_pivotable()).
+        fold(initial, |found, (k, v)| {
+        if *v < found.clone().map(|t| t.1).unwrap_or(0.0) {
+          Some((k.clone(), *v))
+        } else {
+          found
+        }
+      });
+      let (entry_var, zc) = match o_entry_var {
+        Some(tuple) => tuple,
+        None => return Ok(())
+      };
+      assert!(entry_var.is_pivotable());
+      let exit_candidates_exprs: HashMap<Var, LinearExpression> = self.get_basic_vars_for_param(&entry_var).
+        iter().
+        filter(|v| v.is_pivotable()).
+        map(|v| (v.clone(), self.get_basic(v).unwrap().clone())).
+        collect();
+      if !exit_candidates_exprs.values().any(|e| e.get_coefficient(&entry_var) < 0.0) {
+        return Err(String::from("Unbounded"));
       }
-    });
-    let (entry_var, zc) = match o_entry_var {
-      Some(tuple) => tuple,
-      None => return
-    };
-    assert!(entry_var.is_pivotable());
-    let exit_candidates_exprs: HashMap<Var, LinearExpression> = self.get_basic_vars_for_param(&entry_var).
-      iter().
-      filter(|v|v.is_pivotable()).
-      map(|v|(v.clone(),self.get_basic(v).unwrap().clone())).
-      collect();
-    if !exit_candidates_exprs.values().any(|e|e.get_coefficient(&entry_var) < 0.0) {
-      panic!("Unbounded");
+      let initial_state: Option<(Var, Scalar)> = None;
+      let o_exit_var = exit_candidates_exprs.iter().fold(initial_state, |state, (k, e)| {
+        let a_ij = e.get_coefficient(&entry_var);
+        let ratio = -e.get_constant() / a_ij;
+        if state.is_none() || ratio < state.clone().unwrap().1 {
+          Some((k.clone(), ratio))
+        } else {
+          state
+        }
+      });
+      let exit_var = match o_exit_var {
+        Some((v, r)) => v,
+        None => return Ok(())
+      };
+      self.pivot(&entry_var, &exit_var).unwrap();
     }
-    let initial_state: Option<(Var, Scalar)> = None;
-    let o_exit_var = exit_candidates_exprs.iter().fold(initial_state, |state, (k,e)| {
-      let a_ij = e.get_coefficient(&entry_var);
-      let ratio = -e.get_constant() / a_ij;
-      if state.is_none() || ratio < state.clone().unwrap().1 {
-        Some((k.clone(),ratio))
-      } else {
-        state
-      }
-    });
-    let exit_var = match o_exit_var {
-      Some((v, r)) => v,
-      None => return
-    };
-    self.pivot(&entry_var, &exit_var).unwrap();
   }
 
   ///
@@ -506,8 +527,76 @@ impl Tableau {
 
 #[cfg(test)]
 mod test {
+  extern crate itertools;
+  use expr::approx_eq;
+  use var::Var;
+  use std::io::BufReader;
+  use std::io::prelude::*;
+  use std::fs::File;
+  use self::itertools::Itertools;
+  use super::*;
+  fn from_file(file: &str) -> Tableau {
+    let f = BufReader::new(File::open(file).unwrap());
+    let buf = f.lines().map(|r|r.unwrap_or(String::new())).join(";");
+    let problem = parse_Problem(buf.as_ref()).unwrap();
+    problem.augmented_simplex().unwrap()
+  }
+
+  use grammar::*;
   #[test]
-  fn it_works() {
-    let tableau = super::Tableau::new();
+  fn cassowary_tochi() {
+    let mut  tableau = from_file("test/problems/cassowary-tochi");
+    tableau.simplex().unwrap();
+    let solution = tableau.get_basic_feasible_solution();
+    assert!(approx_eq(-10.0, *solution.get(&Var::from("x_l")).unwrap()));
+    assert!(approx_eq(-5.0, *solution.get(&Var::from("x_m")).unwrap()));
+    assert!(approx_eq(0.0, *solution.get(&Var::from("x_r")).unwrap()));
+    assert!(approx_eq(5.0, *solution.get(&Var::from(super::TABLEAU_OBJECTIVE_VARIABLE)).unwrap()));
+  }
+
+  #[test]
+  fn equate() {
+    let mut tableau = from_file("test/problems/equate");
+    tableau.simplex().unwrap();
+    let solution = tableau.get_basic_feasible_solution();
+    assert!(approx_eq(4.0, *solution.get(&Var::from("x")).unwrap()));
+    assert!(approx_eq(4.0, *solution.get(&Var::from(super::TABLEAU_OBJECTIVE_VARIABLE)).unwrap()));
+  }
+
+  #[test]
+  fn one_slack() {
+    let mut tableau = from_file("test/problems/one_slack");
+    tableau.simplex().unwrap();
+    let solution = tableau.get_basic_feasible_solution();
+    assert!(approx_eq(0.0, *solution.get(&Var::from("x")).unwrap()));
+    assert!(approx_eq(0.0, *solution.get(&Var::from(super::TABLEAU_OBJECTIVE_VARIABLE)).unwrap()));
+  }
+
+  #[test]
+  fn two_slack() {
+    let mut tableau = from_file("test/problems/two_slack");
+    tableau.simplex().unwrap();
+    let solution = tableau.get_basic_feasible_solution();
+    assert!(approx_eq(0.0, *solution.get(&Var::from("x")).unwrap()));
+    assert!(approx_eq(0.0, *solution.get(&Var::from("y")).unwrap()));
+    assert!(approx_eq(0.0, *solution.get(&Var::from(super::TABLEAU_OBJECTIVE_VARIABLE)).unwrap()));
+  }
+
+  #[test]
+  fn one_pivot() {
+    let mut tableau = from_file("test/problems/one_pivot");
+    tableau.simplex().unwrap();
+    let solution = tableau.get_basic_feasible_solution();
+
+    assert!(approx_eq(-80.0, *solution.get(&Var::from("x")).unwrap()));
+    assert!(approx_eq(-80.0, *solution.get(&Var::from("o")).unwrap()));
+    assert!(approx_eq(0.0, *solution.get(&Var::from("y")).unwrap()));
+    assert!(approx_eq(-40.0, *solution.get(&Var::from(super::TABLEAU_OBJECTIVE_VARIABLE)).unwrap()));
+  }
+
+  #[test]
+  fn unbounded() {
+    let mut tableau = from_file("test/problems/unbounded");
+    assert_eq!(tableau.simplex().unwrap_err(), String::from("Unbounded"));
   }
 }

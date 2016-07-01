@@ -128,18 +128,6 @@ impl Problem {
     }
   }
 
-  // Returns true iff lr is (0 <= VAR)
-  fn get_restrained_var<'s, 'r>(&'s self, lr: &'r LinearRelation) -> Option<Var> {
-    let lhs_valid = lr.lhs.terms().is_empty() && approx_eq(0.0, lr.lhs.get_constant());
-    let op_valid = lr.op == Relation::LEQ;
-    let rhs_valid = lr.rhs.terms().len() == 1 && *lr.rhs.terms().values().next().unwrap() >= 0.0;
-    if lhs_valid && op_valid && rhs_valid {
-      Some(lr.rhs.terms().keys().next().unwrap().clone())
-    } else {
-      None
-    }
-  }
-
   // lhs <= rhs
   // lhs + s_n == rhs, 0 <= s_n
   // 0 == rhs - lhs - s_n, 0 <= s_n
@@ -205,13 +193,6 @@ impl Problem {
         }
         Relation::LEQ => (),
         _ => self.convert_to_leq_and_eq(&mut constraint)
-      }
-      match self.get_restrained_var(&constraint) {
-        Some(var) => {
-          restrained_vars.insert(var);
-          continue;
-        }
-        _ => ()
       }
       match self.convert_leq_to_eq(&mut constraint, slack_namer) {
         Some(var) => {
@@ -340,7 +321,6 @@ mod test {
     let buf = r#"minimize(x_m+-1.0x_l);2x_m==x_l+x_r;x_l+10<=x_r;x_l>=-10;x_r<=100"#;
     let problem = parse_Problem(buf).unwrap();
     let mut tableau = problem.augmented_simplex().unwrap();
-    tableau.simplex();
-    tableau.print();
+    tableau.simplex().unwrap();
   }
 }
