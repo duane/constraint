@@ -18,9 +18,9 @@ mod tests {
 
   #[test]
   fn parse_lalr_identifiers() {
-    assert_eq!(Var::from("x"), grammar::parse_Variable("x").unwrap());
-    assert_eq!(Var::from("_"), grammar::parse_Variable("_").unwrap());
-    assert_eq!(Var::from("x2"), grammar::parse_Variable("x2").unwrap());
+    assert_eq!(Var::external(String::from("x")), grammar::parse_Variable("x").unwrap());
+    assert_eq!(Var::external(String::from("_")), grammar::parse_Variable("_").unwrap());
+    assert_eq!(Var::external(String::from("x2")), grammar::parse_Variable("x2").unwrap());
     assert!(grammar::parse_Variable("9").is_err());
   }
 
@@ -28,15 +28,15 @@ mod tests {
   fn parse_lalr_terms() {
     let term1 = grammar::parse_Term("2x").unwrap();
     assert!(approx_eq(2.0, term1.0.unwrap()));
-    assert_eq!(Var::from("x"), term1.1.unwrap());
+    assert_eq!(Var::external(String::from("x")), term1.1.unwrap());
 
     let term2 = grammar::parse_Term("-43.x2").unwrap();
     assert!(approx_eq(-43.0, term2.0.unwrap()));
-    assert_eq!(Var::from("x2"), term2.1.unwrap());
+    assert_eq!(Var::external(String::from("x2")), term2.1.unwrap());
 
     let term3 = grammar::parse_Term("y").unwrap();
     assert!(term3.0.is_none());
-    assert_eq!(Var::from("y"), term3.1.unwrap());
+    assert_eq!(Var::external(String::from("y")), term3.1.unwrap());
 
     let term4 = grammar::parse_Term("0.4").unwrap();
     assert!(approx_eq(0.4, term4.0.unwrap()));
@@ -44,19 +44,19 @@ mod tests {
 
     let term5 = grammar::parse_Term("-72.3 x3").unwrap();
     assert!(approx_eq(-72.3, term5.0.unwrap()));
-    assert_eq!(Var::from("x3"), term5.1.unwrap());
+    assert_eq!(Var::external(String::from("x3")), term5.1.unwrap());
 
     let term6 = grammar::parse_Term("-72.3*x3").unwrap();
     assert!(approx_eq(-72.3, term6.0.unwrap()));
-    assert_eq!(Var::from("x3"), term6.1.unwrap());
+    assert_eq!(Var::external(String::from("x3")), term6.1.unwrap());
   }
 
   #[test]
   fn parse_lalr_exprs() {
     let expr = grammar::parse_Expression("-42.3 x4 + 92 +-92.x4+0.0x2+-92.3x3+-82").unwrap();
-    assert!(approx_eq(-134.3, expr.get_coefficient(&Var::from("x4"))));
-    assert!(approx_eq(0.0, expr.get_coefficient(&Var::from("x2"))));
-    assert!(approx_eq(-92.3, expr.get_coefficient(&Var::from("x3"))));
+    assert!(approx_eq(-134.3, expr.get_coefficient(&Var::external(String::from("x4")))));
+    assert!(approx_eq(0.0, expr.get_coefficient(&Var::external(String::from("x2")))));
+    assert!(approx_eq(-92.3, expr.get_coefficient(&Var::external(String::from("x3")))));
     assert!(approx_eq(10.0, expr.get_constant()));
   }
 

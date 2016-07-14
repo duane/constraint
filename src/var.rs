@@ -1,9 +1,15 @@
 use std::cmp::{Ordering, PartialEq};
 use std::fmt::{Display, Error, Formatter};
 use std::hash::{Hash, Hasher};
+use std::cell::Cell;
+//use std::rc::Rc;
+use expr::Scalar;
 
 #[derive(Debug,Clone)]
-pub struct Var(pub String, pub bool);
+pub enum Var {
+  Internal(String),
+  External(String, Cell<Scalar>)
+}
 
 impl Var {
   ///
@@ -15,12 +21,13 @@ impl Var {
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   assert!(Var(String::from("s_1"), true));
+  ///   assert!(Var::internal(String::from("s_1")));
   /// }
   ///
   pub fn is_pivotable(&self) -> bool {
     match self {
-      &Var(_, pivotable) => pivotable
+      &Var::Internal(_) => true,
+      &Var::External(_, _) => false
     }
   }
 
@@ -33,31 +40,22 @@ impl Var {
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   assert_eq!(String::from("s_1"), Var(String::from("s_1"), true));
+  ///   assert_eq!(String::from("s_1"), Var::internal(String::from("s_1")));
   /// }
   ///
   pub fn name<'s>(&'s self) -> &'s String {
     match self {
-      &Var(ref name, _) => name
+      &Var::Internal(ref name) => name,
+      &Var::External(ref name, _) => name
     }
   }
-}
 
-impl<'a> From<&'a str> for Var {
-  ///
-  /// Constructs a variable from a string. This variable is not pivotable.
-  ///
-  fn from(var: &'a str) -> Var {
-    Var(String::from(var), false)
+  pub fn internal(name: String) -> Var {
+    Var::Internal(name)
   }
-}
 
-impl<'a> From<String> for Var {
-  ///
-  /// Constructs a variable from a string. This variable is not pivotable.
-  ///
-  fn from(var: String) -> Var {
-    Var(var, false)
+  pub fn external(name: String) -> Var {
+    Var::External(name, Cell::new(0.0))
   }
 }
 

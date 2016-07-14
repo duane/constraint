@@ -24,8 +24,8 @@ impl ProblemObjective {
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let objective = ProblemObjective::Minimize(LinearExpression::from(Var::from("x")));
-  ///   assert!(approx_eq(1.0, objective.get_expr().get_coefficient(&Var::from("x"))));
+  ///   let objective = ProblemObjective::Minimize(LinearExpression::from(Var::external(String::from("x"))));
+  ///   assert!(approx_eq(1.0, objective.get_expr().get_coefficient(&Var::external(String::from("x")))));
   ///   assert!(approx_eq(0.0, objective.get_expr().get_constant()));
   /// }
   /// ```
@@ -49,9 +49,9 @@ impl ProblemObjective {
   ///
   /// fn main() {
   ///   let mut objective = ProblemObjective::Minimize(LinearExpression::new());
-  ///   assert!(approx_eq(0.0, objective.get_expr().get_coefficient(&Var::from("x"))));
-  ///   objective.set_expr(LinearExpression::from(Var::from("x")));
-  ///   assert!(approx_eq(1.0, objective.get_expr().get_coefficient(&Var::from("x"))));
+  ///   assert!(approx_eq(0.0, objective.get_expr().get_coefficient(&Var::external(String::from("x")))));
+  ///   objective.set_expr(LinearExpression::from(Var::external(String::from("x"))));
+  ///   assert!(approx_eq(1.0, objective.get_expr().get_coefficient(&Var::external(String::from("x")))));
   /// }
   /// ```
   pub fn set_expr(&mut self, expr: LinearExpression) {
@@ -103,8 +103,8 @@ impl Problem {
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let objective = ProblemObjective::Minimize(LinearExpression::from(Var::from("x")));
-  ///   let constraints = vec!(LinearRelation::new(LinearExpression::from(Var::from("x")), Relation::EQ, LinearExpression::from(5.0)));
+  ///   let objective = ProblemObjective::Minimize(LinearExpression::from(Var::external(String::from("x"))));
+  ///   let constraints = vec!(LinearRelation::new(LinearExpression::from(Var::external(String::from("x"))), Relation::EQ, LinearExpression::from(5.0)));
   ///   let _ = Problem::new(objective, constraints);
   /// }
   /// ```
@@ -135,7 +135,7 @@ impl Problem {
   // 0 == (rhs - lhs), 0 <= s_n
   fn convert_leq_to_eq<'s, 'r>(&'s self, lr: &'r mut LinearRelation, namer: &mut Namer) -> Option<Var> {
     if lr.op == Relation::LEQ {
-      let slack = Var(namer.vend(), true);
+      let slack = Var::internal(namer.vend());
       lr.lhs.plus_this(&LinearExpression::from(slack.clone()));
       lr.lhs.times_this(-1.0);
       lr.rhs.plus_this(&lr.lhs);
@@ -160,12 +160,12 @@ impl Problem {
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let objective = ProblemObjective::Minimize(LinearExpression::from(Var::from("x")));
-  ///   let constraints = vec!(LinearRelation::new(LinearExpression::from(Var::from("x")), Relation::EQ, LinearExpression::from(5.0)));
+  ///   let objective = ProblemObjective::Minimize(LinearExpression::from(Var::external(String::from("x"))));
+  ///   let constraints = vec!(LinearRelation::new(LinearExpression::from(Var::external(String::from("x"))), Relation::EQ, LinearExpression::from(5.0)));
   ///   let problem = Problem::new(objective, constraints);
   ///   let tableau = problem.augmented_simplex().unwrap();
   ///   let basic_feasible_solution = tableau.get_basic_feasible_solution();
-  ///   assert!(approx_eq(5.0, *basic_feasible_solution.get(&Var::from("x")).unwrap()));
+  ///   assert!(approx_eq(5.0, *basic_feasible_solution.get(&Var::external(String::from("x"))).unwrap()));
   /// }
   pub fn augmented_simplex(&self) -> Result<Tableau, String> {
     let mut slack_namer = Namer::init("s_");
@@ -298,22 +298,22 @@ mod test {
 
   #[test]
   fn const_equation() {
-    let objective = ProblemObjective::Minimize(LinearExpression::from(Var::from("x")));
-    let constraints = vec!(LinearRelation::new(LinearExpression::from(Var::from("x")), Relation::EQ, LinearExpression::from(5.0)));
+    let objective = ProblemObjective::Minimize(LinearExpression::from(Var::external(String::from("x"))));
+    let constraints = vec!(LinearRelation::new(LinearExpression::from(Var::external(String::from("x"))), Relation::EQ, LinearExpression::from(5.0)));
     let problem = Problem::new(objective, constraints);
     let tableau = problem.augmented_simplex().unwrap();
     let basic_feasible_solution = tableau.get_basic_feasible_solution();
-    assert!(approx_eq(5.0, *basic_feasible_solution.get(&Var::from("x")).unwrap()));
+    assert!(approx_eq(5.0, *basic_feasible_solution.get(&Var::external(String::from("x"))).unwrap()));
   }
 
   #[test]
   fn one_slack() {
-    let objective = ProblemObjective::Minimize(LinearExpression::from(Var::from("x")));
-    let constraints = vec!(LinearRelation::new(LinearExpression::from(Var::from("x")), Relation::LEQ, LinearExpression::from(-5.0)));
+    let objective = ProblemObjective::Minimize(LinearExpression::from(Var::external(String::from("x"))));
+    let constraints = vec!(LinearRelation::new(LinearExpression::from(Var::external(String::from("x"))), Relation::LEQ, LinearExpression::from(-5.0)));
     let problem = Problem::new(objective, constraints);
     let tableau = problem.augmented_simplex().unwrap();
     assert_eq!(1, tableau.get_parametric_vars().len());
-    assert!(tableau.is_parametric(&Var::from("s_1")));
+    assert!(tableau.is_parametric(&Var::external(String::from("s_1"))));
   }
 
   #[test]

@@ -48,7 +48,7 @@ impl Tableau {
       columns: HashMap::new(),
       restricted: HashSet::new(),
     };
-    t.rows.insert(Var::from(TABLEAU_OBJECTIVE_VARIABLE), LinearExpression::new());
+    t.rows.insert(Var::external(String::from(TABLEAU_OBJECTIVE_VARIABLE)), LinearExpression::new());
     t
   }
 
@@ -70,8 +70,8 @@ impl Tableau {
   /// ```
   pub fn get_objective<'s>(&'s self) -> ProblemObjective {
     match self.direction {
-      ProblemDirection::Maximize => ProblemObjective::Maximize(self.rows.get(&Var::from(TABLEAU_OBJECTIVE_VARIABLE)).unwrap().clone()),
-      ProblemDirection::Minimize => ProblemObjective::Minimize(self.rows.get(&Var::from(TABLEAU_OBJECTIVE_VARIABLE)).unwrap().clone())
+      ProblemDirection::Maximize => ProblemObjective::Maximize(self.rows.get(&Var::external(String::from(TABLEAU_OBJECTIVE_VARIABLE))).unwrap().clone()),
+      ProblemDirection::Minimize => ProblemObjective::Minimize(self.rows.get(&Var::external(String::from(TABLEAU_OBJECTIVE_VARIABLE))).unwrap().clone())
     }
   }
 
@@ -89,19 +89,19 @@ impl Tableau {
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   tableau.set_objective(ProblemObjective::Maximize(LinearExpression::from(Var::from("x"))));
-  ///   assert!(approx_eq(1.0, tableau.get_objective().get_expr().get_coefficient(&Var::from("x"))));
+  ///   tableau.set_objective(ProblemObjective::Maximize(LinearExpression::from(Var::external(String::from("x")))));
+  ///   assert!(approx_eq(1.0, tableau.get_objective().get_expr().get_coefficient(&Var::external(String::from("x")))));
   /// }
   /// ```
   pub fn set_objective(&mut self, f: ProblemObjective) {
     match f {
       ProblemObjective::Maximize(e) => {
         self.direction = ProblemDirection::Maximize;
-        self.rows.insert(Var::from(TABLEAU_OBJECTIVE_VARIABLE), e);
+        self.rows.insert(Var::external(String::from(TABLEAU_OBJECTIVE_VARIABLE)), e);
       }
       ProblemObjective::Minimize(e) => {
         self.direction = ProblemDirection::Minimize;
-        self.rows.insert(Var::from(TABLEAU_OBJECTIVE_VARIABLE), e);
+        self.rows.insert(Var::external(String::from(TABLEAU_OBJECTIVE_VARIABLE)), e);
       }
     }
   }
@@ -119,9 +119,9 @@ impl Tableau {
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   assert!(tableau.is_basic(&Var::from("x")));
-  ///   assert!(!tableau.is_basic(&Var::from("s1")));
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), LinearExpression::from(Var::external(String::from("s1"))).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.is_basic(&Var::external(String::from("x"))));
+  ///   assert!(!tableau.is_basic(&Var::external(String::from("s1"))));
   /// }
   /// ```
   pub fn is_basic(&self, var: &Var) -> bool {
@@ -141,10 +141,10 @@ impl Tableau {
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   assert!(!tableau.is_parametric(&Var::from("x")));
-  ///   assert!(tableau.is_parametric(&Var::from("s1")));
-  ///   assert!(!tableau.is_parametric(&Var::from("c")));
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), LinearExpression::from(Var::external(String::from("s1"))).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(!tableau.is_parametric(&Var::external(String::from("x"))));
+  ///   assert!(tableau.is_parametric(&Var::external(String::from("s1"))));
+  ///   assert!(!tableau.is_parametric(&Var::external(String::from("c"))));
   /// }
   /// ```
   pub fn is_parametric(&self, var: &Var) -> bool {
@@ -164,9 +164,9 @@ impl Tableau {
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   let basic = tableau.get_basic(&Var::from("x")).unwrap();
-  ///   assert!(approx_eq(1.0, basic.get_coefficient(&Var::from("s1"))));
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), LinearExpression::from(Var::external(String::from("s1"))).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   let basic = tableau.get_basic(&Var::external(String::from("x"))).unwrap();
+  ///   assert!(approx_eq(1.0, basic.get_coefficient(&Var::external(String::from("s1")))));
   ///   assert!(approx_eq(10.0, basic.get_constant()));
   /// }
   /// ```
@@ -187,10 +187,10 @@ impl Tableau {
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), LinearExpression::from(Var::external(String::from("s1"))).plus(&LinearExpression::from(10.0)), false).is_ok());
   ///   let keys = tableau.get_parametric_vars();
   ///   assert_eq!(1, keys.len());
-  ///   assert!(keys.contains(&Var::from("s1")));
+  ///   assert!(keys.contains(&Var::external(String::from("s1"))));
   /// }
   /// ```
   pub fn parametric_vars<'s>(&'s self) -> hash_map::Keys<'s, Var, HashSet<Var>> {
@@ -210,11 +210,11 @@ impl Tableau {
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), LinearExpression::from(Var::external(String::from("s1"))).plus(&LinearExpression::from(10.0)), false).is_ok());
   ///   let keys: Vec<Var> = tableau.basic_vars().map(|s|s.clone()).collect();
   ///   assert_eq!(2, keys.len());
-  ///   assert!(keys.contains(&Var::from("x")));
-  ///   assert!(keys.contains(&Var::from(TABLEAU_OBJECTIVE_VARIABLE)));
+  ///   assert!(keys.contains(&Var::external(String::from("x"))));
+  ///   assert!(keys.contains(&Var::external(String::from(TABLEAU_OBJECTIVE_VARIABLE))));
   /// }
   /// ```
   pub fn basic_vars<'s>(&'s self) -> hash_map::Keys<'s, Var, LinearExpression> {
@@ -234,10 +234,10 @@ impl Tableau {
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), LinearExpression::from(Var::external(String::from("s1"))).plus(&LinearExpression::from(10.0)), false).is_ok());
   ///   let keys = tableau.get_parametric_vars();
   ///   assert_eq!(1, keys.len());
-  ///   assert!(keys.contains(&Var::from("s1")));
+  ///   assert!(keys.contains(&Var::external(String::from("s1"))));
   /// }
   /// ```
   pub fn get_parametric_vars(&self) -> HashSet<Var> {
@@ -257,10 +257,10 @@ impl Tableau {
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   let vars = tableau.get_basic_vars_for_param(&Var::from("s1"));
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), LinearExpression::from(Var::external(String::from("s1"))).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   let vars = tableau.get_basic_vars_for_param(&Var::external(String::from("s1")));
   ///   assert_eq!(1, vars.len());
-  ///   assert!(vars.contains(&Var::from("x")));
+  ///   assert!(vars.contains(&Var::external(String::from("x"))));
   /// }
   /// ```
   pub fn get_basic_vars_for_param<'s>(&'s self, var: &Var) -> HashSet<Var> {
@@ -306,9 +306,9 @@ impl Tableau {
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   let basic = tableau.get_basic(&Var::from("x")).unwrap();
-  ///   assert!(approx_eq(1.0, basic.get_coefficient(&Var::from("s1"))));
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), LinearExpression::from(Var::external(String::from("s1"))).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   let basic = tableau.get_basic(&Var::external(String::from("x"))).unwrap();
+  ///   assert!(approx_eq(1.0, basic.get_coefficient(&Var::external(String::from("s1")))));
   ///   assert!(approx_eq(10.0, basic.get_constant()));
   /// }
   /// ```
@@ -338,14 +338,14 @@ impl Tableau {
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), LinearExpression::from(Var::external(String::from("s1"))).plus(&LinearExpression::from(10.0)), false).is_ok());
   ///   {
-  ///     let basic = tableau.get_basic(&Var::from("x")).unwrap();
-  ///     assert!(approx_eq(1.0, basic.get_coefficient(&Var::from("s1"))));
+  ///     let basic = tableau.get_basic(&Var::external(String::from("x"))).unwrap();
+  ///     assert!(approx_eq(1.0, basic.get_coefficient(&Var::external(String::from("s1")))));
   ///     assert!(approx_eq(10.0, basic.get_constant()));
   ///   }
-  ///   assert!(tableau.remove_row(&Var::from("x")).is_ok());
-  ///   assert!(tableau.get_basic(&Var::from("x")).is_none());
+  ///   assert!(tableau.remove_row(&Var::external(String::from("x"))).is_ok());
+  ///   assert!(tableau.get_basic(&Var::external(String::from("x"))).is_none());
   /// }
   /// ```
   pub fn remove_row(&mut self, var: &Var) -> Result<LinearExpression, String> {
@@ -393,10 +393,10 @@ impl Tableau {
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::from("x"), LinearExpression::from(Var::from("s1")).plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   assert!(tableau.substitute(&Var::from("s1"), &LinearExpression::from(-8.0)).is_ok());
-  ///   let basic = tableau.get_basic(&Var::from("x")).unwrap();
-  ///   assert!(approx_eq(0.0, basic.get_coefficient(&Var::from("s1"))));
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), LinearExpression::from(Var::external(String::from("s1"))).plus(&LinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.substitute(&Var::external(String::from("s1")), &LinearExpression::from(-8.0)).is_ok());
+  ///   let basic = tableau.get_basic(&Var::external(String::from("x"))).unwrap();
+  ///   assert!(approx_eq(0.0, basic.get_coefficient(&Var::external(String::from("s1")))));
   ///   assert!(approx_eq(2.0, basic.get_constant()));
   /// }
   /// ```
@@ -420,17 +420,17 @@ impl Tableau {
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::from("x"),
-  ///           LinearExpression::from(Var::from("s1")).
+  ///   assert!(tableau.add_row(Var::external(String::from("x")),
+  ///           LinearExpression::from(Var::external(String::from("s1"))).
   ///             plus(&LinearExpression::from(10.0)), false).is_ok());
-  ///   assert!(tableau.add_row(Var::from("y"),
-  ///           LinearExpression::from(Var::from("s1")).
-  ///             plus(&LinearExpression::term(Var::from("s2"), 5.2)).
+  ///   assert!(tableau.add_row(Var::external(String::from("y")),
+  ///           LinearExpression::from(Var::external(String::from("s1"))).
+  ///             plus(&LinearExpression::term(Var::external(String::from("s2")), 5.2)).
   ///             plus(&LinearExpression::from(-72.3)), false).is_ok());
   ///   let solution = tableau.get_basic_feasible_solution();
   ///   assert_eq!(solution.len(), 5); // two basics + two parameters + the objective variable.
-  ///   assert!(approx_eq(10.0, *solution.get(&Var::from("x")).unwrap()));
-  ///   assert!(approx_eq(-72.3, *solution.get(&Var::from("y")).unwrap()));
+  ///   assert!(approx_eq(10.0, *solution.get(&Var::external(String::from("x"))).unwrap()));
+  ///   assert!(approx_eq(-72.3, *solution.get(&Var::external(String::from("y"))).unwrap()));
   /// }
   /// ```
   pub fn get_basic_feasible_solution(&self) -> HashMap<Var, Scalar> {
@@ -508,7 +508,7 @@ impl Tableau {
   pub fn print(&self) {
     let basic_vars: BTreeSet<Var> = self.rows.keys().map(|c|c.clone()).collect();
     let parametric_vars: BTreeSet<Var> = self.columns.keys().map(|c|c.clone()).collect();
-    let header_row: Vec<Cell> = vec![Var::from(""), Var::from("c")].iter().chain(parametric_vars.iter()).map(|s|Cell::from(s)).collect();
+    let header_row: Vec<Cell> = vec![Var::external(String::from("")), Var::external(String::from("c"))].iter().chain(parametric_vars.iter()).map(|s|Cell::from(s)).collect();
     let mut table = Table::new();
     table.add_row(Row::new(header_row));
 
@@ -548,10 +548,10 @@ mod test {
     let mut  tableau = from_file("test/problems/cassowary-tochi");
     tableau.simplex().unwrap();
     let solution = tableau.get_basic_feasible_solution();
-    assert!(approx_eq(-10.0, *solution.get(&Var::from("x_l")).unwrap()));
-    assert!(approx_eq(-5.0, *solution.get(&Var::from("x_m")).unwrap()));
-    assert!(approx_eq(0.0, *solution.get(&Var::from("x_r")).unwrap()));
-    assert!(approx_eq(5.0, *solution.get(&Var::from(super::TABLEAU_OBJECTIVE_VARIABLE)).unwrap()));
+    assert!(approx_eq(-10.0, *solution.get(&Var::external(String::from("x_l"))).unwrap()));
+    assert!(approx_eq(-5.0, *solution.get(&Var::external(String::from("x_m"))).unwrap()));
+    assert!(approx_eq(0.0, *solution.get(&Var::external(String::from("x_r"))).unwrap()));
+    assert!(approx_eq(5.0, *solution.get(&Var::external(String::from(super::TABLEAU_OBJECTIVE_VARIABLE))).unwrap()));
   }
 
   #[test]
@@ -559,8 +559,8 @@ mod test {
     let mut tableau = from_file("test/problems/equate");
     tableau.simplex().unwrap();
     let solution = tableau.get_basic_feasible_solution();
-    assert!(approx_eq(4.0, *solution.get(&Var::from("x")).unwrap()));
-    assert!(approx_eq(4.0, *solution.get(&Var::from(super::TABLEAU_OBJECTIVE_VARIABLE)).unwrap()));
+    assert!(approx_eq(4.0, *solution.get(&Var::external(String::from("x"))).unwrap()));
+    assert!(approx_eq(4.0, *solution.get(&Var::external(String::from(super::TABLEAU_OBJECTIVE_VARIABLE))).unwrap()));
   }
 
   #[test]
@@ -568,8 +568,8 @@ mod test {
     let mut tableau = from_file("test/problems/one_slack");
     tableau.simplex().unwrap();
     let solution = tableau.get_basic_feasible_solution();
-    assert!(approx_eq(0.0, *solution.get(&Var::from("x")).unwrap()));
-    assert!(approx_eq(0.0, *solution.get(&Var::from(super::TABLEAU_OBJECTIVE_VARIABLE)).unwrap()));
+    assert!(approx_eq(0.0, *solution.get(&Var::external(String::from("x"))).unwrap()));
+    assert!(approx_eq(0.0, *solution.get(&Var::external(String::from(super::TABLEAU_OBJECTIVE_VARIABLE))).unwrap()));
   }
 
   #[test]
@@ -577,9 +577,9 @@ mod test {
     let mut tableau = from_file("test/problems/two_slack");
     tableau.simplex().unwrap();
     let solution = tableau.get_basic_feasible_solution();
-    assert!(approx_eq(0.0, *solution.get(&Var::from("x")).unwrap()));
-    assert!(approx_eq(0.0, *solution.get(&Var::from("y")).unwrap()));
-    assert!(approx_eq(0.0, *solution.get(&Var::from(super::TABLEAU_OBJECTIVE_VARIABLE)).unwrap()));
+    assert!(approx_eq(0.0, *solution.get(&Var::external(String::from("x"))).unwrap()));
+    assert!(approx_eq(0.0, *solution.get(&Var::external(String::from("y"))).unwrap()));
+    assert!(approx_eq(0.0, *solution.get(&Var::external(String::from(super::TABLEAU_OBJECTIVE_VARIABLE))).unwrap()));
   }
 
   #[test]
@@ -588,10 +588,10 @@ mod test {
     tableau.simplex().unwrap();
     let solution = tableau.get_basic_feasible_solution();
 
-    assert!(approx_eq(-80.0, *solution.get(&Var::from("x")).unwrap()));
-    assert!(approx_eq(-80.0, *solution.get(&Var::from("o")).unwrap()));
-    assert!(approx_eq(0.0, *solution.get(&Var::from("y")).unwrap()));
-    assert!(approx_eq(-40.0, *solution.get(&Var::from(super::TABLEAU_OBJECTIVE_VARIABLE)).unwrap()));
+    assert!(approx_eq(-80.0, *solution.get(&Var::external(String::from("x"))).unwrap()));
+    assert!(approx_eq(-80.0, *solution.get(&Var::external(String::from("o"))).unwrap()));
+    assert!(approx_eq(0.0, *solution.get(&Var::external(String::from("y"))).unwrap()));
+    assert!(approx_eq(-40.0, *solution.get(&Var::external(String::from(super::TABLEAU_OBJECTIVE_VARIABLE))).unwrap()));
   }
 
   #[test]
