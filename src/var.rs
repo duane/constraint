@@ -2,8 +2,11 @@ use std::cmp::{Ordering, PartialEq};
 use std::fmt::{Display, Error, Formatter};
 use std::hash::{Hash, Hasher};
 use std::cell::Cell;
-//use std::rc::Rc;
+use std::collections::HashMap;
+use std::rc::{Rc, Weak};
 use expr::Scalar;
+
+pub type VarRef = Rc<Var>;
 
 #[derive(Debug,Clone)]
 pub enum Var {
@@ -50,11 +53,11 @@ impl Var {
     }
   }
 
-  pub fn internal(name: String) -> Var {
+  fn internal(name: String) -> Var {
     Var::Internal(name)
   }
 
-  pub fn external(name: String) -> Var {
+  fn external(name: String) -> Var {
     Var::External(name, Cell::new(0.0))
   }
 }
@@ -88,5 +91,124 @@ impl Eq for Var { }
 impl Display for Var {
   fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
     fmt.write_str(self.name())
+  }
+}
+
+#[derive(Debug,Clone,Default)]
+pub struct VarIndex {
+  variables: HashMap<String, Weak<Var>>
+}
+
+impl VarIndex {
+  ///
+  /// Initialize a new VarIndex
+  ///
+  /// # Examples
+  ///
+  /// extern crate constraint;
+  /// use constraint::var::Var;
+  ///
+  /// fn main() {
+  ///   let _ = VarIndex::new();
+  /// }
+  ///
+  pub fn new() -> VarIndex {
+    VarIndex{
+      variables: HashMap::new()
+    }
+  }
+
+  ///
+  /// Inserting a var into a index
+  ///
+  /// # Examples
+  ///
+  /// extern crate constraint;
+  /// use constraint::var::Var;
+  ///
+  /// fn main() {
+  ///   let mut index = VarIndex::new();
+  ///   index.insert(Var::external("x"))
+  /// }
+  ///
+  fn insert<'s>(&'s mut self, var: Var) -> VarRef {
+    let name = {var.name().clone()};
+    let var_ref = Rc::new(var);
+    self.variables.insert(name, Rc::downgrade(&var_ref));
+    var_ref
+  }
+
+  ///
+  /// Checking whether a variable is already bound.
+  ///
+  /// # Examples
+  ///
+  /// extern crate constraint;
+  /// use constraint::var::Var;
+  ///
+  /// fn main() {
+  ///   let mut index = VarIndex::new();
+  ///   index.insert(Var::external("x"));
+  ///   assert!(index.contains(&String::from("x")));
+  /// }
+  ///
+  pub fn contains<'s>(&'s self, by_name: &String) -> bool {
+    self.variables.get(by_name).map(|c|c.upgrade().is_some()).unwrap_or(false)
+  }
+
+  ///
+  /// Getting a variable.
+  ///
+  /// # Examples
+  ///
+  /// extern crate constraint;
+  /// use constraint::var::Var;
+  ///
+  /// fn main() {
+  ///   let mut index = VarIndex::new();
+  ///   index.insert(Var::external("x"));
+  ///   assert_eq!(index.get(&String::from("x")).unwrap().name(), &String::from("x"));
+  /// }
+  ///
+  pub fn get<'s>(&'s self, by_name: &String) -> Option<VarRef> {
+    println!("{:?}", self.variables);
+    println!("{:?}", self.variables.get(by_name).unwrap());
+    self.variables.get(by_name).and_then(|c|c.upgrade())
+  }
+
+  ///
+  /// Generate and insert a new internal variable.
+  ///
+  /// # Examples
+  ///
+  /// extern crate constraint;
+  /// use constraint::var::Var;
+  ///
+  /// fn main() {
+  ///   let mut index = VarIndex::new();
+  ///   let var = index.internal(String::from("x"));
+  ///   assert_eq!(var.name(), &String::from("x"));
+  /// }
+  ///
+  pub fn internal<'s>(&'s mut self, name: String) -> VarRef {
+    self.insert(Var::internal(name))
+  }
+
+  ///
+  /// Generate and insert a new external variable.
+  ///
+  /// # Examples
+  ///
+  /// extern crate constraint;
+  /// use constraint::var::Var;
+  ///
+  /// fn main() {
+  ///   let mut index = VarIndex::new();
+  ///   let var = index.external(String::from("x"));
+  ///   assert_eq!(var.name(), &String::from("x"));
+  /// }
+  ///
+  pub fn external<'s>(&'s mut self, name: String) -> VarRef {
+    self.insert(Var::external(name))
   }
 }

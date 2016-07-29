@@ -6,7 +6,7 @@ pub struct Namer {
 }
 
 impl Namer {
-  pub fn init(prefix: &'static str) -> Namer {
+  pub fn new(prefix: &'static str) -> Namer {
     Namer{
       prefix: prefix,
       count: 1

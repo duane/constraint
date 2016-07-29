@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, HashMap};
 use std::iter::Iterator;
 use std::fmt::{Display, Formatter, Error};
 use std::mem::swap;
-use var::Var;
+use var::VarRef;
 
 pub type Scalar = scalar::Scalar;
 
@@ -75,7 +75,7 @@ impl LinearRelation {
   ///   use constraint::var::Var;
   ///
   ///   fn main() {
-  ///     let relation = LinearRelation::new(LinearExpression::term(Var::external(String::from("x")), -0.5), Relation::GEQ, LinearExpression::from(3.0));
+  ///     let relation = LinearRelation::new(LinearExpression::term(index.external(String::from("x")), -0.5), Relation::GEQ, LinearExpression::from(3.0));
   ///     assert_eq!(Relation::GEQ, relation.op);
   ///     assert_eq!(1, relation.lhs.terms().len());
   ///     assert!(relation.rhs.terms().is_empty());
@@ -124,8 +124,8 @@ impl LinearRelation {
   ///   use constraint::var::Var;
   ///
   ///   fn main() {
-  ///     let mut relation = LinearRelation::new(LinearExpression::term(Var::external(String::from("x")), 2.3), Relation::EQ, LinearExpression::from(3.7));
-  ///     relation.plus_this(&LinearExpression::term(Var::external(String::from("y")), 8.2).plus(&LinearExpression::from(4.1)));
+  ///     let mut relation = LinearRelation::new(LinearExpression::term(index.external(String::from("x")), 2.3), Relation::EQ, LinearExpression::from(3.7));
+  ///     relation.plus_this(&LinearExpression::term(index.external(String::from("y")), 8.2).plus(&LinearExpression::from(4.1)));
   ///     assert_eq!(relation.op, Relation::EQ);
   ///     assert_eq!(relation.lhs.terms().len(), 2);
   ///     assert_eq!(relation.rhs.terms().len(), 1);
@@ -153,7 +153,7 @@ impl LinearRelation {
     self.rhs.div_this(constant);
   }
 
-  pub fn substitute(&mut self, v: &Var, e: &LinearExpression) {
+  pub fn substitute(&mut self, v: &VarRef, e: &LinearExpression) {
     self.lhs.substitute(v, e);
     self.rhs.substitute(v, e);
   }
@@ -169,15 +169,15 @@ impl LinearRelation {
   ///   use constraint::var::Var;
   ///
   ///   fn main() {
-  ///     let relation = LinearRelation::new(LinearExpression::term(Var::external(String::from("x")), -0.5), Relation::GEQ, LinearExpression::from(3.0));
-  ///     let (op, expr) = relation.solve_for(&Var::external(String::from("x"))).unwrap();
+  ///     let relation = LinearRelation::new(LinearExpression::term(index.external(String::from("x")), -0.5), Relation::GEQ, LinearExpression::from(3.0));
+  ///     let (op, expr) = relation.solve_for(&index.external(String::from("x"))).unwrap();
   ///     assert_eq!(Relation::LEQ, op);
   ///     assert!(expr.terms().is_empty());
   ///     assert!(approx_eq(-6.0, expr.get_constant()));
   ///   }
   /// ```
   ///
-  pub fn solve_for(&self, var: &Var) -> Result<(Relation, LinearExpression), String> {
+  pub fn solve_for(&self, var: &VarRef) -> Result<(Relation, LinearExpression), String> {
     let mut lhs = self.lhs.clone();
     let mut rhs = self.rhs.clone();
     let a = lhs.mut_terms().remove(var).unwrap_or(0.0);
@@ -209,7 +209,7 @@ impl Display for LinearRelation {
 #[derive(Debug,Clone)]
 pub struct LinearExpression {
   constant: Scalar,
-  terms: BTreeMap<Var, Scalar>,
+  terms: BTreeMap<VarRef, Scalar>,
 }
 
 impl LinearExpression {
@@ -249,16 +249,16 @@ impl LinearExpression {
   ///   use constraint::var::Var;
   ///
   ///   fn main() {
-  ///     let expr = LinearExpression::term(Var::external(String::from("x")), 2.0);
+  ///     let expr = LinearExpression::term(index.external(String::from("x")), 2.0);
   ///     let mut bindings: HashMap<Var, Scalar> = HashMap::new();
-  ///     bindings.insert(Var::external(String::from("x")), 1.3);
+  ///     bindings.insert(index.external(String::from("x")), 1.3);
   ///     let result = expr.eval(&bindings);
   ///     assert!(approx_eq(2.6, result.get_constant()));
   ///     assert!(result.terms().is_empty());
   ///   }
   /// ```
   ///
-  pub fn eval(&self, bindings: &HashMap<Var, Scalar>) -> LinearExpression {
+  pub fn eval(&self, bindings: &HashMap<VarRef, Scalar>) -> LinearExpression {
     let (defined, undefined) = self.terms.iter().map(|(k,v)|(k.clone(), *v)).partition(|&(ref k,v)|bindings.contains_key(k));
     let mut result = self.constant;
     for (ref var, coef) in defined {
@@ -279,19 +279,19 @@ impl LinearExpression {
   ///   use constraint::var::Var;
   ///
   ///   fn main() {
-  ///     let expr = LinearExpression::term(Var::external(String::from("x")), 2.0);
+  ///     let expr = LinearExpression::term(index.external(String::from("x")), 2.0);
   ///     let mut bindings: HashMap<Var, Scalar> = HashMap::new();
-  ///     bindings.insert(Var::external(String::from("x")), 1.3);
+  ///     bindings.insert(index.external(String::from("x")), 1.3);
   ///     assert!(approx_eq(2.6, expr.full_eval(&bindings).unwrap()));
   ///   }
   /// ```
   ///
-  pub fn full_eval(&self, bindings: &HashMap<Var, Scalar>) -> Result<Scalar, String> {
+  pub fn full_eval(&self, bindings: &HashMap<VarRef, Scalar>) -> Result<Scalar, String> {
     let result = self.eval(bindings);
     if result.terms().is_empty() {
       Ok(result.get_constant())
     } else {
-      Err(format!("The following terms are undefined: {:?}", result.terms().keys().collect::<Vec<&Var>>()))
+      Err(format!("The following terms are undefined: {:?}", result.terms().keys().collect::<Vec<&VarRef>>()))
     }
   }
 
@@ -331,16 +331,16 @@ impl LinearExpression {
   ///   use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let mut expr = LinearExpression::term(Var::external(String::from("x")), 2.4);
-  ///   expr.plus_this(&LinearExpression::term(Var::external(String::from("y")), -2.0));
+  ///   let mut expr = LinearExpression::term(index.external(String::from("x")), 2.4);
+  ///   expr.plus_this(&LinearExpression::term(index.external(String::from("y")), -2.0));
   ///   for (_, coef) in expr.mut_terms().iter_mut() {
   ///     *coef *= 2.0;
   ///   }
-  ///   assert!(approx_eq(4.8, expr.get_coefficient(&Var::external(String::from("x")))));
-  ///   assert!(approx_eq(-4.0, expr.get_coefficient(&Var::external(String::from("y")))));
+  ///   assert!(approx_eq(4.8, expr.get_coefficient(&index.external(String::from("x")))));
+  ///   assert!(approx_eq(-4.0, expr.get_coefficient(&index.external(String::from("y")))));
   /// }
   /// ```
-  pub fn mut_terms<'t>(&'t mut self) -> &'t mut BTreeMap<Var, Scalar> {
+  pub fn mut_terms<'t>(&'t mut self) -> &'t mut BTreeMap<VarRef, Scalar> {
     &mut self.terms
   }
 
@@ -356,13 +356,13 @@ impl LinearExpression {
   ///   use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let expr = LinearExpression::term(Var::external(String::from("x")), 9.4);
+  ///   let expr = LinearExpression::term(index.external(String::from("x")), 9.4);
   ///   let terms = expr.terms();
   ///   assert_eq!(1, terms.len());
-  ///   assert!(approx_eq(9.4, *terms.get(&Var::external(String::from("x"))).unwrap()));
+  ///   assert!(approx_eq(9.4, *terms.get(&index.external(String::from("x"))).unwrap()));
   /// }
   /// ```
-  pub fn terms<'t>(&'t self) -> &'t BTreeMap<Var, Scalar> {
+  pub fn terms<'t>(&'t self) -> &'t BTreeMap<VarRef, Scalar> {
     &self.terms
   }
 
@@ -377,11 +377,11 @@ impl LinearExpression {
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let expr = LinearExpression::term(Var::external(String::from("x")), 42.7);
-  ///   assert!(approx_eq(42.7, expr.get_coefficient(&Var::external(String::from("x")))));
+  ///   let expr = LinearExpression::term(index.external(String::from("x")), 42.7);
+  ///   assert!(approx_eq(42.7, expr.get_coefficient(&index.external(String::from("x")))));
   /// }
   /// ```
-  pub fn term(variable: Var, coefficient: Scalar) -> LinearExpression {
+  pub fn term(variable: VarRef, coefficient: Scalar) -> LinearExpression {
     let mut expr = LinearExpression::new();
     expr.set_coefficient(variable, coefficient);
     expr
@@ -400,13 +400,13 @@ impl LinearExpression {
   ///
   /// fn main() {
   ///   let mut terms = BTreeMap::new();
-  ///   terms.insert(Var::external(String::from("x")), 1.0);
+  ///   terms.insert(index.external(String::from("x")), 1.0);
   ///   let expr = LinearExpression::from_constant_and_terms(1.2, terms);
   ///   assert!(approx_eq(expr.get_constant(), 1.2));
-  ///   assert!(approx_eq(expr.get_coefficient(&Var::external(String::from("x"))), 1.0));
+  ///   assert!(approx_eq(expr.get_coefficient(&index.external(String::from("x"))), 1.0));
   /// }
   /// ```
-  pub fn from_constant_and_terms(constant: Scalar, terms: BTreeMap<Var, Scalar>) -> LinearExpression {
+  pub fn from_constant_and_terms(constant: Scalar, terms: BTreeMap<VarRef, Scalar>) -> LinearExpression {
     LinearExpression{
       constant: constant,
       terms: terms
@@ -424,11 +424,11 @@ impl LinearExpression {
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let expr = LinearExpression::term(Var::external(String::from("x")), 1.0);
-  ///   assert!(approx_eq(expr.get_coefficient(&Var::external(String::from("x"))), 1.0));
+  ///   let expr = LinearExpression::term(index.external(String::from("x")), 1.0);
+  ///   assert!(approx_eq(expr.get_coefficient(&index.external(String::from("x"))), 1.0));
   /// }
   /// ```
-  pub fn get_coefficient<'s, 'v>(&'s self, v: &Var) -> Scalar {
+  pub fn get_coefficient<'s, 'v>(&'s self, v: &VarRef) -> Scalar {
     self.terms.get(v).map(|t| *t).unwrap_or(0.0)
   }
 
@@ -444,12 +444,12 @@ impl LinearExpression {
   ///
   /// fn main() {
   ///   let mut expr = LinearExpression::new();
-  ///   assert!(approx_eq(0.0, expr.get_coefficient(&Var::external(String::from("x")))));
-  ///   expr.set_coefficient(Var::external(String::from("x")), 1.5);
-  ///   assert!(approx_eq(expr.get_coefficient(&Var::external(String::from("x"))), 1.5));
+  ///   assert!(approx_eq(0.0, expr.get_coefficient(&index.external(String::from("x")))));
+  ///   expr.set_coefficient(index.external(String::from("x")), 1.5);
+  ///   assert!(approx_eq(expr.get_coefficient(&index.external(String::from("x"))), 1.5));
   /// }
   /// ```
-  pub fn set_coefficient(&mut self, v: Var, coefficient: Scalar) {
+  pub fn set_coefficient(&mut self, v: VarRef, coefficient: Scalar) {
     self.terms.insert(v, coefficient);
   }
 
@@ -504,9 +504,9 @@ impl LinearExpression {
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let expr = LinearExpression::term(Var::external(String::from("x")), 2.1).plus(&LinearExpression::from(2.3));
+  ///   let expr = LinearExpression::term(index.external(String::from("x")), 2.1).plus(&LinearExpression::from(2.3));
   ///   let product = expr.times(-2.0);
-  ///   assert!(approx_eq(-4.2, product.get_coefficient(&Var::external(String::from("x")))));
+  ///   assert!(approx_eq(-4.2, product.get_coefficient(&index.external(String::from("x")))));
   ///   assert!(approx_eq(-4.6, product.get_constant()));
   /// }
   /// ```
@@ -528,10 +528,10 @@ impl LinearExpression {
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let mut expr = LinearExpression::term(Var::external(String::from("x")), 2.1).plus(&LinearExpression::from(2.3));
-  ///   let expr2 = LinearExpression::term(Var::external(String::from("x")), 1.6).plus(&LinearExpression::from(-8.7));
+  ///   let mut expr = LinearExpression::term(index.external(String::from("x")), 2.1).plus(&LinearExpression::from(2.3));
+  ///   let expr2 = LinearExpression::term(index.external(String::from("x")), 1.6).plus(&LinearExpression::from(-8.7));
   ///   expr.plus_this(&expr2);
-  ///   assert!(approx_eq(3.7, expr.get_coefficient(&Var::external(String::from("x")))));
+  ///   assert!(approx_eq(3.7, expr.get_coefficient(&index.external(String::from("x")))));
   ///   assert!(approx_eq(-6.4, expr.get_constant()));
   /// }
   /// ```
@@ -550,9 +550,9 @@ impl LinearExpression {
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let mut expr = LinearExpression::term(Var::external(String::from("x")), 1.6).plus(&LinearExpression::from(0.3));
+  ///   let mut expr = LinearExpression::term(index.external(String::from("x")), 1.6).plus(&LinearExpression::from(0.3));
   ///   expr.times_this(-1.7);
-  ///   assert!(approx_eq(-2.72, expr.get_coefficient(&Var::external(String::from("x")))));
+  ///   assert!(approx_eq(-2.72, expr.get_coefficient(&index.external(String::from("x")))));
   ///   assert!(approx_eq(-0.51, expr.get_constant()));
   /// }
   /// ```
@@ -577,9 +577,9 @@ impl LinearExpression {
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let mut expr = LinearExpression::term(Var::external(String::from("x")), 81.42).plus(&LinearExpression::from(-114.0));
+  ///   let mut expr = LinearExpression::term(index.external(String::from("x")), 81.42).plus(&LinearExpression::from(-114.0));
   ///   expr.div_this(-2.0);
-  ///   assert!(approx_eq(-40.71, expr.get_coefficient(&Var::external(String::from("x")))));
+  ///   assert!(approx_eq(-40.71, expr.get_coefficient(&index.external(String::from("x")))));
   ///   assert!(approx_eq(57.0, expr.get_constant()));
   /// }
   /// ```
@@ -599,8 +599,8 @@ impl LinearExpression {
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let expr = LinearExpression::term(Var::external(String::from("x")), 0.7).plus(&LinearExpression::from(1.8));
-  ///   assert!(approx_eq(0.7, expr.get_coefficient(&Var::external(String::from("x")))));
+  ///   let expr = LinearExpression::term(index.external(String::from("x")), 0.7).plus(&LinearExpression::from(1.8));
+  ///   assert!(approx_eq(0.7, expr.get_coefficient(&index.external(String::from("x")))));
   ///   assert!(approx_eq(1.8, expr.get_constant()));
   /// }
   /// ```
@@ -621,10 +621,10 @@ impl LinearExpression {
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let expr = LinearExpression::term(Var::external(String::from("x")), 1.7).plus(&LinearExpression::from(8.1));
-  ///   let expr2 = expr.minus(&LinearExpression::term(Var::external(String::from("y")), 42.7));
-  ///   assert!(approx_eq(1.7, expr2.get_coefficient(&Var::external(String::from("x")))));
-  ///   assert!(approx_eq(-42.7, expr2.get_coefficient(&Var::external(String::from("y")))));
+  ///   let expr = LinearExpression::term(index.external(String::from("x")), 1.7).plus(&LinearExpression::from(8.1));
+  ///   let expr2 = expr.minus(&LinearExpression::term(index.external(String::from("y")), 42.7));
+  ///   assert!(approx_eq(1.7, expr2.get_coefficient(&index.external(String::from("x")))));
+  ///   assert!(approx_eq(-42.7, expr2.get_coefficient(&index.external(String::from("y")))));
   ///   assert!(approx_eq(8.1, expr2.get_constant()));
   /// }
   /// ```
@@ -645,10 +645,10 @@ impl LinearExpression {
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let mut expr = LinearExpression::term(Var::external(String::from("x")), 2.1).plus(&LinearExpression::from(2.3));
-  ///   let expr2 = LinearExpression::term(Var::external(String::from("x")), 1.6).plus(&LinearExpression::from(-8.7));
+  ///   let mut expr = LinearExpression::term(index.external(String::from("x")), 2.1).plus(&LinearExpression::from(2.3));
+  ///   let expr2 = LinearExpression::term(index.external(String::from("x")), 1.6).plus(&LinearExpression::from(-8.7));
   ///   expr.minus_this(&expr2);
-  ///   assert!(approx_eq(0.5, expr.get_coefficient(&Var::external(String::from("x")))));
+  ///   assert!(approx_eq(0.5, expr.get_coefficient(&index.external(String::from("x")))));
   ///   assert!(approx_eq(11.0, expr.get_constant()));
   /// }
   /// ```
@@ -668,9 +668,9 @@ impl LinearExpression {
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let expr = LinearExpression::term(Var::external(String::from("x")), 2.1).plus(&LinearExpression::from(2.3));
+  ///   let expr = LinearExpression::term(index.external(String::from("x")), 2.1).plus(&LinearExpression::from(2.3));
   ///   let product = expr.div(-2.0);
-  ///   assert!(approx_eq(-1.05, product.get_coefficient(&Var::external(String::from("x")))));
+  ///   assert!(approx_eq(-1.05, product.get_coefficient(&index.external(String::from("x")))));
   ///   assert!(approx_eq(-1.15, product.get_constant()));
   /// }
   /// ```
@@ -690,14 +690,14 @@ impl LinearExpression {
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let mut expr = LinearExpression::term(Var::external(String::from("x")), 2.1).plus(&LinearExpression::from(2.3));
-  ///   expr.substitute(&Var::external(String::from("x")), &LinearExpression::term(Var::external(String::from("y")), 1.2).plus(&LinearExpression::from(7.5)));
-  ///   assert!(approx_eq(0.0, expr.get_coefficient(&Var::external(String::from("x")))));
-  ///   assert!(approx_eq(2.52, expr.get_coefficient(&Var::external(String::from("y")))));
+  ///   let mut expr = LinearExpression::term(index.external(String::from("x")), 2.1).plus(&LinearExpression::from(2.3));
+  ///   expr.substitute(&index.external(String::from("x")), &LinearExpression::term(index.external(String::from("y")), 1.2).plus(&LinearExpression::from(7.5)));
+  ///   assert!(approx_eq(0.0, expr.get_coefficient(&index.external(String::from("x")))));
+  ///   assert!(approx_eq(2.52, expr.get_coefficient(&index.external(String::from("y")))));
   ///   assert!(approx_eq(18.05, expr.get_constant()));
   /// }
   /// ```
-  pub fn substitute(&mut self, var: &Var, e: &LinearExpression) {
+  pub fn substitute(&mut self, var: &VarRef, e: &LinearExpression) {
     let o_coef = self.terms.remove(var);
     if o_coef.is_none() {
       return;
@@ -707,8 +707,8 @@ impl LinearExpression {
   }
 }
 
-impl<'a> From<Var> for LinearExpression {
-  fn from(var: Var) -> LinearExpression {
+impl<'a> From<VarRef> for LinearExpression {
+  fn from(var: VarRef) -> LinearExpression {
     LinearExpression::term(var, 1.0)
   }
 }
@@ -743,7 +743,7 @@ impl Display for LinearExpression {
 mod test {
   use super::*;
   use std::collections::HashMap;
-  use var::Var;
+  use var::{VarIndex, VarRef};
 
   #[test]
   fn to_string() {
@@ -752,8 +752,9 @@ mod test {
 
   #[test]
   fn get_and_set_coefficients() {
+    let mut index = VarIndex::new();
     let mut expr = LinearExpression::new();
-    let var = Var::external(String::from("x"));
+    let var = index.external(String::from("x"));
     assert!(approx_eq(expr.get_coefficient(&var), 0.0));
     expr.set_coefficient(var.clone(), 42.0);
     assert!(approx_eq(expr.get_coefficient(&var), 42.0));
@@ -772,8 +773,9 @@ mod test {
     let a = 1.0;
     let b = -2.0;
     let c = 7.0;
-    let x1 = Var::external(String::from("x1"));
-    let x2 = Var::external(String::from("x2"));
+    let mut index = VarIndex::new();
+    let x1 = index.external(String::from("x1"));
+    let x2 = index.external(String::from("x2"));
 
     let mut expr = LinearExpression::new();
     expr.set_coefficient(x1.clone(), a);
@@ -800,9 +802,10 @@ mod test {
     let c1 = 3.0;
     let c2 = -4.5;
 
-    let x1 = Var::external(String::from("x1"));
-    let x2 = Var::external(String::from("x2"));
-    let x3 = Var::external(String::from("x3"));
+    let mut index = VarIndex::new();
+    let x1 = index.external(String::from("x1"));
+    let x2 = index.external(String::from("x2"));
+    let x3 = index.external(String::from("x3"));
 
     let mut expr1 = LinearExpression::new();
     expr1.set_coefficient(x1.clone(), p);
@@ -839,82 +842,102 @@ mod test {
 
   #[test]
   fn eval_single_term() {
-    let expr = LinearExpression::term(Var::external(String::from("x")), -2.0);
-    let mut bindings: HashMap<Var, Scalar> = HashMap::new();
-    bindings.insert(Var::external(String::from("x")), -21.0);
+    let mut index = VarIndex::new();
+    let x_ref = index.external(String::from("x"));
+    let expr = LinearExpression::term(x_ref.clone(), -2.0);
+    let mut bindings: HashMap<VarRef, Scalar> = HashMap::new();
+    bindings.insert(x_ref, -21.0);
     assert!(approx_eq(42.0, expr.full_eval(&bindings).unwrap()));
   }
 
   #[test]
   fn eval_multiple_term() {
-    let expr = LinearExpression::term(Var::external(String::from("x")), -2.0).plus(&LinearExpression::term(Var::external(String::from("y")), 3.4));
-    let mut bindings: HashMap<Var, Scalar> = HashMap::new();
-    bindings.insert(Var::external(String::from("x")), -21.0);
-    bindings.insert(Var::external(String::from("y")), -6.0);
+    let mut index = VarIndex::new();
+    let expr = LinearExpression::term(index.external(String::from("x")), -2.0).plus(&LinearExpression::term(index.external(String::from("y")), 3.4));
+    let mut bindings: HashMap<VarRef, Scalar> = HashMap::new();
+    bindings.insert(index.external(String::from("x")), -21.0);
+    bindings.insert(index.external(String::from("y")), -6.0);
     assert!(approx_eq(21.6, expr.full_eval(&bindings).unwrap()));
   }
 
   #[test]
   fn eval_terms_and_constant() {
-    let expr = LinearExpression::term(Var::external(String::from("x")), -2.0).plus(&LinearExpression::term(Var::external(String::from("y")), 3.4)).plus(&LinearExpression::from(7.2));
-    let mut bindings: HashMap<Var, Scalar> = HashMap::new();
-    bindings.insert(Var::external(String::from("x")), -21.0);
-    bindings.insert(Var::external(String::from("y")), -6.0);
+    let mut index = VarIndex::new();
+    let x_ref = index.external(String::from("x"));
+    let y_ref = index.external(String::from("y"));
+    let expr = LinearExpression::term(x_ref.clone(), -2.0).plus(&LinearExpression::term(y_ref.clone(), 3.4)).plus(&LinearExpression::from(7.2));
+    let mut bindings: HashMap<VarRef, Scalar> = HashMap::new();
+    bindings.insert(x_ref, -21.0);
+    bindings.insert(y_ref, -6.0);
     assert!(approx_eq(28.8, expr.full_eval(&bindings).unwrap()));
   }
 
   #[test]
   fn eval_unbound_val() {
-    assert!(LinearExpression::term(Var::external(String::from("x")), -2.0).full_eval(&HashMap::new()).is_err());
+    let mut index = VarIndex::new();
+    assert!(LinearExpression::term(index.external(String::from("x")), -2.0).full_eval(&HashMap::new()).is_err());
   }
 
   #[test]
   fn no_substitute() {
+    let mut index = VarIndex::new();
     let mut expr = LinearExpression::new();
-    expr.substitute(&Var::external(String::from("x")), &LinearExpression::from(2.0));
+    expr.substitute(&index.external(String::from("x")), &LinearExpression::from(2.0));
     assert!(approx_eq(0.0, expr.full_eval(&HashMap::new()).unwrap()));
     assert!(expr.terms().len() == 0);
   }
 
   #[test]
   fn constant_substitute() {
-    let mut expr = LinearExpression::term(Var::external(String::from("x")), 2.0).plus(&LinearExpression::term(Var::external(String::from("y")), -3.0));
+    let mut index = VarIndex::new();
+    let x_ref = index.external(String::from("x"));
+    let y_ref = index.external(String::from("y"));
+    let mut expr = LinearExpression::term(x_ref.clone(), 2.0).plus(&LinearExpression::term(y_ref.clone(), -3.0));
     assert!(expr.terms().len() == 2);
-    expr.substitute(&Var::external(String::from("x")), &LinearExpression::from(1.2));
+    expr.substitute(&x_ref, &LinearExpression::from(1.2));
     assert!(expr.terms().len() == 1);
-    let mut bindings: HashMap<Var, Scalar> = HashMap::new();
-    bindings.insert(Var::external(String::from("y")), 1.6);
+    let mut bindings: HashMap<VarRef, Scalar> = HashMap::new();
+    bindings.insert(y_ref, 1.6);
     assert!(approx_eq(-2.4, expr.full_eval(&bindings).unwrap()));
   }
 
   #[test]
   fn replace_substitute() {
-    let mut expr = LinearExpression::term(Var::external(String::from("x")), 2.0).plus(&LinearExpression::term(Var::external(String::from("y")), -3.0));
+    let mut index = VarIndex::new();
+    let x_ref = index.external(String::from("x"));
+    let y_ref = index.external(String::from("y"));
+    let z_ref = index.external(String::from("z"));
+    let mut expr = LinearExpression::term(x_ref.clone(), 2.0).plus(&LinearExpression::term(y_ref.clone(), -3.0));
     assert!(expr.terms().len() == 2);
-    expr.substitute(&Var::external(String::from("x")), &LinearExpression::term(Var::external(String::from("z")), -4.0));
+    expr.substitute(&x_ref, &LinearExpression::term(z_ref.clone(), -4.0));
     assert!(expr.terms().len() == 2);
-    assert!(approx_eq(-8.0, expr.get_coefficient(&Var::external(String::from("z")))));
-    let mut bindings: HashMap<Var, Scalar> = HashMap::new();
-    bindings.insert(Var::external(String::from("z")), 1.3);
-    bindings.insert(Var::external(String::from("y")), 1.6);
+    assert!(approx_eq(-8.0, expr.get_coefficient(&z_ref)));
+    let mut bindings: HashMap<VarRef, Scalar> = HashMap::new();
+    bindings.insert(z_ref, 1.3);
+    bindings.insert(y_ref, 1.6);
     assert!(approx_eq(-15.2, expr.full_eval(&bindings).unwrap()));
   }
 
   #[test]
   fn complicated_substitute() {
-    let mut expr1 = LinearExpression::term(Var::external(String::from("x")), 2.0).plus(&LinearExpression::term(Var::external(String::from("y")), -3.0)).plus(&LinearExpression::from(3.0));
-    let expr2 = LinearExpression::term(Var::external(String::from("w")), -2.5).plus(&LinearExpression::term(Var::external(String::from("z")), 4.3)).plus(&LinearExpression::from(-10.0));
+    let mut index = VarIndex::new();
+    let x_ref = index.external(String::from("x"));
+    let y_ref = index.external(String::from("y"));
+    let z_ref = index.external(String::from("z"));
+    let w_ref = index.external(String::from("w"));
+    let mut expr1 = LinearExpression::term(x_ref.clone(), 2.0).plus(&LinearExpression::term(y_ref.clone(), -3.0)).plus(&LinearExpression::from(3.0));
+    let expr2 = LinearExpression::term(w_ref.clone(), -2.5).plus(&LinearExpression::term(z_ref.clone(), 4.3)).plus(&LinearExpression::from(-10.0));
     assert!(expr1.terms().len() == 2);
-    expr1.substitute(&Var::external(String::from("x")), &expr2);
+    expr1.substitute(&x_ref, &expr2);
     assert!(expr1.terms().len() == 3);
-    assert!(approx_eq(8.6, expr1.get_coefficient(&Var::external(String::from("z")))));
-    assert!(approx_eq(-5.0, expr1.get_coefficient(&Var::external(String::from("w")))));
-    assert!(approx_eq(-3.0, expr1.get_coefficient(&Var::external(String::from("y")))));
+    assert!(approx_eq(8.6, expr1.get_coefficient(&z_ref)));
+    assert!(approx_eq(-5.0, expr1.get_coefficient(&w_ref)));
+    assert!(approx_eq(-3.0, expr1.get_coefficient(&y_ref)));
     assert!(approx_eq(-17.0, expr1.get_constant()));
-    let mut bindings: HashMap<Var, Scalar> = HashMap::new();
-    bindings.insert(Var::external(String::from("z")), 1.3);
-    bindings.insert(Var::external(String::from("y")), 1.6);
-    bindings.insert(Var::external(String::from("w")), -2.7);
+    let mut bindings: HashMap<VarRef, Scalar> = HashMap::new();
+    bindings.insert(z_ref, 1.3);
+    bindings.insert(y_ref, 1.6);
+    bindings.insert(w_ref, -2.7);
     assert!(approx_eq(2.88, expr1.full_eval(&bindings).unwrap()));
   }
 }

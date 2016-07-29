@@ -3,7 +3,7 @@
 use std::str::FromStr;
 use expr::{Scalar, LinearExpression, LinearRelation, Relation};
 use problem::{Problem, ProblemObjective};
-use var::Var;
+use var::{VarIndex, VarRef};
 extern crate lalrpop_util as __lalrpop_util;
 use self::__lalrpop_util::ParseError as __ParseError;
 
@@ -13,12 +13,13 @@ mod __parse__Expression {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
-    use var::Var;
+    use var::{VarIndex, VarRef};
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_Expression<
         'input,
     >(
+        index: &mut VarIndex,
         input: &'input str,
     ) -> Result<LinearExpression, __ParseError<usize,(usize, &'input str),()>>
     {
@@ -28,7 +29,7 @@ mod __parse__Expression {
             None => None,
             Some(Err(e)) => return Err(e),
         };
-        match try!(__state0(input, &mut __tokens, __lookahead)) {
+        match try!(__state0(index, input, &mut __tokens, __lookahead)) {
             (Some(__lookahead), _) => {
                 Err(__ParseError::ExtraToken { token: __lookahead })
             }
@@ -45,9 +46,9 @@ mod __parse__Expression {
         _28LINE__SEP_2b_20LinearRelation_29((usize, (::std::vec::Vec<&'input str>, LinearRelation), usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2a((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2b((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
-        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<Var>), &'input str), usize)),
-        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
-        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<VarRef>), &'input str), usize)),
+        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
         Expression((usize, LinearExpression, usize)),
         LINE__SEP((usize, &'input str, usize)),
         LINE__SEP_2b((usize, ::std::vec::Vec<&'input str>, usize)),
@@ -56,8 +57,8 @@ mod __parse__Expression {
         ProblemObjective((usize, ProblemObjective, usize)),
         Relation((usize, Relation, usize)),
         Scalar((usize, Scalar, usize)),
-        Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        Variable((usize, Var, usize)),
+        Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        Variable((usize, VarRef, usize)),
         ____Expression((usize, LinearExpression, usize)),
         ____LINE__SEP((usize, &'input str, usize)),
         ____LinearRelation((usize, LinearRelation, usize)),
@@ -65,14 +66,15 @@ mod __parse__Expression {
         ____ProblemObjective((usize, ProblemObjective, usize)),
         ____Relation((usize, Relation, usize)),
         ____Scalar((usize, Scalar, usize)),
-        ____Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        ____Variable((usize, Var, usize)),
+        ____Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        ____Variable((usize, VarRef, usize)),
     }
 
     pub fn __state0<
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -82,11 +84,11 @@ mod __parse__Expression {
         match __lookahead {
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state6(input, __tokens, __sym0));
+                __result = try!(__state6(index, input, __tokens, __sym0));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state7(input, __tokens, __sym0));
+                __result = try!(__state7(index, input, __tokens, __sym0));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -100,23 +102,23 @@ mod __parse__Expression {
             match __nt {
                 __Nonterminal::_28Term_20_22_2b_22_29_2b(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state1(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state1(index, input, __tokens, __lookahead, __sym0));
                 }
                 __Nonterminal::Expression(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state2(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state2(index, input, __tokens, __lookahead, __sym0));
                 }
                 __Nonterminal::Scalar(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state3(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state3(index, input, __tokens, __lookahead, __sym0));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state4(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state4(index, input, __tokens, __lookahead, __sym0));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state5(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state5(index, input, __tokens, __lookahead, __sym0));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -129,21 +131,22 @@ mod __parse__Expression {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state6(input, __tokens, __sym1));
+                __result = try!(__state6(index, input, __tokens, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state7(input, __tokens, __sym1));
+                __result = try!(__state7(index, input, __tokens, __sym1));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -157,15 +160,15 @@ mod __parse__Expression {
             match __nt {
                 __Nonterminal::Scalar(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state3(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state3(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state8(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state8(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state5(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state5(index, input, __tokens, __lookahead, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -179,6 +182,7 @@ mod __parse__Expression {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -191,7 +195,7 @@ mod __parse__Expression {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action3(input, __sym0);
+                let __nt = super::__action3(index, input, __sym0);
                 let __nt = __Nonterminal::____Expression((
                     __start,
                     __nt,
@@ -212,6 +216,7 @@ mod __parse__Expression {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -222,18 +227,18 @@ mod __parse__Expression {
         match __lookahead {
             Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state10(input, __tokens, __sym0, __sym1));
+                __result = try!(__state10(index, input, __tokens, __sym0, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state7(input, __tokens, __sym1));
+                __result = try!(__state7(index, input, __tokens, __sym1));
             }
             None |
             Some((_, (2, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action11(input, __sym0);
+                let __nt = super::__action11(index, input, __sym0);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -253,7 +258,7 @@ mod __parse__Expression {
             match __nt {
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state9(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state9(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -267,23 +272,24 @@ mod __parse__Expression {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state11(input, __tokens, __sym0, __sym1));
+                __result = try!(__state11(index, input, __tokens, __sym0, __sym1));
             }
             None => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action48(input, __sym0);
+                let __nt = super::__action48(index, input, __sym0);
                 let __nt = __Nonterminal::Expression((
                     __start,
                     __nt,
@@ -305,10 +311,11 @@ mod __parse__Expression {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, Var, usize)>,
+        __sym0: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -318,7 +325,7 @@ mod __parse__Expression {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action12(input, __sym0);
+                let __nt = super::__action12(index, input, __sym0);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -339,6 +346,7 @@ mod __parse__Expression {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -358,7 +366,7 @@ mod __parse__Expression {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action9(input, __sym0);
+                let __nt = super::__action9(index, input, __sym0);
                 let __nt = __Nonterminal::Scalar((
                     __start,
                     __nt,
@@ -379,6 +387,7 @@ mod __parse__Expression {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -396,7 +405,7 @@ mod __parse__Expression {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action10(input, __sym0);
+                let __nt = super::__action10(index, input, __sym0);
                 let __nt = __Nonterminal::Variable((
                     __start,
                     __nt,
@@ -417,25 +426,26 @@ mod __parse__Expression {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
-        __sym1: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
+        __sym1: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state12(input, __tokens, __sym0, __sym1, __sym2));
+                __result = try!(__state12(index, input, __tokens, __sym0, __sym1, __sym2));
             }
             None => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action49(input, __sym0, __sym1);
+                let __nt = super::__action49(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::Expression((
                     __start,
                     __nt,
@@ -457,11 +467,12 @@ mod __parse__Expression {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<(usize, Scalar, usize)>,
-        __sym1: &mut Option<(usize, Var, usize)>,
+        __sym1: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -472,7 +483,7 @@ mod __parse__Expression {
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action41(input, __sym0, __sym1);
+                let __nt = super::__action41(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -493,6 +504,7 @@ mod __parse__Expression {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, Scalar, usize)>,
@@ -508,7 +520,7 @@ mod __parse__Expression {
         match __lookahead {
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state7(input, __tokens, __sym2));
+                __result = try!(__state7(index, input, __tokens, __sym2));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -522,7 +534,7 @@ mod __parse__Expression {
             match __nt {
                 __Nonterminal::Variable(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state13(input, __tokens, __lookahead, __sym0, __sym1, __sym2));
+                    __result = try!(__state13(index, input, __tokens, __lookahead, __sym0, __sym1, __sym2));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -536,9 +548,10 @@ mod __parse__Expression {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
-        __sym0: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
         __sym1: &mut Option<(usize, &'input str, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
@@ -555,7 +568,7 @@ mod __parse__Expression {
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action46(input, __sym0, __sym1);
+                let __nt = super::__action46(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::_28Term_20_22_2b_22_29_2b((
                     __start,
                     __nt,
@@ -576,10 +589,11 @@ mod __parse__Expression {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
-        __sym1: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
+        __sym1: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
         __sym2: &mut Option<(usize, &'input str, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
@@ -597,7 +611,7 @@ mod __parse__Expression {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action47(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action47(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::_28Term_20_22_2b_22_29_2b((
                     __start,
                     __nt,
@@ -618,12 +632,13 @@ mod __parse__Expression {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<(usize, Scalar, usize)>,
         __sym1: &mut Option<(usize, &'input str, usize)>,
-        __sym2: &mut Option<(usize, Var, usize)>,
+        __sym2: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -635,7 +650,7 @@ mod __parse__Expression {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action40(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action40(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -660,12 +675,13 @@ mod __parse__LINE_SEP {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
-    use var::Var;
+    use var::{VarIndex, VarRef};
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_LINE_SEP<
         'input,
     >(
+        index: &mut VarIndex,
         input: &'input str,
     ) -> Result<&'input str, __ParseError<usize,(usize, &'input str),()>>
     {
@@ -675,7 +691,7 @@ mod __parse__LINE_SEP {
             None => None,
             Some(Err(e)) => return Err(e),
         };
-        match try!(__state0(input, &mut __tokens, __lookahead)) {
+        match try!(__state0(index, input, &mut __tokens, __lookahead)) {
             (Some(__lookahead), _) => {
                 Err(__ParseError::ExtraToken { token: __lookahead })
             }
@@ -692,9 +708,9 @@ mod __parse__LINE_SEP {
         _28LINE__SEP_2b_20LinearRelation_29((usize, (::std::vec::Vec<&'input str>, LinearRelation), usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2a((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2b((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
-        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<Var>), &'input str), usize)),
-        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
-        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<VarRef>), &'input str), usize)),
+        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
         Expression((usize, LinearExpression, usize)),
         LINE__SEP((usize, &'input str, usize)),
         LINE__SEP_2b((usize, ::std::vec::Vec<&'input str>, usize)),
@@ -703,8 +719,8 @@ mod __parse__LINE_SEP {
         ProblemObjective((usize, ProblemObjective, usize)),
         Relation((usize, Relation, usize)),
         Scalar((usize, Scalar, usize)),
-        Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        Variable((usize, Var, usize)),
+        Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        Variable((usize, VarRef, usize)),
         ____Expression((usize, LinearExpression, usize)),
         ____LINE__SEP((usize, &'input str, usize)),
         ____LinearRelation((usize, LinearRelation, usize)),
@@ -712,14 +728,15 @@ mod __parse__LINE_SEP {
         ____ProblemObjective((usize, ProblemObjective, usize)),
         ____Relation((usize, Relation, usize)),
         ____Scalar((usize, Scalar, usize)),
-        ____Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        ____Variable((usize, Var, usize)),
+        ____Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        ____Variable((usize, VarRef, usize)),
     }
 
     pub fn __state0<
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -729,7 +746,7 @@ mod __parse__LINE_SEP {
         match __lookahead {
             Some((__loc1, (3, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state2(input, __tokens, __sym0));
+                __result = try!(__state2(index, input, __tokens, __sym0));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -743,7 +760,7 @@ mod __parse__LINE_SEP {
             match __nt {
                 __Nonterminal::LINE__SEP(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state1(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state1(index, input, __tokens, __lookahead, __sym0));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -756,6 +773,7 @@ mod __parse__LINE_SEP {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -768,7 +786,7 @@ mod __parse__LINE_SEP {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action7(input, __sym0);
+                let __nt = super::__action7(index, input, __sym0);
                 let __nt = __Nonterminal::____LINE__SEP((
                     __start,
                     __nt,
@@ -789,6 +807,7 @@ mod __parse__LINE_SEP {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -805,7 +824,7 @@ mod __parse__LINE_SEP {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action24(input, __sym0);
+                let __nt = super::__action24(index, input, __sym0);
                 let __nt = __Nonterminal::LINE__SEP((
                     __start,
                     __nt,
@@ -830,12 +849,13 @@ mod __parse__LinearRelation {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
-    use var::Var;
+    use var::{VarIndex, VarRef};
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_LinearRelation<
         'input,
     >(
+        index: &mut VarIndex,
         input: &'input str,
     ) -> Result<LinearRelation, __ParseError<usize,(usize, &'input str),()>>
     {
@@ -845,7 +865,7 @@ mod __parse__LinearRelation {
             None => None,
             Some(Err(e)) => return Err(e),
         };
-        match try!(__state0(input, &mut __tokens, __lookahead)) {
+        match try!(__state0(index, input, &mut __tokens, __lookahead)) {
             (Some(__lookahead), _) => {
                 Err(__ParseError::ExtraToken { token: __lookahead })
             }
@@ -862,9 +882,9 @@ mod __parse__LinearRelation {
         _28LINE__SEP_2b_20LinearRelation_29((usize, (::std::vec::Vec<&'input str>, LinearRelation), usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2a((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2b((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
-        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<Var>), &'input str), usize)),
-        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
-        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<VarRef>), &'input str), usize)),
+        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
         Expression((usize, LinearExpression, usize)),
         LINE__SEP((usize, &'input str, usize)),
         LINE__SEP_2b((usize, ::std::vec::Vec<&'input str>, usize)),
@@ -873,8 +893,8 @@ mod __parse__LinearRelation {
         ProblemObjective((usize, ProblemObjective, usize)),
         Relation((usize, Relation, usize)),
         Scalar((usize, Scalar, usize)),
-        Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        Variable((usize, Var, usize)),
+        Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        Variable((usize, VarRef, usize)),
         ____Expression((usize, LinearExpression, usize)),
         ____LINE__SEP((usize, &'input str, usize)),
         ____LinearRelation((usize, LinearRelation, usize)),
@@ -882,14 +902,15 @@ mod __parse__LinearRelation {
         ____ProblemObjective((usize, ProblemObjective, usize)),
         ____Relation((usize, Relation, usize)),
         ____Scalar((usize, Scalar, usize)),
-        ____Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        ____Variable((usize, Var, usize)),
+        ____Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        ____Variable((usize, VarRef, usize)),
     }
 
     pub fn __state0<
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -899,11 +920,11 @@ mod __parse__LinearRelation {
         match __lookahead {
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state7(input, __tokens, __sym0));
+                __result = try!(__state7(index, input, __tokens, __sym0));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state8(input, __tokens, __sym0));
+                __result = try!(__state8(index, input, __tokens, __sym0));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -917,27 +938,27 @@ mod __parse__LinearRelation {
             match __nt {
                 __Nonterminal::_28Term_20_22_2b_22_29_2b(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state1(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state1(index, input, __tokens, __lookahead, __sym0));
                 }
                 __Nonterminal::Expression(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state2(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state2(index, input, __tokens, __lookahead, __sym0));
                 }
                 __Nonterminal::LinearRelation(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state3(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state3(index, input, __tokens, __lookahead, __sym0));
                 }
                 __Nonterminal::Scalar(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state4(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state4(index, input, __tokens, __lookahead, __sym0));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state5(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state5(index, input, __tokens, __lookahead, __sym0));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state6(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state6(index, input, __tokens, __lookahead, __sym0));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -950,21 +971,22 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state7(input, __tokens, __sym1));
+                __result = try!(__state7(index, input, __tokens, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state8(input, __tokens, __sym1));
+                __result = try!(__state8(index, input, __tokens, __sym1));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -978,15 +1000,15 @@ mod __parse__LinearRelation {
             match __nt {
                 __Nonterminal::Scalar(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state4(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state4(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state9(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state9(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state6(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state6(index, input, __tokens, __lookahead, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -1000,6 +1022,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -1010,27 +1033,27 @@ mod __parse__LinearRelation {
         match __lookahead {
             Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state11(input, __tokens, __sym1));
+                __result = try!(__state11(index, input, __tokens, __sym1));
             }
             Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state12(input, __tokens, __sym1));
+                __result = try!(__state12(index, input, __tokens, __sym1));
             }
             Some((__loc1, (6, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state13(input, __tokens, __sym1));
+                __result = try!(__state13(index, input, __tokens, __sym1));
             }
             Some((__loc1, (7, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state14(input, __tokens, __sym1));
+                __result = try!(__state14(index, input, __tokens, __sym1));
             }
             Some((__loc1, (8, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state15(input, __tokens, __sym1));
+                __result = try!(__state15(index, input, __tokens, __sym1));
             }
             Some((__loc1, (9, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state16(input, __tokens, __sym1));
+                __result = try!(__state16(index, input, __tokens, __sym1));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -1044,7 +1067,7 @@ mod __parse__LinearRelation {
             match __nt {
                 __Nonterminal::Relation(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state10(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state10(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -1058,6 +1081,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -1070,7 +1094,7 @@ mod __parse__LinearRelation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action5(input, __sym0);
+                let __nt = super::__action5(index, input, __sym0);
                 let __nt = __Nonterminal::____LinearRelation((
                     __start,
                     __nt,
@@ -1091,6 +1115,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -1101,11 +1126,11 @@ mod __parse__LinearRelation {
         match __lookahead {
             Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state18(input, __tokens, __sym0, __sym1));
+                __result = try!(__state18(index, input, __tokens, __sym0, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state8(input, __tokens, __sym1));
+                __result = try!(__state8(index, input, __tokens, __sym1));
             }
             Some((_, (2, _), _)) |
             Some((_, (4, _), _)) |
@@ -1117,7 +1142,7 @@ mod __parse__LinearRelation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action11(input, __sym0);
+                let __nt = super::__action11(index, input, __sym0);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -1137,7 +1162,7 @@ mod __parse__LinearRelation {
             match __nt {
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state17(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state17(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -1151,17 +1176,18 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state19(input, __tokens, __sym0, __sym1));
+                __result = try!(__state19(index, input, __tokens, __sym0, __sym1));
             }
             Some((_, (4, _), _)) |
             Some((_, (5, _), _)) |
@@ -1172,7 +1198,7 @@ mod __parse__LinearRelation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action48(input, __sym0);
+                let __nt = super::__action48(index, input, __sym0);
                 let __nt = __Nonterminal::Expression((
                     __start,
                     __nt,
@@ -1194,10 +1220,11 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, Var, usize)>,
+        __sym0: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -1212,7 +1239,7 @@ mod __parse__LinearRelation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action12(input, __sym0);
+                let __nt = super::__action12(index, input, __sym0);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -1233,6 +1260,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -1257,7 +1285,7 @@ mod __parse__LinearRelation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action9(input, __sym0);
+                let __nt = super::__action9(index, input, __sym0);
                 let __nt = __Nonterminal::Scalar((
                     __start,
                     __nt,
@@ -1278,6 +1306,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -1300,7 +1329,7 @@ mod __parse__LinearRelation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action10(input, __sym0);
+                let __nt = super::__action10(index, input, __sym0);
                 let __nt = __Nonterminal::Variable((
                     __start,
                     __nt,
@@ -1321,18 +1350,19 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
-        __sym1: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
+        __sym1: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state20(input, __tokens, __sym0, __sym1, __sym2));
+                __result = try!(__state20(index, input, __tokens, __sym0, __sym1, __sym2));
             }
             Some((_, (4, _), _)) |
             Some((_, (5, _), _)) |
@@ -1344,7 +1374,7 @@ mod __parse__LinearRelation {
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action49(input, __sym0, __sym1);
+                let __nt = super::__action49(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::Expression((
                     __start,
                     __nt,
@@ -1366,6 +1396,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -1377,11 +1408,11 @@ mod __parse__LinearRelation {
         match __lookahead {
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state26(input, __tokens, __sym2));
+                __result = try!(__state26(index, input, __tokens, __sym2));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state27(input, __tokens, __sym2));
+                __result = try!(__state27(index, input, __tokens, __sym2));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -1395,23 +1426,23 @@ mod __parse__LinearRelation {
             match __nt {
                 __Nonterminal::_28Term_20_22_2b_22_29_2b(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state21(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state21(index, input, __tokens, __lookahead, __sym2));
                 }
                 __Nonterminal::Expression(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state22(input, __tokens, __lookahead, __sym0, __sym1, __sym2));
+                    __result = try!(__state22(index, input, __tokens, __lookahead, __sym0, __sym1, __sym2));
                 }
                 __Nonterminal::Scalar(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state23(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state23(index, input, __tokens, __lookahead, __sym2));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state24(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state24(index, input, __tokens, __lookahead, __sym2));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state25(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state25(index, input, __tokens, __lookahead, __sym2));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -1425,6 +1456,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -1442,7 +1474,7 @@ mod __parse__LinearRelation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action15(input, __sym0);
+                let __nt = super::__action15(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -1463,6 +1495,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -1480,7 +1513,7 @@ mod __parse__LinearRelation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action16(input, __sym0);
+                let __nt = super::__action16(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -1501,6 +1534,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -1518,7 +1552,7 @@ mod __parse__LinearRelation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action20(input, __sym0);
+                let __nt = super::__action20(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -1539,6 +1573,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -1556,7 +1591,7 @@ mod __parse__LinearRelation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action19(input, __sym0);
+                let __nt = super::__action19(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -1577,6 +1612,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -1594,7 +1630,7 @@ mod __parse__LinearRelation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action17(input, __sym0);
+                let __nt = super::__action17(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -1615,6 +1651,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -1632,7 +1669,7 @@ mod __parse__LinearRelation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action18(input, __sym0);
+                let __nt = super::__action18(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -1653,11 +1690,12 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<(usize, Scalar, usize)>,
-        __sym1: &mut Option<(usize, Var, usize)>,
+        __sym1: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -1673,7 +1711,7 @@ mod __parse__LinearRelation {
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action41(input, __sym0, __sym1);
+                let __nt = super::__action41(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -1694,6 +1732,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, Scalar, usize)>,
@@ -1709,7 +1748,7 @@ mod __parse__LinearRelation {
         match __lookahead {
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state8(input, __tokens, __sym2));
+                __result = try!(__state8(index, input, __tokens, __sym2));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -1723,7 +1762,7 @@ mod __parse__LinearRelation {
             match __nt {
                 __Nonterminal::Variable(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state28(input, __tokens, __lookahead, __sym0, __sym1, __sym2));
+                    __result = try!(__state28(index, input, __tokens, __lookahead, __sym0, __sym1, __sym2));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -1737,9 +1776,10 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
-        __sym0: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
         __sym1: &mut Option<(usize, &'input str, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
@@ -1756,7 +1796,7 @@ mod __parse__LinearRelation {
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action46(input, __sym0, __sym1);
+                let __nt = super::__action46(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::_28Term_20_22_2b_22_29_2b((
                     __start,
                     __nt,
@@ -1777,10 +1817,11 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
-        __sym1: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
+        __sym1: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
         __sym2: &mut Option<(usize, &'input str, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
@@ -1798,7 +1839,7 @@ mod __parse__LinearRelation {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action47(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action47(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::_28Term_20_22_2b_22_29_2b((
                     __start,
                     __nt,
@@ -1819,21 +1860,22 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state26(input, __tokens, __sym1));
+                __result = try!(__state26(index, input, __tokens, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state27(input, __tokens, __sym1));
+                __result = try!(__state27(index, input, __tokens, __sym1));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -1847,15 +1889,15 @@ mod __parse__LinearRelation {
             match __nt {
                 __Nonterminal::Scalar(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state23(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state23(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state29(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state29(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state25(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state25(index, input, __tokens, __lookahead, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -1869,6 +1911,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -1885,7 +1928,7 @@ mod __parse__LinearRelation {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action21(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action21(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::LinearRelation((
                     __start,
                     __nt,
@@ -1906,6 +1949,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -1916,18 +1960,18 @@ mod __parse__LinearRelation {
         match __lookahead {
             Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state31(input, __tokens, __sym0, __sym1));
+                __result = try!(__state31(index, input, __tokens, __sym0, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state27(input, __tokens, __sym1));
+                __result = try!(__state27(index, input, __tokens, __sym1));
             }
             None |
             Some((_, (2, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action11(input, __sym0);
+                let __nt = super::__action11(index, input, __sym0);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -1947,7 +1991,7 @@ mod __parse__LinearRelation {
             match __nt {
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state30(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state30(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -1961,23 +2005,24 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state19(input, __tokens, __sym0, __sym1));
+                __result = try!(__state19(index, input, __tokens, __sym0, __sym1));
             }
             None => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action48(input, __sym0);
+                let __nt = super::__action48(index, input, __sym0);
                 let __nt = __Nonterminal::Expression((
                     __start,
                     __nt,
@@ -1999,10 +2044,11 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, Var, usize)>,
+        __sym0: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -2012,7 +2058,7 @@ mod __parse__LinearRelation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action12(input, __sym0);
+                let __nt = super::__action12(index, input, __sym0);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -2033,6 +2079,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -2052,7 +2099,7 @@ mod __parse__LinearRelation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action9(input, __sym0);
+                let __nt = super::__action9(index, input, __sym0);
                 let __nt = __Nonterminal::Scalar((
                     __start,
                     __nt,
@@ -2073,6 +2120,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -2090,7 +2138,7 @@ mod __parse__LinearRelation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action10(input, __sym0);
+                let __nt = super::__action10(index, input, __sym0);
                 let __nt = __Nonterminal::Variable((
                     __start,
                     __nt,
@@ -2111,12 +2159,13 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<(usize, Scalar, usize)>,
         __sym1: &mut Option<(usize, &'input str, usize)>,
-        __sym2: &mut Option<(usize, Var, usize)>,
+        __sym2: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -2133,7 +2182,7 @@ mod __parse__LinearRelation {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action40(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action40(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -2154,25 +2203,26 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
-        __sym1: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
+        __sym1: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state20(input, __tokens, __sym0, __sym1, __sym2));
+                __result = try!(__state20(index, input, __tokens, __sym0, __sym1, __sym2));
             }
             None => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action49(input, __sym0, __sym1);
+                let __nt = super::__action49(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::Expression((
                     __start,
                     __nt,
@@ -2194,11 +2244,12 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<(usize, Scalar, usize)>,
-        __sym1: &mut Option<(usize, Var, usize)>,
+        __sym1: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -2209,7 +2260,7 @@ mod __parse__LinearRelation {
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action41(input, __sym0, __sym1);
+                let __nt = super::__action41(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -2230,6 +2281,7 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, Scalar, usize)>,
@@ -2245,7 +2297,7 @@ mod __parse__LinearRelation {
         match __lookahead {
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state27(input, __tokens, __sym2));
+                __result = try!(__state27(index, input, __tokens, __sym2));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -2259,7 +2311,7 @@ mod __parse__LinearRelation {
             match __nt {
                 __Nonterminal::Variable(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state32(input, __tokens, __lookahead, __sym0, __sym1, __sym2));
+                    __result = try!(__state32(index, input, __tokens, __lookahead, __sym0, __sym1, __sym2));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -2273,12 +2325,13 @@ mod __parse__LinearRelation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<(usize, Scalar, usize)>,
         __sym1: &mut Option<(usize, &'input str, usize)>,
-        __sym2: &mut Option<(usize, Var, usize)>,
+        __sym2: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -2290,7 +2343,7 @@ mod __parse__LinearRelation {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action40(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action40(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -2315,12 +2368,13 @@ mod __parse__Problem {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
-    use var::Var;
+    use var::{VarIndex, VarRef};
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_Problem<
         'input,
     >(
+        index: &mut VarIndex,
         input: &'input str,
     ) -> Result<Problem, __ParseError<usize,(usize, &'input str),()>>
     {
@@ -2330,7 +2384,7 @@ mod __parse__Problem {
             None => None,
             Some(Err(e)) => return Err(e),
         };
-        match try!(__state0(input, &mut __tokens, __lookahead)) {
+        match try!(__state0(index, input, &mut __tokens, __lookahead)) {
             (Some(__lookahead), _) => {
                 Err(__ParseError::ExtraToken { token: __lookahead })
             }
@@ -2347,9 +2401,9 @@ mod __parse__Problem {
         _28LINE__SEP_2b_20LinearRelation_29((usize, (::std::vec::Vec<&'input str>, LinearRelation), usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2a((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2b((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
-        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<Var>), &'input str), usize)),
-        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
-        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<VarRef>), &'input str), usize)),
+        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
         Expression((usize, LinearExpression, usize)),
         LINE__SEP((usize, &'input str, usize)),
         LINE__SEP_2b((usize, ::std::vec::Vec<&'input str>, usize)),
@@ -2358,8 +2412,8 @@ mod __parse__Problem {
         ProblemObjective((usize, ProblemObjective, usize)),
         Relation((usize, Relation, usize)),
         Scalar((usize, Scalar, usize)),
-        Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        Variable((usize, Var, usize)),
+        Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        Variable((usize, VarRef, usize)),
         ____Expression((usize, LinearExpression, usize)),
         ____LINE__SEP((usize, &'input str, usize)),
         ____LinearRelation((usize, LinearRelation, usize)),
@@ -2367,14 +2421,15 @@ mod __parse__Problem {
         ____ProblemObjective((usize, ProblemObjective, usize)),
         ____Relation((usize, Relation, usize)),
         ____Scalar((usize, Scalar, usize)),
-        ____Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        ____Variable((usize, Var, usize)),
+        ____Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        ____Variable((usize, VarRef, usize)),
     }
 
     pub fn __state0<
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -2384,11 +2439,11 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (10, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state3(input, __tokens, __sym0));
+                __result = try!(__state3(index, input, __tokens, __sym0));
             }
             Some((__loc1, (11, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state4(input, __tokens, __sym0));
+                __result = try!(__state4(index, input, __tokens, __sym0));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -2402,11 +2457,11 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::Problem(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state1(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state1(index, input, __tokens, __lookahead, __sym0));
                 }
                 __Nonterminal::ProblemObjective(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state2(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state2(index, input, __tokens, __lookahead, __sym0));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -2419,6 +2474,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -2431,7 +2487,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action8(input, __sym0);
+                let __nt = super::__action8(index, input, __sym0);
                 let __nt = __Nonterminal::____Problem((
                     __start,
                     __nt,
@@ -2452,6 +2508,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -2462,7 +2519,7 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (3, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state7(input, __tokens, __sym1));
+                __result = try!(__state7(index, input, __tokens, __sym1));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -2476,11 +2533,11 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::LINE__SEP(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state5(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state5(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::LINE__SEP_2b(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state6(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state6(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -2494,6 +2551,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -2508,11 +2566,11 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state13(input, __tokens, __sym1));
+                __result = try!(__state13(index, input, __tokens, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state14(input, __tokens, __sym1));
+                __result = try!(__state14(index, input, __tokens, __sym1));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -2526,23 +2584,23 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::_28Term_20_22_2b_22_29_2b(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state8(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state8(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Expression(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state9(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state9(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 __Nonterminal::Scalar(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state10(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state10(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state11(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state11(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state12(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state12(index, input, __tokens, __lookahead, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -2556,6 +2614,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -2570,11 +2629,11 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state13(input, __tokens, __sym1));
+                __result = try!(__state13(index, input, __tokens, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state14(input, __tokens, __sym1));
+                __result = try!(__state14(index, input, __tokens, __sym1));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -2588,23 +2647,23 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::_28Term_20_22_2b_22_29_2b(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state8(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state8(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Expression(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state15(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state15(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 __Nonterminal::Scalar(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state10(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state10(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state11(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state11(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state12(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state12(index, input, __tokens, __lookahead, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -2618,6 +2677,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -2632,7 +2692,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action29(input, __sym0);
+                let __nt = super::__action29(index, input, __sym0);
                 let __nt = __Nonterminal::LINE__SEP_2b((
                     __start,
                     __nt,
@@ -2653,6 +2713,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -2664,15 +2725,15 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (3, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state7(input, __tokens, __sym2));
+                __result = try!(__state7(index, input, __tokens, __sym2));
             }
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state23(input, __tokens, __sym2));
+                __result = try!(__state23(index, input, __tokens, __sym2));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state24(input, __tokens, __sym2));
+                __result = try!(__state24(index, input, __tokens, __sym2));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -2686,31 +2747,31 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::_28Term_20_22_2b_22_29_2b(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state16(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state16(index, input, __tokens, __lookahead, __sym2));
                 }
                 __Nonterminal::Expression(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state17(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state17(index, input, __tokens, __lookahead, __sym2));
                 }
                 __Nonterminal::LINE__SEP(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state18(input, __tokens, __lookahead, __sym1, __sym2));
+                    __result = try!(__state18(index, input, __tokens, __lookahead, __sym1, __sym2));
                 }
                 __Nonterminal::LinearRelation(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state19(input, __tokens, __lookahead, __sym0, __sym1, __sym2));
+                    __result = try!(__state19(index, input, __tokens, __lookahead, __sym0, __sym1, __sym2));
                 }
                 __Nonterminal::Scalar(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state20(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state20(index, input, __tokens, __lookahead, __sym2));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state21(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state21(index, input, __tokens, __lookahead, __sym2));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state22(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state22(index, input, __tokens, __lookahead, __sym2));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -2724,6 +2785,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -2742,7 +2804,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action24(input, __sym0);
+                let __nt = super::__action24(index, input, __sym0);
                 let __nt = __Nonterminal::LINE__SEP((
                     __start,
                     __nt,
@@ -2763,21 +2825,22 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state13(input, __tokens, __sym1));
+                __result = try!(__state13(index, input, __tokens, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state14(input, __tokens, __sym1));
+                __result = try!(__state14(index, input, __tokens, __sym1));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -2791,15 +2854,15 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::Scalar(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state10(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state10(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state25(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state25(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state12(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state12(index, input, __tokens, __lookahead, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -2813,6 +2876,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -2824,7 +2888,7 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (0, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state26(input, __tokens, __sym0, __sym1, __sym2));
+                __result = try!(__state26(index, input, __tokens, __sym0, __sym1, __sym2));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -2840,6 +2904,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -2850,18 +2915,18 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state28(input, __tokens, __sym0, __sym1));
+                __result = try!(__state28(index, input, __tokens, __sym0, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state14(input, __tokens, __sym1));
+                __result = try!(__state14(index, input, __tokens, __sym1));
             }
             Some((_, (0, _), _)) |
             Some((_, (2, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action11(input, __sym0);
+                let __nt = super::__action11(index, input, __sym0);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -2881,7 +2946,7 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state27(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state27(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -2895,23 +2960,24 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state29(input, __tokens, __sym0, __sym1));
+                __result = try!(__state29(index, input, __tokens, __sym0, __sym1));
             }
             Some((_, (0, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action48(input, __sym0);
+                let __nt = super::__action48(index, input, __sym0);
                 let __nt = __Nonterminal::Expression((
                     __start,
                     __nt,
@@ -2933,10 +2999,11 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, Var, usize)>,
+        __sym0: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -2946,7 +3013,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action12(input, __sym0);
+                let __nt = super::__action12(index, input, __sym0);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -2967,6 +3034,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -2986,7 +3054,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action9(input, __sym0);
+                let __nt = super::__action9(index, input, __sym0);
                 let __nt = __Nonterminal::Scalar((
                     __start,
                     __nt,
@@ -3007,6 +3075,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -3024,7 +3093,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action10(input, __sym0);
+                let __nt = super::__action10(index, input, __sym0);
                 let __nt = __Nonterminal::Variable((
                     __start,
                     __nt,
@@ -3045,6 +3114,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -3056,7 +3126,7 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (0, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state30(input, __tokens, __sym0, __sym1, __sym2));
+                __result = try!(__state30(index, input, __tokens, __sym0, __sym1, __sym2));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -3072,21 +3142,22 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state23(input, __tokens, __sym1));
+                __result = try!(__state23(index, input, __tokens, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state24(input, __tokens, __sym1));
+                __result = try!(__state24(index, input, __tokens, __sym1));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -3100,15 +3171,15 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::Scalar(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state20(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state20(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state31(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state31(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state22(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state22(index, input, __tokens, __lookahead, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -3122,6 +3193,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -3132,27 +3204,27 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state33(input, __tokens, __sym1));
+                __result = try!(__state33(index, input, __tokens, __sym1));
             }
             Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state34(input, __tokens, __sym1));
+                __result = try!(__state34(index, input, __tokens, __sym1));
             }
             Some((__loc1, (6, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state35(input, __tokens, __sym1));
+                __result = try!(__state35(index, input, __tokens, __sym1));
             }
             Some((__loc1, (7, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state36(input, __tokens, __sym1));
+                __result = try!(__state36(index, input, __tokens, __sym1));
             }
             Some((__loc1, (8, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state37(input, __tokens, __sym1));
+                __result = try!(__state37(index, input, __tokens, __sym1));
             }
             Some((__loc1, (9, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state38(input, __tokens, __sym1));
+                __result = try!(__state38(index, input, __tokens, __sym1));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -3166,7 +3238,7 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::Relation(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state32(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state32(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -3180,6 +3252,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -3196,7 +3269,7 @@ mod __parse__Problem {
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action30(input, __sym0, __sym1);
+                let __nt = super::__action30(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::LINE__SEP_2b((
                     __start,
                     __nt,
@@ -3217,6 +3290,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -3229,7 +3303,7 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (3, __tok0), __loc2)) => {
                 let mut __sym3 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state7(input, __tokens, __sym3));
+                __result = try!(__state7(index, input, __tokens, __sym3));
             }
             None => {
                 let __sym0 = __sym0.take().unwrap();
@@ -3237,7 +3311,7 @@ mod __parse__Problem {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action44(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action44(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::Problem((
                     __start,
                     __nt,
@@ -3257,15 +3331,15 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::_28LINE__SEP_2b_20LinearRelation_29_2b(__nt) => {
                     let __sym3 = &mut Some(__nt);
-                    __result = try!(__state39(input, __tokens, __lookahead, __sym0, __sym1, __sym2, __sym3));
+                    __result = try!(__state39(index, input, __tokens, __lookahead, __sym0, __sym1, __sym2, __sym3));
                 }
                 __Nonterminal::LINE__SEP(__nt) => {
                     let __sym3 = &mut Some(__nt);
-                    __result = try!(__state5(input, __tokens, __lookahead, __sym3));
+                    __result = try!(__state5(index, input, __tokens, __lookahead, __sym3));
                 }
                 __Nonterminal::LINE__SEP_2b(__nt) => {
                     let __sym3 = &mut Some(__nt);
-                    __result = try!(__state40(input, __tokens, __lookahead, __sym3));
+                    __result = try!(__state40(index, input, __tokens, __lookahead, __sym3));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -3279,6 +3353,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -3289,11 +3364,11 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state42(input, __tokens, __sym0, __sym1));
+                __result = try!(__state42(index, input, __tokens, __sym0, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state24(input, __tokens, __sym1));
+                __result = try!(__state24(index, input, __tokens, __sym1));
             }
             Some((_, (2, _), _)) |
             Some((_, (4, _), _)) |
@@ -3305,7 +3380,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action11(input, __sym0);
+                let __nt = super::__action11(index, input, __sym0);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -3325,7 +3400,7 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state41(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state41(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -3339,17 +3414,18 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state29(input, __tokens, __sym0, __sym1));
+                __result = try!(__state29(index, input, __tokens, __sym0, __sym1));
             }
             Some((_, (4, _), _)) |
             Some((_, (5, _), _)) |
@@ -3360,7 +3436,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action48(input, __sym0);
+                let __nt = super::__action48(index, input, __sym0);
                 let __nt = __Nonterminal::Expression((
                     __start,
                     __nt,
@@ -3382,10 +3458,11 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, Var, usize)>,
+        __sym0: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -3400,7 +3477,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action12(input, __sym0);
+                let __nt = super::__action12(index, input, __sym0);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -3421,6 +3498,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -3445,7 +3523,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action9(input, __sym0);
+                let __nt = super::__action9(index, input, __sym0);
                 let __nt = __Nonterminal::Scalar((
                     __start,
                     __nt,
@@ -3466,6 +3544,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -3488,7 +3567,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action10(input, __sym0);
+                let __nt = super::__action10(index, input, __sym0);
                 let __nt = __Nonterminal::Variable((
                     __start,
                     __nt,
@@ -3509,25 +3588,26 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
-        __sym1: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
+        __sym1: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state43(input, __tokens, __sym0, __sym1, __sym2));
+                __result = try!(__state43(index, input, __tokens, __sym0, __sym1, __sym2));
             }
             Some((_, (0, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action49(input, __sym0, __sym1);
+                let __nt = super::__action49(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::Expression((
                     __start,
                     __nt,
@@ -3549,6 +3629,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -3569,7 +3650,7 @@ mod __parse__Problem {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action22(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action22(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::ProblemObjective((
                     __start,
                     __nt,
@@ -3590,11 +3671,12 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<(usize, Scalar, usize)>,
-        __sym1: &mut Option<(usize, Var, usize)>,
+        __sym1: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -3605,7 +3687,7 @@ mod __parse__Problem {
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action41(input, __sym0, __sym1);
+                let __nt = super::__action41(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -3626,6 +3708,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, Scalar, usize)>,
@@ -3641,7 +3724,7 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state14(input, __tokens, __sym2));
+                __result = try!(__state14(index, input, __tokens, __sym2));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -3655,7 +3738,7 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::Variable(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state44(input, __tokens, __lookahead, __sym0, __sym1, __sym2));
+                    __result = try!(__state44(index, input, __tokens, __lookahead, __sym0, __sym1, __sym2));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -3669,9 +3752,10 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
-        __sym0: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
         __sym1: &mut Option<(usize, &'input str, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
@@ -3688,7 +3772,7 @@ mod __parse__Problem {
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action46(input, __sym0, __sym1);
+                let __nt = super::__action46(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::_28Term_20_22_2b_22_29_2b((
                     __start,
                     __nt,
@@ -3709,6 +3793,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -3729,7 +3814,7 @@ mod __parse__Problem {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action23(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action23(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::ProblemObjective((
                     __start,
                     __nt,
@@ -3750,18 +3835,19 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
-        __sym1: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
+        __sym1: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state43(input, __tokens, __sym0, __sym1, __sym2));
+                __result = try!(__state43(index, input, __tokens, __sym0, __sym1, __sym2));
             }
             Some((_, (4, _), _)) |
             Some((_, (5, _), _)) |
@@ -3773,7 +3859,7 @@ mod __parse__Problem {
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action49(input, __sym0, __sym1);
+                let __nt = super::__action49(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::Expression((
                     __start,
                     __nt,
@@ -3795,6 +3881,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -3806,11 +3893,11 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state50(input, __tokens, __sym2));
+                __result = try!(__state50(index, input, __tokens, __sym2));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state51(input, __tokens, __sym2));
+                __result = try!(__state51(index, input, __tokens, __sym2));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -3824,23 +3911,23 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::_28Term_20_22_2b_22_29_2b(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state45(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state45(index, input, __tokens, __lookahead, __sym2));
                 }
                 __Nonterminal::Expression(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state46(input, __tokens, __lookahead, __sym0, __sym1, __sym2));
+                    __result = try!(__state46(index, input, __tokens, __lookahead, __sym0, __sym1, __sym2));
                 }
                 __Nonterminal::Scalar(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state47(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state47(index, input, __tokens, __lookahead, __sym2));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state48(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state48(index, input, __tokens, __lookahead, __sym2));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state49(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state49(index, input, __tokens, __lookahead, __sym2));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -3854,6 +3941,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -3871,7 +3959,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action15(input, __sym0);
+                let __nt = super::__action15(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -3892,6 +3980,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -3909,7 +3998,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action16(input, __sym0);
+                let __nt = super::__action16(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -3930,6 +4019,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -3947,7 +4037,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action20(input, __sym0);
+                let __nt = super::__action20(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -3968,6 +4058,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -3985,7 +4076,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action19(input, __sym0);
+                let __nt = super::__action19(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -4006,6 +4097,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -4023,7 +4115,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action17(input, __sym0);
+                let __nt = super::__action17(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -4044,6 +4136,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -4061,7 +4154,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action18(input, __sym0);
+                let __nt = super::__action18(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -4082,6 +4175,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -4095,7 +4189,7 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (3, __tok0), __loc2)) => {
                 let mut __sym4 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state7(input, __tokens, __sym4));
+                __result = try!(__state7(index, input, __tokens, __sym4));
             }
             None => {
                 let __sym0 = __sym0.take().unwrap();
@@ -4104,7 +4198,7 @@ mod __parse__Problem {
                 let __sym3 = __sym3.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym3.2.clone();
-                let __nt = super::__action45(input, __sym0, __sym1, __sym2, __sym3);
+                let __nt = super::__action45(index, input, __sym0, __sym1, __sym2, __sym3);
                 let __nt = __Nonterminal::Problem((
                     __start,
                     __nt,
@@ -4124,11 +4218,11 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::LINE__SEP(__nt) => {
                     let __sym4 = &mut Some(__nt);
-                    __result = try!(__state5(input, __tokens, __lookahead, __sym4));
+                    __result = try!(__state5(index, input, __tokens, __lookahead, __sym4));
                 }
                 __Nonterminal::LINE__SEP_2b(__nt) => {
                     let __sym4 = &mut Some(__nt);
-                    __result = try!(__state52(input, __tokens, __lookahead, __sym3, __sym4));
+                    __result = try!(__state52(index, input, __tokens, __lookahead, __sym3, __sym4));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -4142,6 +4236,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -4152,15 +4247,15 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (3, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state7(input, __tokens, __sym1));
+                __result = try!(__state7(index, input, __tokens, __sym1));
             }
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state23(input, __tokens, __sym1));
+                __result = try!(__state23(index, input, __tokens, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state24(input, __tokens, __sym1));
+                __result = try!(__state24(index, input, __tokens, __sym1));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -4174,31 +4269,31 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::_28Term_20_22_2b_22_29_2b(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state16(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state16(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Expression(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state17(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state17(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::LINE__SEP(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state18(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state18(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 __Nonterminal::LinearRelation(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state53(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state53(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 __Nonterminal::Scalar(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state20(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state20(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state21(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state21(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state22(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state22(index, input, __tokens, __lookahead, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -4212,11 +4307,12 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<(usize, Scalar, usize)>,
-        __sym1: &mut Option<(usize, Var, usize)>,
+        __sym1: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -4232,7 +4328,7 @@ mod __parse__Problem {
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action41(input, __sym0, __sym1);
+                let __nt = super::__action41(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -4253,6 +4349,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, Scalar, usize)>,
@@ -4268,7 +4365,7 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state24(input, __tokens, __sym2));
+                __result = try!(__state24(index, input, __tokens, __sym2));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -4282,7 +4379,7 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::Variable(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state54(input, __tokens, __lookahead, __sym0, __sym1, __sym2));
+                    __result = try!(__state54(index, input, __tokens, __lookahead, __sym0, __sym1, __sym2));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -4296,10 +4393,11 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
-        __sym1: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
+        __sym1: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
         __sym2: &mut Option<(usize, &'input str, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
@@ -4317,7 +4415,7 @@ mod __parse__Problem {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action47(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action47(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::_28Term_20_22_2b_22_29_2b((
                     __start,
                     __nt,
@@ -4338,12 +4436,13 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<(usize, Scalar, usize)>,
         __sym1: &mut Option<(usize, &'input str, usize)>,
-        __sym2: &mut Option<(usize, Var, usize)>,
+        __sym2: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -4355,7 +4454,7 @@ mod __parse__Problem {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action40(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action40(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -4376,21 +4475,22 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state50(input, __tokens, __sym1));
+                __result = try!(__state50(index, input, __tokens, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state51(input, __tokens, __sym1));
+                __result = try!(__state51(index, input, __tokens, __sym1));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -4404,15 +4504,15 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::Scalar(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state47(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state47(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state55(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state55(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state49(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state49(index, input, __tokens, __lookahead, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -4426,6 +4526,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -4443,7 +4544,7 @@ mod __parse__Problem {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action21(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action21(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::LinearRelation((
                     __start,
                     __nt,
@@ -4464,6 +4565,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -4474,11 +4576,11 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state57(input, __tokens, __sym0, __sym1));
+                __result = try!(__state57(index, input, __tokens, __sym0, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state51(input, __tokens, __sym1));
+                __result = try!(__state51(index, input, __tokens, __sym1));
             }
             None |
             Some((_, (2, _), _)) |
@@ -4486,7 +4588,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action11(input, __sym0);
+                let __nt = super::__action11(index, input, __sym0);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -4506,7 +4608,7 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state56(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state56(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -4520,24 +4622,25 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state29(input, __tokens, __sym0, __sym1));
+                __result = try!(__state29(index, input, __tokens, __sym0, __sym1));
             }
             None |
             Some((_, (3, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action48(input, __sym0);
+                let __nt = super::__action48(index, input, __sym0);
                 let __nt = __Nonterminal::Expression((
                     __start,
                     __nt,
@@ -4559,10 +4662,11 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, Var, usize)>,
+        __sym0: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -4573,7 +4677,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action12(input, __sym0);
+                let __nt = super::__action12(index, input, __sym0);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -4594,6 +4698,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -4614,7 +4719,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action9(input, __sym0);
+                let __nt = super::__action9(index, input, __sym0);
                 let __nt = __Nonterminal::Scalar((
                     __start,
                     __nt,
@@ -4635,6 +4740,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -4653,7 +4759,7 @@ mod __parse__Problem {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action10(input, __sym0);
+                let __nt = super::__action10(index, input, __sym0);
                 let __nt = __Nonterminal::Variable((
                     __start,
                     __nt,
@@ -4674,6 +4780,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -4685,15 +4792,15 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (3, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state7(input, __tokens, __sym2));
+                __result = try!(__state7(index, input, __tokens, __sym2));
             }
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state23(input, __tokens, __sym2));
+                __result = try!(__state23(index, input, __tokens, __sym2));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state24(input, __tokens, __sym2));
+                __result = try!(__state24(index, input, __tokens, __sym2));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -4707,31 +4814,31 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::_28Term_20_22_2b_22_29_2b(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state16(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state16(index, input, __tokens, __lookahead, __sym2));
                 }
                 __Nonterminal::Expression(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state17(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state17(index, input, __tokens, __lookahead, __sym2));
                 }
                 __Nonterminal::LINE__SEP(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state18(input, __tokens, __lookahead, __sym1, __sym2));
+                    __result = try!(__state18(index, input, __tokens, __lookahead, __sym1, __sym2));
                 }
                 __Nonterminal::LinearRelation(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state58(input, __tokens, __lookahead, __sym0, __sym1, __sym2));
+                    __result = try!(__state58(index, input, __tokens, __lookahead, __sym0, __sym1, __sym2));
                 }
                 __Nonterminal::Scalar(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state20(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state20(index, input, __tokens, __lookahead, __sym2));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state21(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state21(index, input, __tokens, __lookahead, __sym2));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state22(input, __tokens, __lookahead, __sym2));
+                    __result = try!(__state22(index, input, __tokens, __lookahead, __sym2));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -4745,6 +4852,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -4760,7 +4868,7 @@ mod __parse__Problem {
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action42(input, __sym0, __sym1);
+                let __nt = super::__action42(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::_28LINE__SEP_2b_20LinearRelation_29_2b((
                     __start,
                     __nt,
@@ -4781,12 +4889,13 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<(usize, Scalar, usize)>,
         __sym1: &mut Option<(usize, &'input str, usize)>,
-        __sym2: &mut Option<(usize, Var, usize)>,
+        __sym2: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -4803,7 +4912,7 @@ mod __parse__Problem {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action40(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action40(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -4824,18 +4933,19 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
-        __sym1: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
+        __sym1: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state43(input, __tokens, __sym0, __sym1, __sym2));
+                __result = try!(__state43(index, input, __tokens, __sym0, __sym1, __sym2));
             }
             None |
             Some((_, (3, _), _)) => {
@@ -4843,7 +4953,7 @@ mod __parse__Problem {
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action49(input, __sym0, __sym1);
+                let __nt = super::__action49(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::Expression((
                     __start,
                     __nt,
@@ -4865,11 +4975,12 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<(usize, Scalar, usize)>,
-        __sym1: &mut Option<(usize, Var, usize)>,
+        __sym1: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -4881,7 +4992,7 @@ mod __parse__Problem {
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action41(input, __sym0, __sym1);
+                let __nt = super::__action41(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -4902,6 +5013,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, Scalar, usize)>,
@@ -4917,7 +5029,7 @@ mod __parse__Problem {
         match __lookahead {
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state51(input, __tokens, __sym2));
+                __result = try!(__state51(index, input, __tokens, __sym2));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -4931,7 +5043,7 @@ mod __parse__Problem {
             match __nt {
                 __Nonterminal::Variable(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state59(input, __tokens, __lookahead, __sym0, __sym1, __sym2));
+                    __result = try!(__state59(index, input, __tokens, __lookahead, __sym0, __sym1, __sym2));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -4945,6 +5057,7 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -4962,7 +5075,7 @@ mod __parse__Problem {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action43(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action43(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::_28LINE__SEP_2b_20LinearRelation_29_2b((
                     __start,
                     __nt,
@@ -4983,12 +5096,13 @@ mod __parse__Problem {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<(usize, Scalar, usize)>,
         __sym1: &mut Option<(usize, &'input str, usize)>,
-        __sym2: &mut Option<(usize, Var, usize)>,
+        __sym2: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -5001,7 +5115,7 @@ mod __parse__Problem {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action40(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action40(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -5026,12 +5140,13 @@ mod __parse__ProblemObjective {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
-    use var::Var;
+    use var::{VarIndex, VarRef};
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_ProblemObjective<
         'input,
     >(
+        index: &mut VarIndex,
         input: &'input str,
     ) -> Result<ProblemObjective, __ParseError<usize,(usize, &'input str),()>>
     {
@@ -5041,7 +5156,7 @@ mod __parse__ProblemObjective {
             None => None,
             Some(Err(e)) => return Err(e),
         };
-        match try!(__state0(input, &mut __tokens, __lookahead)) {
+        match try!(__state0(index, input, &mut __tokens, __lookahead)) {
             (Some(__lookahead), _) => {
                 Err(__ParseError::ExtraToken { token: __lookahead })
             }
@@ -5058,9 +5173,9 @@ mod __parse__ProblemObjective {
         _28LINE__SEP_2b_20LinearRelation_29((usize, (::std::vec::Vec<&'input str>, LinearRelation), usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2a((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2b((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
-        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<Var>), &'input str), usize)),
-        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
-        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<VarRef>), &'input str), usize)),
+        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
         Expression((usize, LinearExpression, usize)),
         LINE__SEP((usize, &'input str, usize)),
         LINE__SEP_2b((usize, ::std::vec::Vec<&'input str>, usize)),
@@ -5069,8 +5184,8 @@ mod __parse__ProblemObjective {
         ProblemObjective((usize, ProblemObjective, usize)),
         Relation((usize, Relation, usize)),
         Scalar((usize, Scalar, usize)),
-        Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        Variable((usize, Var, usize)),
+        Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        Variable((usize, VarRef, usize)),
         ____Expression((usize, LinearExpression, usize)),
         ____LINE__SEP((usize, &'input str, usize)),
         ____LinearRelation((usize, LinearRelation, usize)),
@@ -5078,14 +5193,15 @@ mod __parse__ProblemObjective {
         ____ProblemObjective((usize, ProblemObjective, usize)),
         ____Relation((usize, Relation, usize)),
         ____Scalar((usize, Scalar, usize)),
-        ____Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        ____Variable((usize, Var, usize)),
+        ____Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        ____Variable((usize, VarRef, usize)),
     }
 
     pub fn __state0<
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -5095,11 +5211,11 @@ mod __parse__ProblemObjective {
         match __lookahead {
             Some((__loc1, (10, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state2(input, __tokens, __sym0));
+                __result = try!(__state2(index, input, __tokens, __sym0));
             }
             Some((__loc1, (11, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state3(input, __tokens, __sym0));
+                __result = try!(__state3(index, input, __tokens, __sym0));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -5113,7 +5229,7 @@ mod __parse__ProblemObjective {
             match __nt {
                 __Nonterminal::ProblemObjective(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state1(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state1(index, input, __tokens, __lookahead, __sym0));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -5126,6 +5242,7 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -5138,7 +5255,7 @@ mod __parse__ProblemObjective {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action6(input, __sym0);
+                let __nt = super::__action6(index, input, __sym0);
                 let __nt = __Nonterminal::____ProblemObjective((
                     __start,
                     __nt,
@@ -5159,6 +5276,7 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -5173,11 +5291,11 @@ mod __parse__ProblemObjective {
         match __lookahead {
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state9(input, __tokens, __sym1));
+                __result = try!(__state9(index, input, __tokens, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state10(input, __tokens, __sym1));
+                __result = try!(__state10(index, input, __tokens, __sym1));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -5191,23 +5309,23 @@ mod __parse__ProblemObjective {
             match __nt {
                 __Nonterminal::_28Term_20_22_2b_22_29_2b(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state4(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state4(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Expression(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state5(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state5(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 __Nonterminal::Scalar(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state6(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state6(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state7(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state7(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state8(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state8(index, input, __tokens, __lookahead, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -5221,6 +5339,7 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -5235,11 +5354,11 @@ mod __parse__ProblemObjective {
         match __lookahead {
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state9(input, __tokens, __sym1));
+                __result = try!(__state9(index, input, __tokens, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state10(input, __tokens, __sym1));
+                __result = try!(__state10(index, input, __tokens, __sym1));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -5253,23 +5372,23 @@ mod __parse__ProblemObjective {
             match __nt {
                 __Nonterminal::_28Term_20_22_2b_22_29_2b(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state4(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state4(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Expression(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state11(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state11(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 __Nonterminal::Scalar(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state6(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state6(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state7(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state7(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state8(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state8(index, input, __tokens, __lookahead, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -5283,21 +5402,22 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state9(input, __tokens, __sym1));
+                __result = try!(__state9(index, input, __tokens, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state10(input, __tokens, __sym1));
+                __result = try!(__state10(index, input, __tokens, __sym1));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -5311,15 +5431,15 @@ mod __parse__ProblemObjective {
             match __nt {
                 __Nonterminal::Scalar(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state6(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state6(index, input, __tokens, __lookahead, __sym1));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state12(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state12(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state8(input, __tokens, __lookahead, __sym1));
+                    __result = try!(__state8(index, input, __tokens, __lookahead, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -5333,6 +5453,7 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -5344,7 +5465,7 @@ mod __parse__ProblemObjective {
         match __lookahead {
             Some((__loc1, (0, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state13(input, __tokens, __sym0, __sym1, __sym2));
+                __result = try!(__state13(index, input, __tokens, __sym0, __sym1, __sym2));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -5360,6 +5481,7 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -5370,18 +5492,18 @@ mod __parse__ProblemObjective {
         match __lookahead {
             Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state15(input, __tokens, __sym0, __sym1));
+                __result = try!(__state15(index, input, __tokens, __sym0, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state10(input, __tokens, __sym1));
+                __result = try!(__state10(index, input, __tokens, __sym1));
             }
             Some((_, (0, _), _)) |
             Some((_, (2, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action11(input, __sym0);
+                let __nt = super::__action11(index, input, __sym0);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -5401,7 +5523,7 @@ mod __parse__ProblemObjective {
             match __nt {
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state14(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state14(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -5415,23 +5537,24 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state16(input, __tokens, __sym0, __sym1));
+                __result = try!(__state16(index, input, __tokens, __sym0, __sym1));
             }
             Some((_, (0, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action48(input, __sym0);
+                let __nt = super::__action48(index, input, __sym0);
                 let __nt = __Nonterminal::Expression((
                     __start,
                     __nt,
@@ -5453,10 +5576,11 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, Var, usize)>,
+        __sym0: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -5466,7 +5590,7 @@ mod __parse__ProblemObjective {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action12(input, __sym0);
+                let __nt = super::__action12(index, input, __sym0);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -5487,6 +5611,7 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -5506,7 +5631,7 @@ mod __parse__ProblemObjective {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action9(input, __sym0);
+                let __nt = super::__action9(index, input, __sym0);
                 let __nt = __Nonterminal::Scalar((
                     __start,
                     __nt,
@@ -5527,6 +5652,7 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -5544,7 +5670,7 @@ mod __parse__ProblemObjective {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action10(input, __sym0);
+                let __nt = super::__action10(index, input, __sym0);
                 let __nt = __Nonterminal::Variable((
                     __start,
                     __nt,
@@ -5565,6 +5691,7 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -5576,7 +5703,7 @@ mod __parse__ProblemObjective {
         match __lookahead {
             Some((__loc1, (0, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state17(input, __tokens, __sym0, __sym1, __sym2));
+                __result = try!(__state17(index, input, __tokens, __sym0, __sym1, __sym2));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -5592,25 +5719,26 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
-        __sym1: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
+        __sym1: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state18(input, __tokens, __sym0, __sym1, __sym2));
+                __result = try!(__state18(index, input, __tokens, __sym0, __sym1, __sym2));
             }
             Some((_, (0, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action49(input, __sym0, __sym1);
+                let __nt = super::__action49(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::Expression((
                     __start,
                     __nt,
@@ -5632,6 +5760,7 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -5652,7 +5781,7 @@ mod __parse__ProblemObjective {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action22(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action22(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::ProblemObjective((
                     __start,
                     __nt,
@@ -5673,11 +5802,12 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<(usize, Scalar, usize)>,
-        __sym1: &mut Option<(usize, Var, usize)>,
+        __sym1: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -5688,7 +5818,7 @@ mod __parse__ProblemObjective {
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action41(input, __sym0, __sym1);
+                let __nt = super::__action41(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -5709,6 +5839,7 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, Scalar, usize)>,
@@ -5724,7 +5855,7 @@ mod __parse__ProblemObjective {
         match __lookahead {
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state10(input, __tokens, __sym2));
+                __result = try!(__state10(index, input, __tokens, __sym2));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -5738,7 +5869,7 @@ mod __parse__ProblemObjective {
             match __nt {
                 __Nonterminal::Variable(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state19(input, __tokens, __lookahead, __sym0, __sym1, __sym2));
+                    __result = try!(__state19(index, input, __tokens, __lookahead, __sym0, __sym1, __sym2));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -5752,9 +5883,10 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
-        __sym0: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
         __sym1: &mut Option<(usize, &'input str, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
@@ -5771,7 +5903,7 @@ mod __parse__ProblemObjective {
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action46(input, __sym0, __sym1);
+                let __nt = super::__action46(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::_28Term_20_22_2b_22_29_2b((
                     __start,
                     __nt,
@@ -5792,6 +5924,7 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -5812,7 +5945,7 @@ mod __parse__ProblemObjective {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action23(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action23(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::ProblemObjective((
                     __start,
                     __nt,
@@ -5833,10 +5966,11 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
-        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)>,
-        __sym1: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)>,
+        __sym1: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
         __sym2: &mut Option<(usize, &'input str, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
@@ -5854,7 +5988,7 @@ mod __parse__ProblemObjective {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action47(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action47(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::_28Term_20_22_2b_22_29_2b((
                     __start,
                     __nt,
@@ -5875,12 +6009,13 @@ mod __parse__ProblemObjective {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<(usize, Scalar, usize)>,
         __sym1: &mut Option<(usize, &'input str, usize)>,
-        __sym2: &mut Option<(usize, Var, usize)>,
+        __sym2: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -5892,7 +6027,7 @@ mod __parse__ProblemObjective {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action40(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action40(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -5917,12 +6052,13 @@ mod __parse__Relation {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
-    use var::Var;
+    use var::{VarIndex, VarRef};
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_Relation<
         'input,
     >(
+        index: &mut VarIndex,
         input: &'input str,
     ) -> Result<Relation, __ParseError<usize,(usize, &'input str),()>>
     {
@@ -5932,7 +6068,7 @@ mod __parse__Relation {
             None => None,
             Some(Err(e)) => return Err(e),
         };
-        match try!(__state0(input, &mut __tokens, __lookahead)) {
+        match try!(__state0(index, input, &mut __tokens, __lookahead)) {
             (Some(__lookahead), _) => {
                 Err(__ParseError::ExtraToken { token: __lookahead })
             }
@@ -5949,9 +6085,9 @@ mod __parse__Relation {
         _28LINE__SEP_2b_20LinearRelation_29((usize, (::std::vec::Vec<&'input str>, LinearRelation), usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2a((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2b((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
-        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<Var>), &'input str), usize)),
-        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
-        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<VarRef>), &'input str), usize)),
+        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
         Expression((usize, LinearExpression, usize)),
         LINE__SEP((usize, &'input str, usize)),
         LINE__SEP_2b((usize, ::std::vec::Vec<&'input str>, usize)),
@@ -5960,8 +6096,8 @@ mod __parse__Relation {
         ProblemObjective((usize, ProblemObjective, usize)),
         Relation((usize, Relation, usize)),
         Scalar((usize, Scalar, usize)),
-        Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        Variable((usize, Var, usize)),
+        Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        Variable((usize, VarRef, usize)),
         ____Expression((usize, LinearExpression, usize)),
         ____LINE__SEP((usize, &'input str, usize)),
         ____LinearRelation((usize, LinearRelation, usize)),
@@ -5969,14 +6105,15 @@ mod __parse__Relation {
         ____ProblemObjective((usize, ProblemObjective, usize)),
         ____Relation((usize, Relation, usize)),
         ____Scalar((usize, Scalar, usize)),
-        ____Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        ____Variable((usize, Var, usize)),
+        ____Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        ____Variable((usize, VarRef, usize)),
     }
 
     pub fn __state0<
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -5986,27 +6123,27 @@ mod __parse__Relation {
         match __lookahead {
             Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state2(input, __tokens, __sym0));
+                __result = try!(__state2(index, input, __tokens, __sym0));
             }
             Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state3(input, __tokens, __sym0));
+                __result = try!(__state3(index, input, __tokens, __sym0));
             }
             Some((__loc1, (6, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state4(input, __tokens, __sym0));
+                __result = try!(__state4(index, input, __tokens, __sym0));
             }
             Some((__loc1, (7, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state5(input, __tokens, __sym0));
+                __result = try!(__state5(index, input, __tokens, __sym0));
             }
             Some((__loc1, (8, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state6(input, __tokens, __sym0));
+                __result = try!(__state6(index, input, __tokens, __sym0));
             }
             Some((__loc1, (9, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state7(input, __tokens, __sym0));
+                __result = try!(__state7(index, input, __tokens, __sym0));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -6020,7 +6157,7 @@ mod __parse__Relation {
             match __nt {
                 __Nonterminal::Relation(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state1(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state1(index, input, __tokens, __lookahead, __sym0));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -6033,6 +6170,7 @@ mod __parse__Relation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -6045,7 +6183,7 @@ mod __parse__Relation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action4(input, __sym0);
+                let __nt = super::__action4(index, input, __sym0);
                 let __nt = __Nonterminal::____Relation((
                     __start,
                     __nt,
@@ -6066,6 +6204,7 @@ mod __parse__Relation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -6082,7 +6221,7 @@ mod __parse__Relation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action15(input, __sym0);
+                let __nt = super::__action15(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -6103,6 +6242,7 @@ mod __parse__Relation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -6119,7 +6259,7 @@ mod __parse__Relation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action16(input, __sym0);
+                let __nt = super::__action16(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -6140,6 +6280,7 @@ mod __parse__Relation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -6156,7 +6297,7 @@ mod __parse__Relation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action20(input, __sym0);
+                let __nt = super::__action20(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -6177,6 +6318,7 @@ mod __parse__Relation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -6193,7 +6335,7 @@ mod __parse__Relation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action19(input, __sym0);
+                let __nt = super::__action19(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -6214,6 +6356,7 @@ mod __parse__Relation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -6230,7 +6373,7 @@ mod __parse__Relation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action17(input, __sym0);
+                let __nt = super::__action17(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -6251,6 +6394,7 @@ mod __parse__Relation {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -6267,7 +6411,7 @@ mod __parse__Relation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action18(input, __sym0);
+                let __nt = super::__action18(index, input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -6292,12 +6436,13 @@ mod __parse__Scalar {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
-    use var::Var;
+    use var::{VarIndex, VarRef};
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_Scalar<
         'input,
     >(
+        index: &mut VarIndex,
         input: &'input str,
     ) -> Result<Scalar, __ParseError<usize,(usize, &'input str),()>>
     {
@@ -6307,7 +6452,7 @@ mod __parse__Scalar {
             None => None,
             Some(Err(e)) => return Err(e),
         };
-        match try!(__state0(input, &mut __tokens, __lookahead)) {
+        match try!(__state0(index, input, &mut __tokens, __lookahead)) {
             (Some(__lookahead), _) => {
                 Err(__ParseError::ExtraToken { token: __lookahead })
             }
@@ -6324,9 +6469,9 @@ mod __parse__Scalar {
         _28LINE__SEP_2b_20LinearRelation_29((usize, (::std::vec::Vec<&'input str>, LinearRelation), usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2a((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2b((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
-        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<Var>), &'input str), usize)),
-        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
-        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<VarRef>), &'input str), usize)),
+        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
         Expression((usize, LinearExpression, usize)),
         LINE__SEP((usize, &'input str, usize)),
         LINE__SEP_2b((usize, ::std::vec::Vec<&'input str>, usize)),
@@ -6335,8 +6480,8 @@ mod __parse__Scalar {
         ProblemObjective((usize, ProblemObjective, usize)),
         Relation((usize, Relation, usize)),
         Scalar((usize, Scalar, usize)),
-        Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        Variable((usize, Var, usize)),
+        Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        Variable((usize, VarRef, usize)),
         ____Expression((usize, LinearExpression, usize)),
         ____LINE__SEP((usize, &'input str, usize)),
         ____LinearRelation((usize, LinearRelation, usize)),
@@ -6344,14 +6489,15 @@ mod __parse__Scalar {
         ____ProblemObjective((usize, ProblemObjective, usize)),
         ____Relation((usize, Relation, usize)),
         ____Scalar((usize, Scalar, usize)),
-        ____Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        ____Variable((usize, Var, usize)),
+        ____Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        ____Variable((usize, VarRef, usize)),
     }
 
     pub fn __state0<
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -6361,7 +6507,7 @@ mod __parse__Scalar {
         match __lookahead {
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state2(input, __tokens, __sym0));
+                __result = try!(__state2(index, input, __tokens, __sym0));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -6375,7 +6521,7 @@ mod __parse__Scalar {
             match __nt {
                 __Nonterminal::Scalar(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state1(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state1(index, input, __tokens, __lookahead, __sym0));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -6388,6 +6534,7 @@ mod __parse__Scalar {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -6400,7 +6547,7 @@ mod __parse__Scalar {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action0(input, __sym0);
+                let __nt = super::__action0(index, input, __sym0);
                 let __nt = __Nonterminal::____Scalar((
                     __start,
                     __nt,
@@ -6421,6 +6568,7 @@ mod __parse__Scalar {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -6437,7 +6585,7 @@ mod __parse__Scalar {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action9(input, __sym0);
+                let __nt = super::__action9(index, input, __sym0);
                 let __nt = __Nonterminal::Scalar((
                     __start,
                     __nt,
@@ -6462,14 +6610,15 @@ mod __parse__Term {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
-    use var::Var;
+    use var::{VarIndex, VarRef};
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_Term<
         'input,
     >(
+        index: &mut VarIndex,
         input: &'input str,
-    ) -> Result<(Option<Scalar>, Option<Var>), __ParseError<usize,(usize, &'input str),()>>
+    ) -> Result<(Option<Scalar>, Option<VarRef>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __tokens = super::__intern_token::__Matcher::new(input);
         let __lookahead = match __tokens.next() {
@@ -6477,7 +6626,7 @@ mod __parse__Term {
             None => None,
             Some(Err(e)) => return Err(e),
         };
-        match try!(__state0(input, &mut __tokens, __lookahead)) {
+        match try!(__state0(index, input, &mut __tokens, __lookahead)) {
             (Some(__lookahead), _) => {
                 Err(__ParseError::ExtraToken { token: __lookahead })
             }
@@ -6494,9 +6643,9 @@ mod __parse__Term {
         _28LINE__SEP_2b_20LinearRelation_29((usize, (::std::vec::Vec<&'input str>, LinearRelation), usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2a((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2b((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
-        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<Var>), &'input str), usize)),
-        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
-        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<VarRef>), &'input str), usize)),
+        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
         Expression((usize, LinearExpression, usize)),
         LINE__SEP((usize, &'input str, usize)),
         LINE__SEP_2b((usize, ::std::vec::Vec<&'input str>, usize)),
@@ -6505,8 +6654,8 @@ mod __parse__Term {
         ProblemObjective((usize, ProblemObjective, usize)),
         Relation((usize, Relation, usize)),
         Scalar((usize, Scalar, usize)),
-        Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        Variable((usize, Var, usize)),
+        Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        Variable((usize, VarRef, usize)),
         ____Expression((usize, LinearExpression, usize)),
         ____LINE__SEP((usize, &'input str, usize)),
         ____LinearRelation((usize, LinearRelation, usize)),
@@ -6514,14 +6663,15 @@ mod __parse__Term {
         ____ProblemObjective((usize, ProblemObjective, usize)),
         ____Relation((usize, Relation, usize)),
         ____Scalar((usize, Scalar, usize)),
-        ____Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        ____Variable((usize, Var, usize)),
+        ____Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        ____Variable((usize, VarRef, usize)),
     }
 
     pub fn __state0<
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -6531,11 +6681,11 @@ mod __parse__Term {
         match __lookahead {
             Some((__loc1, (12, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state4(input, __tokens, __sym0));
+                __result = try!(__state4(index, input, __tokens, __sym0));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state5(input, __tokens, __sym0));
+                __result = try!(__state5(index, input, __tokens, __sym0));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -6549,15 +6699,15 @@ mod __parse__Term {
             match __nt {
                 __Nonterminal::Scalar(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state1(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state1(index, input, __tokens, __lookahead, __sym0));
                 }
                 __Nonterminal::Term(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state2(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state2(index, input, __tokens, __lookahead, __sym0));
                 }
                 __Nonterminal::Variable(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state3(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state3(index, input, __tokens, __lookahead, __sym0));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -6570,6 +6720,7 @@ mod __parse__Term {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -6580,17 +6731,17 @@ mod __parse__Term {
         match __lookahead {
             Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state7(input, __tokens, __sym0, __sym1));
+                __result = try!(__state7(index, input, __tokens, __sym0, __sym1));
             }
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state5(input, __tokens, __sym1));
+                __result = try!(__state5(index, input, __tokens, __sym1));
             }
             None => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action11(input, __sym0);
+                let __nt = super::__action11(index, input, __sym0);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -6610,7 +6761,7 @@ mod __parse__Term {
             match __nt {
                 __Nonterminal::Variable(__nt) => {
                     let __sym1 = &mut Some(__nt);
-                    __result = try!(__state6(input, __tokens, __lookahead, __sym0, __sym1));
+                    __result = try!(__state6(index, input, __tokens, __lookahead, __sym0, __sym1));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -6624,10 +6775,11 @@ mod __parse__Term {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, (Option<Scalar>, Option<Var>), usize)>,
+        __sym0: &mut Option<(usize, (Option<Scalar>, Option<VarRef>), usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -6636,7 +6788,7 @@ mod __parse__Term {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action2(input, __sym0);
+                let __nt = super::__action2(index, input, __sym0);
                 let __nt = __Nonterminal::____Term((
                     __start,
                     __nt,
@@ -6657,10 +6809,11 @@ mod __parse__Term {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, Var, usize)>,
+        __sym0: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -6669,7 +6822,7 @@ mod __parse__Term {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action12(input, __sym0);
+                let __nt = super::__action12(index, input, __sym0);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -6690,6 +6843,7 @@ mod __parse__Term {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -6708,7 +6862,7 @@ mod __parse__Term {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action9(input, __sym0);
+                let __nt = super::__action9(index, input, __sym0);
                 let __nt = __Nonterminal::Scalar((
                     __start,
                     __nt,
@@ -6729,6 +6883,7 @@ mod __parse__Term {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -6745,7 +6900,7 @@ mod __parse__Term {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action10(input, __sym0);
+                let __nt = super::__action10(index, input, __sym0);
                 let __nt = __Nonterminal::Variable((
                     __start,
                     __nt,
@@ -6766,11 +6921,12 @@ mod __parse__Term {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<(usize, Scalar, usize)>,
-        __sym1: &mut Option<(usize, Var, usize)>,
+        __sym1: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -6780,7 +6936,7 @@ mod __parse__Term {
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym1.2.clone();
-                let __nt = super::__action41(input, __sym0, __sym1);
+                let __nt = super::__action41(index, input, __sym0, __sym1);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -6801,6 +6957,7 @@ mod __parse__Term {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, Scalar, usize)>,
@@ -6816,7 +6973,7 @@ mod __parse__Term {
         match __lookahead {
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state5(input, __tokens, __sym2));
+                __result = try!(__state5(index, input, __tokens, __sym2));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -6830,7 +6987,7 @@ mod __parse__Term {
             match __nt {
                 __Nonterminal::Variable(__nt) => {
                     let __sym2 = &mut Some(__nt);
-                    __result = try!(__state8(input, __tokens, __lookahead, __sym0, __sym1, __sym2));
+                    __result = try!(__state8(index, input, __tokens, __lookahead, __sym0, __sym1, __sym2));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -6844,12 +7001,13 @@ mod __parse__Term {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
         __sym0: &mut Option<(usize, Scalar, usize)>,
         __sym1: &mut Option<(usize, &'input str, usize)>,
-        __sym2: &mut Option<(usize, Var, usize)>,
+        __sym2: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -6860,7 +7018,7 @@ mod __parse__Term {
                 let __sym2 = __sym2.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym2.2.clone();
-                let __nt = super::__action40(input, __sym0, __sym1, __sym2);
+                let __nt = super::__action40(index, input, __sym0, __sym1, __sym2);
                 let __nt = __Nonterminal::Term((
                     __start,
                     __nt,
@@ -6885,14 +7043,15 @@ mod __parse__Variable {
     use std::str::FromStr;
     use expr::{Scalar, LinearExpression, LinearRelation, Relation};
     use problem::{Problem, ProblemObjective};
-    use var::Var;
+    use var::{VarIndex, VarRef};
     extern crate lalrpop_util as __lalrpop_util;
     use self::__lalrpop_util::ParseError as __ParseError;
     pub fn parse_Variable<
         'input,
     >(
+        index: &mut VarIndex,
         input: &'input str,
-    ) -> Result<Var, __ParseError<usize,(usize, &'input str),()>>
+    ) -> Result<VarRef, __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __tokens = super::__intern_token::__Matcher::new(input);
         let __lookahead = match __tokens.next() {
@@ -6900,7 +7059,7 @@ mod __parse__Variable {
             None => None,
             Some(Err(e)) => return Err(e),
         };
-        match try!(__state0(input, &mut __tokens, __lookahead)) {
+        match try!(__state0(index, input, &mut __tokens, __lookahead)) {
             (Some(__lookahead), _) => {
                 Err(__ParseError::ExtraToken { token: __lookahead })
             }
@@ -6917,9 +7076,9 @@ mod __parse__Variable {
         _28LINE__SEP_2b_20LinearRelation_29((usize, (::std::vec::Vec<&'input str>, LinearRelation), usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2a((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
         _28LINE__SEP_2b_20LinearRelation_29_2b((usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize)),
-        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<Var>), &'input str), usize)),
-        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
-        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29((usize, ((Option<Scalar>, Option<VarRef>), &'input str), usize)),
+        _28Term_20_22_2b_22_29_2a((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
+        _28Term_20_22_2b_22_29_2b((usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize)),
         Expression((usize, LinearExpression, usize)),
         LINE__SEP((usize, &'input str, usize)),
         LINE__SEP_2b((usize, ::std::vec::Vec<&'input str>, usize)),
@@ -6928,8 +7087,8 @@ mod __parse__Variable {
         ProblemObjective((usize, ProblemObjective, usize)),
         Relation((usize, Relation, usize)),
         Scalar((usize, Scalar, usize)),
-        Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        Variable((usize, Var, usize)),
+        Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        Variable((usize, VarRef, usize)),
         ____Expression((usize, LinearExpression, usize)),
         ____LINE__SEP((usize, &'input str, usize)),
         ____LinearRelation((usize, LinearRelation, usize)),
@@ -6937,14 +7096,15 @@ mod __parse__Variable {
         ____ProblemObjective((usize, ProblemObjective, usize)),
         ____Relation((usize, Relation, usize)),
         ____Scalar((usize, Scalar, usize)),
-        ____Term((usize, (Option<Scalar>, Option<Var>), usize)),
-        ____Variable((usize, Var, usize)),
+        ____Term((usize, (Option<Scalar>, Option<VarRef>), usize)),
+        ____Variable((usize, VarRef, usize)),
     }
 
     pub fn __state0<
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
@@ -6954,7 +7114,7 @@ mod __parse__Variable {
         match __lookahead {
             Some((__loc1, (13, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state2(input, __tokens, __sym0));
+                __result = try!(__state2(index, input, __tokens, __sym0));
             }
             _ => {
                 return Err(__ParseError::UnrecognizedToken {
@@ -6968,7 +7128,7 @@ mod __parse__Variable {
             match __nt {
                 __Nonterminal::Variable(__nt) => {
                     let __sym0 = &mut Some(__nt);
-                    __result = try!(__state1(input, __tokens, __lookahead, __sym0));
+                    __result = try!(__state1(index, input, __tokens, __lookahead, __sym0));
                 }
                 _ => {
                     return Ok((__lookahead, __nt));
@@ -6981,10 +7141,11 @@ mod __parse__Variable {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __lookahead: Option<(usize, (usize, &'input str), usize)>,
-        __sym0: &mut Option<(usize, Var, usize)>,
+        __sym0: &mut Option<(usize, VarRef, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
@@ -6993,7 +7154,7 @@ mod __parse__Variable {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action1(input, __sym0);
+                let __nt = super::__action1(index, input, __sym0);
                 let __nt = __Nonterminal::____Variable((
                     __start,
                     __nt,
@@ -7014,6 +7175,7 @@ mod __parse__Variable {
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
+        index: &mut VarIndex,
         input: &'input str,
         __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, &'input str, usize)>,
@@ -7030,7 +7192,7 @@ mod __parse__Variable {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action10(input, __sym0);
+                let __nt = super::__action10(index, input, __sym0);
                 let __nt = __Nonterminal::Variable((
                     __start,
                     __nt,
@@ -8040,6 +8202,7 @@ mod __intern_token {
 pub fn __action0<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, Scalar, usize),
 ) -> Scalar
@@ -8050,9 +8213,10 @@ pub fn __action0<
 pub fn __action1<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
-    (_, __0, _): (usize, Var, usize),
-) -> Var
+    (_, __0, _): (usize, VarRef, usize),
+) -> VarRef
 {
     (__0)
 }
@@ -8060,9 +8224,10 @@ pub fn __action1<
 pub fn __action2<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
-    (_, __0, _): (usize, (Option<Scalar>, Option<Var>), usize),
-) -> (Option<Scalar>, Option<Var>)
+    (_, __0, _): (usize, (Option<Scalar>, Option<VarRef>), usize),
+) -> (Option<Scalar>, Option<VarRef>)
 {
     (__0)
 }
@@ -8070,6 +8235,7 @@ pub fn __action2<
 pub fn __action3<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, LinearExpression, usize),
 ) -> LinearExpression
@@ -8080,6 +8246,7 @@ pub fn __action3<
 pub fn __action4<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, Relation, usize),
 ) -> Relation
@@ -8090,6 +8257,7 @@ pub fn __action4<
 pub fn __action5<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, LinearRelation, usize),
 ) -> LinearRelation
@@ -8100,6 +8268,7 @@ pub fn __action5<
 pub fn __action6<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, ProblemObjective, usize),
 ) -> ProblemObjective
@@ -8110,6 +8279,7 @@ pub fn __action6<
 pub fn __action7<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> &'input str
@@ -8120,6 +8290,7 @@ pub fn __action7<
 pub fn __action8<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, Problem, usize),
 ) -> Problem
@@ -8130,6 +8301,7 @@ pub fn __action8<
 pub fn __action9<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, s, _): (usize, &'input str, usize),
 ) -> Scalar
@@ -8140,19 +8312,21 @@ pub fn __action9<
 pub fn __action10<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, s, _): (usize, &'input str, usize),
-) -> Var
+) -> VarRef
 {
-    Var::external(String::from(s))
+    index.external(String::from(s))
 }
 
 pub fn __action11<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, s, _): (usize, Scalar, usize),
-) -> (Option<Scalar>, Option<Var>)
+) -> (Option<Scalar>, Option<VarRef>)
 {
     (Some(s), None)
 }
@@ -8160,9 +8334,10 @@ pub fn __action11<
 pub fn __action12<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
-    (_, v, _): (usize, Var, usize),
-) -> (Option<Scalar>, Option<Var>)
+    (_, v, _): (usize, VarRef, usize),
+) -> (Option<Scalar>, Option<VarRef>)
 {
     (None, Some(v))
 }
@@ -8170,11 +8345,12 @@ pub fn __action12<
 pub fn __action13<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, s, _): (usize, Scalar, usize),
     (_, _, _): (usize, ::std::option::Option<&'input str>, usize),
-    (_, v, _): (usize, Var, usize),
-) -> (Option<Scalar>, Option<Var>)
+    (_, v, _): (usize, VarRef, usize),
+) -> (Option<Scalar>, Option<VarRef>)
 {
     (Some(s), Some(v))
 }
@@ -8182,14 +8358,15 @@ pub fn __action13<
 pub fn __action14<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
-    (_, e, _): (usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize),
-    (_, u, _): (usize, (Option<Scalar>, Option<Var>), usize),
+    (_, e, _): (usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize),
+    (_, u, _): (usize, (Option<Scalar>, Option<VarRef>), usize),
 ) -> LinearExpression
 {
     {
     let mut expr = LinearExpression::new();
-    let mut terms: Vec<(Option<Scalar>, Option<Var>)> = e.into_iter().map(|t| t.0).collect();
+    let mut terms: Vec<(Option<Scalar>, Option<VarRef>)> = e.into_iter().map(|t| t.0).collect();
     terms.push(u);
     for (scalar, var) in terms.into_iter() {
       let term = match (scalar, var) {
@@ -8207,6 +8384,7 @@ pub fn __action14<
 pub fn __action15<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> Relation
@@ -8217,6 +8395,7 @@ pub fn __action15<
 pub fn __action16<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> Relation
@@ -8227,6 +8406,7 @@ pub fn __action16<
 pub fn __action17<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> Relation
@@ -8237,6 +8417,7 @@ pub fn __action17<
 pub fn __action18<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> Relation
@@ -8247,6 +8428,7 @@ pub fn __action18<
 pub fn __action19<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> Relation
@@ -8257,6 +8439,7 @@ pub fn __action19<
 pub fn __action20<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> Relation
@@ -8267,6 +8450,7 @@ pub fn __action20<
 pub fn __action21<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, lhs, _): (usize, LinearExpression, usize),
     (_, o, _): (usize, Relation, usize),
@@ -8279,6 +8463,7 @@ pub fn __action21<
 pub fn __action22<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, e, _): (usize, LinearExpression, usize),
@@ -8291,6 +8476,7 @@ pub fn __action22<
 pub fn __action23<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, e, _): (usize, LinearExpression, usize),
@@ -8303,6 +8489,7 @@ pub fn __action23<
 pub fn __action24<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> &'input str
@@ -8313,6 +8500,7 @@ pub fn __action24<
 pub fn __action25<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, o, _): (usize, ProblemObjective, usize),
     (_, _, _): (usize, ::std::vec::Vec<&'input str>, usize),
@@ -8323,13 +8511,14 @@ pub fn __action25<
     {
     let mut exprs: Vec<LinearRelation> = r.into_iter().map(|t|{t.1}).collect();
     exprs.push(i);
-    Problem::new(o, exprs)
+    Problem::new(o, exprs, index.clone())
   }
 }
 
 pub fn __action26<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
@@ -8341,6 +8530,7 @@ pub fn __action26<
 pub fn __action27<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize),
 ) -> ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>
@@ -8351,6 +8541,7 @@ pub fn __action27<
 pub fn __action28<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, ::std::vec::Vec<&'input str>, usize),
     (_, __1, _): (usize, LinearRelation, usize),
@@ -8362,6 +8553,7 @@ pub fn __action28<
 pub fn __action29<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> ::std::vec::Vec<&'input str>
@@ -8372,6 +8564,7 @@ pub fn __action29<
 pub fn __action30<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<&'input str>, usize),
     (_, e, _): (usize, &'input str, usize),
@@ -8383,10 +8576,11 @@ pub fn __action30<
 pub fn __action31<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>
+) -> ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>
 {
     vec![]
 }
@@ -8394,9 +8588,10 @@ pub fn __action31<
 pub fn __action32<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
-    (_, v, _): (usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize),
-) -> ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>
+    (_, v, _): (usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize),
+) -> ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>
 {
     v
 }
@@ -8404,10 +8599,11 @@ pub fn __action32<
 pub fn __action33<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
-    (_, __0, _): (usize, (Option<Scalar>, Option<Var>), usize),
+    (_, __0, _): (usize, (Option<Scalar>, Option<VarRef>), usize),
     (_, __1, _): (usize, &'input str, usize),
-) -> ((Option<Scalar>, Option<Var>), &'input str)
+) -> ((Option<Scalar>, Option<VarRef>), &'input str)
 {
     (__0, __1)
 }
@@ -8415,6 +8611,7 @@ pub fn __action33<
 pub fn __action34<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> ::std::option::Option<&'input str>
@@ -8425,6 +8622,7 @@ pub fn __action34<
 pub fn __action35<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
@@ -8436,9 +8634,10 @@ pub fn __action35<
 pub fn __action36<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
-    (_, __0, _): (usize, ((Option<Scalar>, Option<Var>), &'input str), usize),
-) -> ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>
+    (_, __0, _): (usize, ((Option<Scalar>, Option<VarRef>), &'input str), usize),
+) -> ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>
 {
     vec![__0]
 }
@@ -8446,10 +8645,11 @@ pub fn __action36<
 pub fn __action37<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
-    (_, v, _): (usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize),
-    (_, e, _): (usize, ((Option<Scalar>, Option<Var>), &'input str), usize),
-) -> ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>
+    (_, v, _): (usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize),
+    (_, e, _): (usize, ((Option<Scalar>, Option<VarRef>), &'input str), usize),
+) -> ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>
 {
     { let mut v = v; v.push(e); v }
 }
@@ -8457,6 +8657,7 @@ pub fn __action37<
 pub fn __action38<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, __0, _): (usize, (::std::vec::Vec<&'input str>, LinearRelation), usize),
 ) -> ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>
@@ -8467,6 +8668,7 @@ pub fn __action38<
 pub fn __action39<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize),
     (_, e, _): (usize, (::std::vec::Vec<&'input str>, LinearRelation), usize),
@@ -8478,20 +8680,23 @@ pub fn __action39<
 pub fn __action40<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     __0: (usize, Scalar, usize),
     __1: (usize, &'input str, usize),
-    __2: (usize, Var, usize),
-) -> (Option<Scalar>, Option<Var>)
+    __2: (usize, VarRef, usize),
+) -> (Option<Scalar>, Option<VarRef>)
 {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
     let __temp0 = __action34(
+        index,
         input,
         __1,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action13(
+        index,
         input,
         __0,
         __temp0,
@@ -8502,20 +8707,23 @@ pub fn __action40<
 pub fn __action41<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     __0: (usize, Scalar, usize),
-    __1: (usize, Var, usize),
-) -> (Option<Scalar>, Option<Var>)
+    __1: (usize, VarRef, usize),
+) -> (Option<Scalar>, Option<VarRef>)
 {
     let __start0 = __0.2.clone();
     let __end0 = __1.0.clone();
     let __temp0 = __action35(
+        index,
         input,
         &__start0,
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action13(
+        index,
         input,
         __0,
         __temp0,
@@ -8526,6 +8734,7 @@ pub fn __action41<
 pub fn __action42<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<&'input str>, usize),
     __1: (usize, LinearRelation, usize),
@@ -8534,12 +8743,14 @@ pub fn __action42<
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
     let __temp0 = __action28(
+        index,
         input,
         __0,
         __1,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action38(
+        index,
         input,
         __temp0,
     )
@@ -8548,6 +8759,7 @@ pub fn __action42<
 pub fn __action43<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<(::std::vec::Vec<&'input str>, LinearRelation)>, usize),
     __1: (usize, ::std::vec::Vec<&'input str>, usize),
@@ -8557,12 +8769,14 @@ pub fn __action43<
     let __start0 = __1.0.clone();
     let __end0 = __2.2.clone();
     let __temp0 = __action28(
+        index,
         input,
         __1,
         __2,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action39(
+        index,
         input,
         __0,
         __temp0,
@@ -8572,6 +8786,7 @@ pub fn __action43<
 pub fn __action44<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     __0: (usize, ProblemObjective, usize),
     __1: (usize, ::std::vec::Vec<&'input str>, usize),
@@ -8581,12 +8796,14 @@ pub fn __action44<
     let __start0 = __2.2.clone();
     let __end0 = __2.2.clone();
     let __temp0 = __action26(
+        index,
         input,
         &__start0,
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action25(
+        index,
         input,
         __0,
         __1,
@@ -8598,6 +8815,7 @@ pub fn __action44<
 pub fn __action45<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
     __0: (usize, ProblemObjective, usize),
     __1: (usize, ::std::vec::Vec<&'input str>, usize),
@@ -8608,11 +8826,13 @@ pub fn __action45<
     let __start0 = __3.0.clone();
     let __end0 = __3.2.clone();
     let __temp0 = __action27(
+        index,
         input,
         __3,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action25(
+        index,
         input,
         __0,
         __1,
@@ -8624,20 +8844,23 @@ pub fn __action45<
 pub fn __action46<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
-    __0: (usize, (Option<Scalar>, Option<Var>), usize),
+    __0: (usize, (Option<Scalar>, Option<VarRef>), usize),
     __1: (usize, &'input str, usize),
-) -> ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>
+) -> ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>
 {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
     let __temp0 = __action33(
+        index,
         input,
         __0,
         __1,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action36(
+        index,
         input,
         __temp0,
     )
@@ -8646,21 +8869,24 @@ pub fn __action46<
 pub fn __action47<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
-    __0: (usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize),
-    __1: (usize, (Option<Scalar>, Option<Var>), usize),
+    __0: (usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize),
+    __1: (usize, (Option<Scalar>, Option<VarRef>), usize),
     __2: (usize, &'input str, usize),
-) -> ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>
+) -> ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>
 {
     let __start0 = __1.0.clone();
     let __end0 = __2.2.clone();
     let __temp0 = __action33(
+        index,
         input,
         __1,
         __2,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action37(
+        index,
         input,
         __0,
         __temp0,
@@ -8670,19 +8896,22 @@ pub fn __action47<
 pub fn __action48<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
-    __0: (usize, (Option<Scalar>, Option<Var>), usize),
+    __0: (usize, (Option<Scalar>, Option<VarRef>), usize),
 ) -> LinearExpression
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
     let __temp0 = __action31(
+        index,
         input,
         &__start0,
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action14(
+        index,
         input,
         __temp0,
         __0,
@@ -8692,19 +8921,22 @@ pub fn __action48<
 pub fn __action49<
     'input,
 >(
+    index: &mut VarIndex,
     input: &'input str,
-    __0: (usize, ::std::vec::Vec<((Option<Scalar>, Option<Var>), &'input str)>, usize),
-    __1: (usize, (Option<Scalar>, Option<Var>), usize),
+    __0: (usize, ::std::vec::Vec<((Option<Scalar>, Option<VarRef>), &'input str)>, usize),
+    __1: (usize, (Option<Scalar>, Option<VarRef>), usize),
 ) -> LinearExpression
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
     let __temp0 = __action32(
+        index,
         input,
         __0,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action14(
+        index,
         input,
         __temp0,
         __1,
