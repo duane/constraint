@@ -21,7 +21,7 @@ impl ProblemObjective {
   /// extern crate constraint;
   /// use constraint::expr::{approx_eq, LinearExpression};
   /// use constraint::problem::ProblemObjective;
-  /// use constraint::var::Var;
+  /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
@@ -46,7 +46,7 @@ impl ProblemObjective {
   /// extern crate constraint;
   /// use constraint::expr::{approx_eq, LinearExpression};
   /// use constraint::problem::ProblemObjective;
-  /// use constraint::var::Var;
+  /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
@@ -103,7 +103,7 @@ impl Problem {
   /// extern crate constraint;
   /// use constraint::expr::{LinearExpression, LinearRelation, Relation};
   /// use constraint::problem::{Problem, ProblemObjective};
-  /// use constraint::var::Var;
+  /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
@@ -162,7 +162,7 @@ impl Problem {
   /// extern crate constraint;
   /// use constraint::expr::{approx_eq, LinearExpression, LinearRelation, Relation};
   /// use constraint::problem::{Problem, ProblemObjective};
-  /// use constraint::var::Var;
+  /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();

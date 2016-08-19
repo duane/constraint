@@ -124,7 +124,7 @@ impl VarIndex {
   /// # Examples
   ///
   /// extern crate constraint;
-  /// use constraint::var::Var;
+  /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
@@ -144,7 +144,7 @@ impl VarIndex {
   /// # Examples
   ///
   /// extern crate constraint;
-  /// use constraint::var::Var;
+  /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
@@ -162,7 +162,7 @@ impl VarIndex {
   /// # Examples
   ///
   /// extern crate constraint;
-  /// use constraint::var::Var;
+  /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
@@ -182,7 +182,7 @@ impl VarIndex {
   /// # Examples
   ///
   /// extern crate constraint;
-  /// use constraint::var::Var;
+  /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
@@ -200,7 +200,7 @@ impl VarIndex {
   /// # Examples
   ///
   /// extern crate constraint;
-  /// use constraint::var::Var;
+  /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
