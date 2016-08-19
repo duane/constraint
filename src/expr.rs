@@ -1,7 +1,7 @@
 use std::fmt::{Debug, Display, Formatter, Error};
 use std::hash::Hash;
 use std::mem::swap;
-use abs::NewLinearExpression;
+use abs::LinearExpression;
 
 pub type Scalar = scalar::Scalar;
 
@@ -57,9 +57,9 @@ impl Display for Relation {
 
 #[derive(Debug,Clone)]
 pub struct LinearRelation<V: Ord + Clone + Hash + Debug> {
-  pub lhs: NewLinearExpression<V>,
+  pub lhs: LinearExpression<V>,
   pub op: Relation,
-  pub rhs: NewLinearExpression<V>
+  pub rhs: LinearExpression<V>
 }
 
 impl<V> LinearRelation<V> where V: Ord + Clone + Hash + Debug + Display {
@@ -84,7 +84,7 @@ impl<V> LinearRelation<V> where V: Ord + Clone + Hash + Debug + Display {
   ///   }
   /// ```
   ///
-  pub fn new(lhs: NewLinearExpression<V>, op: Relation, rhs: NewLinearExpression<V>) -> LinearRelation<V> {
+  pub fn new(lhs: LinearExpression<V>, op: Relation, rhs: LinearExpression<V>) -> LinearRelation<V> {
     LinearRelation{
       lhs: lhs,
       op: op,
@@ -137,12 +137,12 @@ impl<V> LinearRelation<V> where V: Ord + Clone + Hash + Debug + Display {
   ///     assert!(approx_eq(relation.rhs.get_constant(), 7.8));
   ///   }
   /// ```
-  pub fn plus_this(&mut self, expr: &NewLinearExpression<V>) {
+  pub fn plus_this(&mut self, expr: &LinearExpression<V>) {
     self.lhs.plus_this(expr);
     self.rhs.plus_this(expr);
   }
 
-  pub fn minus_this(&mut self, expr: &NewLinearExpression<V>) {
+  pub fn minus_this(&mut self, expr: &LinearExpression<V>) {
     self.lhs.minus_this(expr);
     self.rhs.minus_this(expr);
   }
@@ -157,7 +157,7 @@ impl<V> LinearRelation<V> where V: Ord + Clone + Hash + Debug + Display {
     self.rhs.div_this(constant);
   }
 
-  pub fn substitute(&mut self, v: &V, e: &NewLinearExpression<V>) {
+  pub fn substitute(&mut self, v: &V, e: &LinearExpression<V>) {
     self.lhs.substitute(v, e);
     self.rhs.substitute(v, e);
   }
@@ -183,7 +183,7 @@ impl<V> LinearRelation<V> where V: Ord + Clone + Hash + Debug + Display {
   ///   }
   /// ```
   ///
-  pub fn solve_for(&self, var: &V) -> Result<(Relation, NewLinearExpression<V>), String> {
+  pub fn solve_for(&self, var: &V) -> Result<(Relation, LinearExpression<V>), String> {
     let mut lhs = self.lhs.clone();
     let mut rhs = self.rhs.clone();
     let a = lhs.mut_terms().remove(var).unwrap_or(0.0);

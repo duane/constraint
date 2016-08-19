@@ -5,15 +5,15 @@ use std::fmt::{Debug, Display, Error, Formatter};
 use std::string::ToString;
 use std::hash::Hash;
 
-///NewLinearExpression<V> contains ax+by+...+c
+///LinearExpression<V> contains ax+by+...+c
 
 #[derive(Debug,Clone)]
-pub struct NewLinearExpression<V> {
+pub struct LinearExpression<V> {
   constant: Scalar,
   terms: BTreeMap<V, Scalar>,
 }
 
-impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
+impl<V> LinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// Creates an expression equal to 0.
   ///
@@ -21,19 +21,19 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   ///   extern crate constraint;
-  ///   use constraint::abs::NewLinearExpression;
+  ///   use constraint::abs::LinearExpression;
   ///   use constraint::expr::approx_eq;
   ///   use constraint::var::VarRef;
   ///
   ///   fn main() {
-  ///     let expr = NewLinearExpression::<VarRef>::new();
+  ///     let expr = LinearExpression::<VarRef>::new();
   ///     assert!(expr.terms().is_empty());
   ///     assert!(approx_eq(0.0, expr.get_constant()));
   ///   }
   /// ```
   ///
-  pub fn new() -> NewLinearExpression<V> {
-    NewLinearExpression{
+  pub fn new() -> LinearExpression<V> {
+    LinearExpression{
       constant: 0.0,
       terms: BTreeMap::new()
     }
@@ -46,18 +46,18 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::NewLinearExpression;
+  /// use constraint::abs::LinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
-  ///   let expr = NewLinearExpression::term(index.external(String::from("x")), 42.7);
+  ///   let expr = LinearExpression::term(index.external(String::from("x")), 42.7);
   ///   assert!(approx_eq(42.7, expr.get_coefficient(&index.external(String::from("x")))));
   /// }
   /// ```
-  pub fn term(variable: V, coefficient: Scalar) -> NewLinearExpression<V> {
-    let mut expr = NewLinearExpression::<V>::new();
+  pub fn term(variable: V, coefficient: Scalar) -> LinearExpression<V> {
+    let mut expr = LinearExpression::<V>::new();
     expr.set_coefficient(variable, coefficient);
     expr
   }
@@ -69,7 +69,7 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::NewLinearExpression;
+  /// use constraint::abs::LinearExpression;
   /// use constraint::expr::approx_eq;
   /// use std::collections::BTreeMap;
   /// use constraint::var::VarIndex;
@@ -78,20 +78,20 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///   let mut terms = BTreeMap::new();
   ///   let mut index = VarIndex::new();
   ///   terms.insert(index.external(String::from("x")), 1.0);
-  ///   let expr = NewLinearExpression::from_constant_and_terms(1.2, terms);
+  ///   let expr = LinearExpression::from_constant_and_terms(1.2, terms);
   ///   assert!(approx_eq(expr.get_constant(), 1.2));
   ///   assert!(approx_eq(expr.get_coefficient(&index.external(String::from("x"))), 1.0));
   /// }
   /// ```
-  pub fn from_constant_and_terms(constant: Scalar, terms: BTreeMap<V, Scalar>) -> NewLinearExpression<V> {
-    NewLinearExpression{
+  pub fn from_constant_and_terms(constant: Scalar, terms: BTreeMap<V, Scalar>) -> LinearExpression<V> {
+    LinearExpression{
       constant: constant,
       terms: terms
     }
   }
 }
 
-impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
+impl<V> LinearExpression<V> where V: Ord + Clone + Hash + Debug {
 
   fn coefficient_transform<'t, F>(&'t mut self, operation: F)
     where F : Fn(Scalar) -> Scalar {
@@ -101,7 +101,7 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
     self.constant = operation(self.constant);
   }
 
-  fn coefficient_merge<'a, 'b, F>(&'a mut self, other: &'b NewLinearExpression<V>, merge_fun: F)
+  fn coefficient_merge<'a, 'b, F>(&'a mut self, other: &'b LinearExpression<V>, merge_fun: F)
     where F : Fn(Scalar, Scalar) -> Scalar {
     for (name, coef) in other.terms.iter() {
       let existing_coef = self.terms.get(name).map(|c|{*c}).unwrap_or(0.0);
@@ -125,14 +125,14 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::NewLinearExpression;
+  /// use constraint::abs::LinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
-  ///   let mut expr = NewLinearExpression::term(index.external(String::from("x")), 2.4);
-  ///   expr.plus_this(&NewLinearExpression::term(index.external(String::from("y")), -2.0));
+  ///   let mut expr = LinearExpression::term(index.external(String::from("x")), 2.4);
+  ///   expr.plus_this(&LinearExpression::term(index.external(String::from("y")), -2.0));
   ///   for (_, coef) in expr.mut_terms().iter_mut() {
   ///     *coef *= 2.0;
   ///   }
@@ -152,13 +152,13 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::NewLinearExpression;
+  /// use constraint::abs::LinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
-  ///   let expr = NewLinearExpression::term(index.external(String::from("x")), 9.4);
+  ///   let expr = LinearExpression::term(index.external(String::from("x")), 9.4);
   ///   let terms = expr.terms();
   ///   assert_eq!(1, terms.len());
   ///   assert!(approx_eq(9.4, *terms.get(&index.external(String::from("x"))).unwrap()));
@@ -175,13 +175,13 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::NewLinearExpression;
+  /// use constraint::abs::LinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
-  ///   let expr = NewLinearExpression::term(index.external(String::from("x")), 1.0);
+  ///   let expr = LinearExpression::term(index.external(String::from("x")), 1.0);
   ///   assert!(approx_eq(expr.get_coefficient(&index.external(String::from("x"))), 1.0));
   /// }
   /// ```
@@ -196,13 +196,13 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::NewLinearExpression;
+  /// use constraint::abs::LinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::var::{VarIndex, VarRef};
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
-  ///   let mut expr = NewLinearExpression::<VarRef>::new();
+  ///   let mut expr = LinearExpression::<VarRef>::new();
   ///   assert!(approx_eq(0.0, expr.get_coefficient(&index.external(String::from("x")))));
   ///   expr.set_coefficient(index.external(String::from("x")), 1.5);
   ///   assert!(approx_eq(expr.get_coefficient(&index.external(String::from("x"))), 1.5));
@@ -219,12 +219,12 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::NewLinearExpression;
+  /// use constraint::abs::LinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::var::VarRef;
   ///
   /// fn main() {
-  ///   let mut expr = NewLinearExpression::<VarRef>::new();
+  ///   let mut expr = LinearExpression::<VarRef>::new();
   ///   assert!(approx_eq(0.0, expr.get_constant()));
   ///   expr.set_constant(1.7);
   ///   assert!(approx_eq(1.7, expr.get_constant()));
@@ -241,12 +241,12 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::NewLinearExpression;
+  /// use constraint::abs::LinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::var::VarRef;
   ///
   /// fn main() {
-  ///   let mut expr = NewLinearExpression::<VarRef>::new();
+  ///   let mut expr = LinearExpression::<VarRef>::new();
   ///   assert!(approx_eq(0.0, expr.get_constant()));
   ///   expr.set_constant(1.7);
   ///   assert!(approx_eq(1.7, expr.get_constant()));
@@ -263,20 +263,20 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::NewLinearExpression;
+  /// use constraint::abs::LinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
-  ///   let expr = NewLinearExpression::term(index.external(String::from("x")), 2.1).plus(&NewLinearExpression::from(2.3));
+  ///   let expr = LinearExpression::term(index.external(String::from("x")), 2.1).plus(&LinearExpression::from(2.3));
   ///   let product = expr.times(-2.0);
   ///   assert!(approx_eq(-4.2, product.get_coefficient(&index.external(String::from("x")))));
   ///   assert!(approx_eq(-4.6, product.get_constant()));
   /// }
   /// ```
-  pub fn times(&self, constant: Scalar) -> NewLinearExpression<V> {
-    NewLinearExpression::<V>::from_constant_and_terms(self.constant * constant,
+  pub fn times(&self, constant: Scalar) -> LinearExpression<V> {
+    LinearExpression::<V>::from_constant_and_terms(self.constant * constant,
                                                       self.terms.iter().map(|(name, scalar)| {
                                                         (name.clone(), scalar * constant)
                                                       }).collect())
@@ -289,20 +289,20 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::NewLinearExpression;
+  /// use constraint::abs::LinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
-  ///   let mut expr = NewLinearExpression::term(index.external(String::from("x")), 2.1).plus(&NewLinearExpression::from(2.3));
-  ///   let expr2 = NewLinearExpression::term(index.external(String::from("x")), 1.6).plus(&NewLinearExpression::from(-8.7));
+  ///   let mut expr = LinearExpression::term(index.external(String::from("x")), 2.1).plus(&LinearExpression::from(2.3));
+  ///   let expr2 = LinearExpression::term(index.external(String::from("x")), 1.6).plus(&LinearExpression::from(-8.7));
   ///   expr.plus_this(&expr2);
   ///   assert!(approx_eq(3.7, expr.get_coefficient(&index.external(String::from("x")))));
   ///   assert!(approx_eq(-6.4, expr.get_constant()));
   /// }
   /// ```
-  pub fn plus_this(&mut self, expr: &NewLinearExpression<V>) {
+  pub fn plus_this(&mut self, expr: &LinearExpression<V>) {
     self.coefficient_merge(expr, |a, b| a + b);
   }
 
@@ -313,13 +313,13 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::NewLinearExpression;
+  /// use constraint::abs::LinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
-  ///   let mut expr = NewLinearExpression::term(index.external(String::from("x")), 1.6).plus(&NewLinearExpression::from(0.3));
+  ///   let mut expr = LinearExpression::term(index.external(String::from("x")), 1.6).plus(&LinearExpression::from(0.3));
   ///   expr.times_this(-1.7);
   ///   assert!(approx_eq(-2.72, expr.get_coefficient(&index.external(String::from("x")))));
   ///   assert!(approx_eq(-0.51, expr.get_constant()));
@@ -342,13 +342,13 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::NewLinearExpression;
+  /// use constraint::abs::LinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
-  ///   let mut expr = NewLinearExpression::term(index.external(String::from("x")), 81.42).plus(&NewLinearExpression::from(-114.0));
+  ///   let mut expr = LinearExpression::term(index.external(String::from("x")), 81.42).plus(&LinearExpression::from(-114.0));
   ///   expr.div_this(-2.0);
   ///   assert!(approx_eq(-40.71, expr.get_coefficient(&index.external(String::from("x")))));
   ///   assert!(approx_eq(57.0, expr.get_constant()));
@@ -366,18 +366,18 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::NewLinearExpression;
+  /// use constraint::abs::LinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
-  ///   let expr = NewLinearExpression::term(index.external(String::from("x")), 0.7).plus(&NewLinearExpression::from(1.8));
+  ///   let expr = LinearExpression::term(index.external(String::from("x")), 0.7).plus(&LinearExpression::from(1.8));
   ///   assert!(approx_eq(0.7, expr.get_coefficient(&index.external(String::from("x")))));
   ///   assert!(approx_eq(1.8, expr.get_constant()));
   /// }
   /// ```
-  pub fn plus(&self, expr: &NewLinearExpression<V>) -> NewLinearExpression<V> {
+  pub fn plus(&self, expr: &LinearExpression<V>) -> LinearExpression<V> {
     let mut result = self.clone();
     result.plus_this(expr);
     result
@@ -390,20 +390,20 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::NewLinearExpression;
+  /// use constraint::abs::LinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
-  ///   let expr = NewLinearExpression::term(index.external(String::from("x")), 1.7).plus(&NewLinearExpression::from(8.1));
-  ///   let expr2 = expr.minus(&NewLinearExpression::term(index.external(String::from("y")), 42.7));
+  ///   let expr = LinearExpression::term(index.external(String::from("x")), 1.7).plus(&LinearExpression::from(8.1));
+  ///   let expr2 = expr.minus(&LinearExpression::term(index.external(String::from("y")), 42.7));
   ///   assert!(approx_eq(1.7, expr2.get_coefficient(&index.external(String::from("x")))));
   ///   assert!(approx_eq(-42.7, expr2.get_coefficient(&index.external(String::from("y")))));
   ///   assert!(approx_eq(8.1, expr2.get_constant()));
   /// }
   /// ```
-  pub fn minus(&self, expr: &NewLinearExpression<V>) -> NewLinearExpression<V> {
+  pub fn minus(&self, expr: &LinearExpression<V>) -> LinearExpression<V> {
     let mut new = expr.times(-1.0);
     new.plus_this(self);
     new
@@ -416,20 +416,20 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::NewLinearExpression;
+  /// use constraint::abs::LinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
-  ///   let mut expr = NewLinearExpression::term(index.external(String::from("x")), 2.1).plus(&NewLinearExpression::from(2.3));
-  ///   let expr2 = NewLinearExpression::term(index.external(String::from("x")), 1.6).plus(&NewLinearExpression::from(-8.7));
+  ///   let mut expr = LinearExpression::term(index.external(String::from("x")), 2.1).plus(&LinearExpression::from(2.3));
+  ///   let expr2 = LinearExpression::term(index.external(String::from("x")), 1.6).plus(&LinearExpression::from(-8.7));
   ///   expr.minus_this(&expr2);
   ///   assert!(approx_eq(0.5, expr.get_coefficient(&index.external(String::from("x")))));
   ///   assert!(approx_eq(11.0, expr.get_constant()));
   /// }
   /// ```
-  pub fn minus_this(&mut self, expr: &NewLinearExpression<V>) {
+  pub fn minus_this(&mut self, expr: &LinearExpression<V>) {
     self.coefficient_merge(expr, |a, b| a - b);
   }
 
@@ -441,19 +441,19 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::NewLinearExpression;
+  /// use constraint::abs::LinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
-  ///   let expr = NewLinearExpression::term(index.external(String::from("x")), 2.1).plus(&NewLinearExpression::from(2.3));
+  ///   let expr = LinearExpression::term(index.external(String::from("x")), 2.1).plus(&LinearExpression::from(2.3));
   ///   let product = expr.div(-2.0);
   ///   assert!(approx_eq(-1.05, product.get_coefficient(&index.external(String::from("x")))));
   ///   assert!(approx_eq(-1.15, product.get_constant()));
   /// }
   /// ```
-  pub fn div(&self, constant: Scalar) -> NewLinearExpression<V> {
+  pub fn div(&self, constant: Scalar) -> LinearExpression<V> {
     assert!(!approx_eq(constant, 0.0));
     self.times(1.0 / constant)
   }
@@ -465,20 +465,20 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::NewLinearExpression;
+  /// use constraint::abs::LinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::var::VarIndex;
   ///
   /// fn main() {
   ///   let mut index = VarIndex::new();
-  ///   let mut expr = NewLinearExpression::term(index.external(String::from("x")), 2.1).plus(&NewLinearExpression::from(2.3));
-  ///   expr.substitute(&index.external(String::from("x")), &NewLinearExpression::term(index.external(String::from("y")), 1.2).plus(&NewLinearExpression::from(7.5)));
+  ///   let mut expr = LinearExpression::term(index.external(String::from("x")), 2.1).plus(&LinearExpression::from(2.3));
+  ///   expr.substitute(&index.external(String::from("x")), &LinearExpression::term(index.external(String::from("y")), 1.2).plus(&LinearExpression::from(7.5)));
   ///   assert!(approx_eq(0.0, expr.get_coefficient(&index.external(String::from("x")))));
   ///   assert!(approx_eq(2.52, expr.get_coefficient(&index.external(String::from("y")))));
   ///   assert!(approx_eq(18.05, expr.get_constant()));
   /// }
   /// ```
-  pub fn substitute(&mut self, var: &V, e: &NewLinearExpression<V>) {
+  pub fn substitute(&mut self, var: &V, e: &LinearExpression<V>) {
     let o_coef = self.terms.remove(var);
     if o_coef.is_none() {
       return;
@@ -510,13 +510,13 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///   }
   /// ```
   ///
-  pub fn eval(&self, bindings: &HashMap<V, Scalar>) -> NewLinearExpression<V> {
+  pub fn eval(&self, bindings: &HashMap<V, Scalar>) -> LinearExpression<V> {
     let (defined, undefined) = self.terms.iter().map(|(k,v)|(k.clone(), *v)).partition(|&(ref k,v)|bindings.contains_key(k));
     let mut result = self.constant;
     for (ref var, coef) in defined {
       result += coef * *bindings.get(var).unwrap();
     }
-    NewLinearExpression::from_constant_and_terms(result, undefined)
+    LinearExpression::from_constant_and_terms(result, undefined)
   }
 
   ///
@@ -550,16 +550,16 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   }
 }
 
-impl<V> From<Scalar> for NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
-  fn from(constant: Scalar) -> NewLinearExpression<V> {
-    NewLinearExpression{
+impl<V> From<Scalar> for LinearExpression<V> where V: Ord + Clone + Hash + Debug {
+  fn from(constant: Scalar) -> LinearExpression<V> {
+    LinearExpression{
       constant: constant,
       terms: BTreeMap::new()
     }
   }
 }
 
-impl<V> Display for NewLinearExpression<V> where V: ToString {
+impl<V> Display for LinearExpression<V> where V: ToString {
   fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
     let mut terms: Vec<String> = vec![];
     for (name, coeff) in self.terms.iter() {
@@ -576,12 +576,12 @@ impl<V> Display for NewLinearExpression<V> where V: ToString {
   }
 }
 
-pub type InternedLinearExpression = NewLinearExpression<VarRef>;
+pub type InternedLinearExpression = LinearExpression<VarRef>;
 
 impl From<VarRef> for InternedLinearExpression {
   fn from(var: VarRef) -> InternedLinearExpression {
-    NewLinearExpression::term(var, 0.0)
+    LinearExpression::term(var, 0.0)
   }
 }
 
-pub type RawLinearExpression = NewLinearExpression<String>;
+pub type RawLinearExpression = LinearExpression<String>;
