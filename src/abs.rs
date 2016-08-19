@@ -494,13 +494,14 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   ///   extern crate constraint;
-  ///   use constraint::expr::{approx_eq, LinearExpression, Scalar};
+  ///   use constraint::expr::{approx_eq, Scalar};
   ///   use std::collections::HashMap;
   ///   use constraint::var::{VarIndex, VarRef};
+  ///   use constraint::abs::InternedLinearExpression;
   ///
   ///   fn main() {
   ///     let mut index = VarIndex::new();
-  ///     let expr = LinearExpression::term(index.external(String::from("x")), 2.0);
+  ///     let expr = InternedLinearExpression::term(index.external(String::from("x")), 2.0);
   ///     let mut bindings: HashMap<VarRef, Scalar> = HashMap::new();
   ///     bindings.insert(index.external(String::from("x")), 1.3);
   ///     let result = expr.eval(&bindings);
@@ -525,13 +526,14 @@ impl<V> NewLinearExpression<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   ///   extern crate constraint;
-  ///   use constraint::expr::{approx_eq, LinearExpression, Scalar};
+  ///   use constraint::expr::{approx_eq, Scalar};
   ///   use std::collections::HashMap;
   ///   use constraint::var::{VarIndex, VarRef};
+  ///   use constraint::abs::InternedLinearExpression;
   ///
   ///   fn main() {
   ///     let mut index = VarIndex::new();
-  ///     let expr = LinearExpression::term(index.external(String::from("x")), 2.0);
+  ///     let expr = InternedLinearExpression::term(index.external(String::from("x")), 2.0);
   ///     let mut bindings: HashMap<VarRef, Scalar> = HashMap::new();
   ///     bindings.insert(index.external(String::from("x")), 1.3);
   ///     assert!(approx_eq(2.6, expr.full_eval(&bindings).unwrap()));
