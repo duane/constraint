@@ -5,9 +5,9 @@
 
 pub mod expr;
 pub mod state;
-//pub mod problem;
-//pub mod grammar;
-//pub mod tableau;
+pub mod problem;
+pub mod grammar;
+pub mod tableau;
 pub mod var;
 pub mod abs;
 

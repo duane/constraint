@@ -53,11 +53,11 @@ impl Var {
     }
   }
 
-  fn internal(name: String) -> Var {
+  pub fn internal(name: String) -> Var {
     Var::Internal(name)
   }
 
-  fn external(name: String) -> Var {
+  pub fn external(name: String) -> Var {
     Var::External(name, Cell::new(0.0))
   }
 }
@@ -131,10 +131,10 @@ impl VarIndex {
   ///   index.insert(Var::external("x"))
   /// }
   ///
-  fn insert<'s>(&'s mut self, var: Var) -> VarRef {
+  pub fn insert<'s>(&'s mut self, var: Var) -> VarRef {
     let name = {var.name().clone()};
     let var_ref = Rc::new(var);
-    self.variables.insert(name, Rc::downgrade(&var_ref));
+    self.variables.entry(name).or_insert_with(||Rc::downgrade(&var_ref));
     var_ref
   }
 
@@ -171,8 +171,6 @@ impl VarIndex {
   /// }
   ///
   pub fn get<'s>(&'s self, by_name: &String) -> Option<VarRef> {
-    println!("{:?}", self.variables);
-    println!("{:?}", self.variables.get(by_name).unwrap());
     self.variables.get(by_name).and_then(|c|c.upgrade())
   }
 

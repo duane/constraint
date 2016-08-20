@@ -580,8 +580,20 @@ pub type InternedLinearExpression = LinearExpression<VarRef>;
 
 impl From<VarRef> for InternedLinearExpression {
   fn from(var: VarRef) -> InternedLinearExpression {
-    LinearExpression::term(var, 0.0)
+    LinearExpression::term(var, 1.0)
   }
 }
 
-pub type RawLinearExpression = LinearExpression<String>;
+pub type RawLinearExpression = LinearExpression<Var>;
+
+impl RawLinearExpression {
+  pub fn interned(&self, index: &mut VarIndex) -> InternedLinearExpression {
+    InternedLinearExpression::from_constant_and_terms(self.get_constant(), self.terms.iter().map(|(k,v)|(index.insert(k.clone()), *v)).collect())
+  }
+}
+
+impl From<Var> for RawLinearExpression {
+  fn from(var: Var) -> RawLinearExpression {
+    LinearExpression::term(var, 1.0)
+  }
+}

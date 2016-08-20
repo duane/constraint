@@ -2,6 +2,7 @@ use std::fmt::{Debug, Display, Formatter, Error};
 use std::hash::Hash;
 use std::mem::swap;
 use abs::LinearExpression;
+use var::{Var, VarRef};
 
 pub type Scalar = scalar::Scalar;
 
@@ -54,6 +55,9 @@ impl Display for Relation {
     fmt.write_str(op_str)
   }
 }
+
+pub type RawLinearRelation = LinearRelation<Var>;
+pub type InternedLinearRelation = LinearRelation<VarRef>;
 
 #[derive(Debug,Clone)]
 pub struct LinearRelation<V: Ord + Clone + Hash + Debug> {

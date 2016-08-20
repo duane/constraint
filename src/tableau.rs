@@ -6,23 +6,26 @@ use std::collections::hash_map;
 use prettytable::Table;
 use prettytable::row::Row;
 use prettytable::cell::Cell;
+use abs::{InternedLinearExpression, RawLinearExpression};
 
 use state::Namer;
-use var::{VarIndex, VarRef};
+use var::{Var, VarIndex, VarRef};
 
 pub const TABLEAU_OBJECTIVE_VARIABLE: &'static str = "OMGIAMANOBJECTIVE";
 
+#[derive(Debug)]
 pub enum ProblemDirection {
   Maximize,
   Minimize
 }
 
+#[derive(Debug)]
 pub struct Tableau {
   direction: ProblemDirection,
   rows: HashMap<VarRef, InternedLinearExpression>,
   columns: HashMap<VarRef, HashSet<VarRef>>,
   restricted: HashSet<VarRef>,
-  index: VarIndex,
+  pub index: VarIndex,
   slack_namer: Namer
 }
 
@@ -79,7 +82,7 @@ impl Tableau {
   ///   assert!(approx_eq(0.0, tableau.get_objective().get_expr().full_eval(&HashMap::new()).unwrap()));
   /// }
   /// ```
-  pub fn get_objective<'s>(&'s self) -> ProblemObjective {
+  pub fn get_objective<'s>(&'s self) -> InternedProblemObjective {
     let objective_expr = self.rows.get(&self.index.get(&String::from(TABLEAU_OBJECTIVE_VARIABLE)).expect("tableau objective variable not in index")).unwrap().clone();
     match self.direction {
       ProblemDirection::Maximize => ProblemObjective::Maximize(objective_expr),
@@ -87,26 +90,7 @@ impl Tableau {
     }
   }
 
-  ///
-  /// Set the objective of a tableau.
-  ///
-  /// # Examples
-  ///
-  /// ```
-  /// extern crate constraint;
-  /// use constraint::expr::
-  /// use constraint::expr::approx_eq;
-  /// use constraint::tableau::Tableau;
-  /// use constraint::problem::ProblemObjective;
-  /// use constraint::var::Var;
-  ///
-  /// fn main() {
-  ///   let mut tableau = Tableau::new();
-  ///   tableau.set_objective(ProblemObjective::Maximize(InternedLinearExpression::from(index.external(String::from("x")))));
-  ///   assert!(approx_eq(1.0, tableau.get_objective().get_expr().get_coefficient(&index.external(String::from("x")))));
-  /// }
-  /// ```
-  pub fn set_objective(&mut self, f: ProblemObjective) {
+  fn set_interned_objective(&mut self, f: InternedProblemObjective) {
     let objective_var_ref = self.index.get(&String::from(TABLEAU_OBJECTIVE_VARIABLE)).expect("Could not find objective variable in index");
     match f {
       ProblemObjective::Maximize(e) => {
@@ -121,21 +105,48 @@ impl Tableau {
   }
 
   ///
+  /// Set the objective of a tableau.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::abs::RawLinearExpression;
+  /// use constraint::expr::approx_eq;
+  /// use constraint::tableau::Tableau;
+  /// use constraint::problem::ProblemObjective;
+  /// use constraint::var::Var;
+  ///
+  /// fn main() {
+  ///   let mut tableau = Tableau::new();
+  ///   tableau.set_objective(ProblemObjective::Maximize(RawLinearExpression::from(Var::external(String::from("x")))));
+  ///   let x_ref = {tableau.index.external(String::from("x"))};
+  ///   assert!(approx_eq(1.0, tableau.get_objective().get_expr().get_coefficient(&x_ref)));
+  /// }
+  /// ```
+  pub fn set_objective(&mut self, f: RawProblemObjective) {
+    let interned = {f.interned(&mut self.index)};
+    self.set_interned_objective(interned);
+  }
+
+  ///
   /// Determine whether a given variable is basic (as opposed to parametric).
   ///
   /// # Examples
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::InternedLinearExpression;
+  /// use constraint::abs::RawLinearExpression;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(index.external(String::from("x")), InternedLinearExpression::from(index.external(String::from("s1"))).plus(&InternedLinearExpression::from(10.0)), false).is_ok());
-  ///   assert!(tableau.is_basic(&index.external(String::from("x"))));
-  ///   assert!(!tableau.is_basic(&index.external(String::from("s1"))));
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   let x_ref = {tableau.index.external(String::from("x"))};
+  ///   assert!(tableau.is_basic(&x_ref));
+  ///   let s1_ref = {tableau.index.external(String::from("s1"))};
+  ///   assert!(!tableau.is_basic(&s1_ref));
   /// }
   /// ```
   pub fn is_basic(&self, var: &VarRef) -> bool {
@@ -149,16 +160,19 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::InternedLinearExpression;
+  /// use constraint::abs::RawLinearExpression;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(index.external(String::from("x")), InternedLinearExpression::from(index.external(String::from("s1"))).plus(&InternedLinearExpression::from(10.0)), false).is_ok());
-  ///   assert!(!tableau.is_parametric(&index.external(String::from("x"))));
-  ///   assert!(tableau.is_parametric(&index.external(String::from("s1"))));
-  ///   assert!(!tableau.is_parametric(&index.external(String::from("c"))));
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   let x_ref = {tableau.index.external(String::from("x"))};
+  ///   let s1_ref = {tableau.index.external(String::from("s1"))};
+  ///   let c_ref = {tableau.index.external(String::from("c"))};
+  ///   assert!(!tableau.is_parametric(&x_ref));
+  ///   assert!(tableau.is_parametric(&s1_ref));
+  ///   assert!(!tableau.is_parametric(&c_ref));
   /// }
   /// ```
   pub fn is_parametric(&self, var: &VarRef) -> bool {
@@ -172,15 +186,18 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::expr::{approx_eq, InternedLinearExpression};
+  /// use constraint::abs::RawLinearExpression;
+  /// use constraint::expr::approx_eq;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(index.external(String::from("x")), InternedLinearExpression::from(index.external(String::from("s1"))).plus(&InternedLinearExpression::from(10.0)), false).is_ok());
-  ///   let basic = tableau.get_basic(&index.external(String::from("x"))).unwrap();
-  ///   assert!(approx_eq(1.0, basic.get_coefficient(&index.external(String::from("s1")))));
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   let x_ref = {tableau.index.external(String::from("x"))};
+  ///   let s1_ref = {tableau.index.external(String::from("s1"))};
+  ///   let basic = tableau.get_basic(&x_ref).unwrap();
+  ///   assert!(approx_eq(1.0, basic.get_coefficient(&s1_ref)));
   ///   assert!(approx_eq(10.0, basic.get_constant()));
   /// }
   /// ```
@@ -195,16 +212,17 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::InternedLinearExpression;
+  /// use constraint::abs::RawLinearExpression;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(index.external(String::from("x")), InternedLinearExpression::from(index.external(String::from("s1"))).plus(&InternedLinearExpression::from(10.0)), false).is_ok());
-  ///   let keys = tableau.get_parametric_vars();
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   let s1_ref = {tableau.index.external(String::from("s1"))};
+  ///   let mut keys = tableau.parametric_vars();
   ///   assert_eq!(1, keys.len());
-  ///   assert!(keys.contains(&index.external(String::from("s1"))));
+  ///   assert_eq!(keys.next().unwrap(), &s1_ref);
   /// }
   /// ```
   pub fn parametric_vars<'s>(&'s self) -> hash_map::Keys<'s, VarRef, HashSet<VarRef>> {
@@ -212,23 +230,25 @@ impl Tableau {
   }
 
   ///
-  /// Get an iterator to the parametric vars.
+  /// Get an iterator to the basic vars.
   ///
   /// # Examples
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::InternedLinearExpression;
+  /// use constraint::abs::RawLinearExpression;
   /// use constraint::tableau::{TABLEAU_OBJECTIVE_VARIABLE, Tableau};
-  /// use constraint::var::Var;
+  /// use constraint::var::{Var, VarRef};
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(index.external(String::from("x")), InternedLinearExpression::from(index.external(String::from("s1"))).plus(&InternedLinearExpression::from(10.0)), false).is_ok());
-  ///   let keys: Vec<Var> = tableau.basic_vars().map(|s|s.clone()).collect();
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   let keys: Vec<VarRef> = tableau.basic_vars().map(|s|s.clone()).collect();
   ///   assert_eq!(2, keys.len());
-  ///   assert!(keys.contains(&index.external(String::from("x"))));
-  ///   assert!(keys.contains(&index.external(String::from(TABLEAU_OBJECTIVE_VARIABLE))));
+  ///   let x_ref = {tableau.index.external(String::from("x"))};
+  ///   let objective_ref = {tableau.index.external(String::from(TABLEAU_OBJECTIVE_VARIABLE))};
+  ///   assert!(keys.contains(&x_ref));
+  ///   assert!(keys.contains(&objective_ref));
   /// }
   /// ```
   pub fn basic_vars<'s>(&'s self) -> hash_map::Keys<'s, VarRef, InternedLinearExpression> {
@@ -242,16 +262,17 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::InternedLinearExpression;
+  /// use constraint::abs::RawLinearExpression;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(index.external(String::from("x")), InternedLinearExpression::from(index.external(String::from("s1"))).plus(&InternedLinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   let s1_ref = {tableau.index.external(String::from("s1"))};
   ///   let keys = tableau.get_parametric_vars();
   ///   assert_eq!(1, keys.len());
-  ///   assert!(keys.contains(&index.external(String::from("s1"))));
+  ///   assert!(keys.contains(&s1_ref));
   /// }
   /// ```
   pub fn get_parametric_vars(&self) -> HashSet<VarRef> {
@@ -265,16 +286,18 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::InternedLinearExpression;
+  /// use constraint::abs::RawLinearExpression;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(index.external(String::from("x")), InternedLinearExpression::from(index.external(String::from("s1"))).plus(&InternedLinearExpression::from(10.0)), false).is_ok());
-  ///   let vars = tableau.get_basic_vars_for_param(&index.external(String::from("s1")));
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   let s1_ref = {tableau.index.external(String::from("s1"))};
+  ///   let x_ref = {tableau.index.external(String::from("x"))};
+  ///   let vars = tableau.get_basic_vars_for_param(&s1_ref);
   ///   assert_eq!(1, vars.len());
-  ///   assert!(vars.contains(&index.external(String::from("x"))));
+  ///   assert!(vars.contains(&x_ref));
   /// }
   /// ```
   pub fn get_basic_vars_for_param<'s>(&'s self, var: &VarRef) -> HashSet<VarRef> {
@@ -307,26 +330,7 @@ impl Tableau {
     Ok(())
   }
 
-  ///
-  /// Add a row using a basic variable and a linear expression
-  ///
-  /// # Examples
-  ///
-  /// ```
-  /// extern crate constraint;
-  /// use constraint::expr::{approx_eq, InternedLinearExpression};
-  /// use constraint::tableau::Tableau;
-  /// use constraint::var::Var;
-  ///
-  /// fn main() {
-  ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(index.external(String::from("x")), InternedLinearExpression::from(index.external(String::from("s1"))).plus(&InternedLinearExpression::from(10.0)), false).is_ok());
-  ///   let basic = tableau.get_basic(&index.external(String::from("x"))).unwrap();
-  ///   assert!(approx_eq(1.0, basic.get_coefficient(&index.external(String::from("s1")))));
-  ///   assert!(approx_eq(10.0, basic.get_constant()));
-  /// }
-  /// ```
-  pub fn add_row(&mut self, var: VarRef, e: InternedLinearExpression, restricted: bool) -> Result<(), String> {
+  fn add_interned_row(&mut self, var: VarRef, e: InternedLinearExpression, restricted: bool) -> Result<(), String> {
     assert!(!self.rows.contains_key(&var));
     let vars: HashSet<VarRef> = e.terms().keys().map(|s| s.clone()).collect();
     self.rows.insert(var.clone(), e);
@@ -340,18 +344,46 @@ impl Tableau {
   }
 
   ///
+  /// Add a row using a basic variable and a linear expression
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::abs::RawLinearExpression;
+  /// use constraint::expr::approx_eq;
+  /// use constraint::tableau::Tableau;
+  /// use constraint::var::Var;
+  ///
+  /// fn main() {
+  ///   let x = Var::external(String::from("x"));
+  ///   let s1 = Var::internal(String::from("s1"));
+  ///   let mut tableau = Tableau::new();
+  ///   assert!(tableau.add_row(x.clone(), RawLinearExpression::from(s1.clone()).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   let basic = tableau.get_basic(&tableau.index.get(&String::from("x")).unwrap()).unwrap();
+  ///   assert!(approx_eq(1.0, basic.get_coefficient(&tableau.index.get(&String::from("s1")).unwrap())));
+  ///   assert!(approx_eq(10.0, basic.get_constant()));
+  /// }
+  /// ```
+  pub fn add_row(&mut self, var: Var, e: RawLinearExpression, restricted: bool) -> Result<(), String> {
+    let interned_var = {self.index.insert(var)};
+    let interned_terms = {e.interned(&mut self.index)};
+    self.add_interned_row(interned_var, interned_terms, restricted)
+  }
+
+  ///
   /// Vends a new external variable reference. Does not add to the tableau; just the index. The returned reference is the only strong reference.
   ///
   /// # Examples
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::var::VarRef;
+  /// use constraint::var::Var;
   /// use constraint::tableau::Tableau;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert_eq!(*tableau.external(String::from("x")), &String::from("x"));
+  ///   assert_eq!(*tableau.external(String::from("x")), Var::external(String::from("x")));
   /// }
   /// ```
   pub fn external(&mut self, name: String) -> VarRef {
@@ -368,12 +400,12 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::var::VarRef;
+  /// use constraint::var::Var;
   /// use constraint::tableau::Tableau;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert_eq!(*tableau.slack(), &String::from("s_0"));
+  ///   assert_eq!(*tableau.slack(), Var::internal(String::from("s_1")));
   /// }
   /// ```
   pub fn slack(&mut self) -> VarRef {
@@ -391,20 +423,23 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::expr::{approx_eq, InternedLinearExpression};
+  /// use constraint::abs::RawLinearExpression;
+  /// use constraint::expr::approx_eq;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(index.external(String::from("x")), InternedLinearExpression::from(index.external(String::from("s1"))).plus(&InternedLinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   let x_ref = {tableau.index.external(String::from("x"))};
+  ///   let s1_ref = {tableau.index.external(String::from("s1"))};
   ///   {
-  ///     let basic = tableau.get_basic(&index.external(String::from("x"))).unwrap();
-  ///     assert!(approx_eq(1.0, basic.get_coefficient(&index.external(String::from("s1")))));
+  ///     let basic = tableau.get_basic(&x_ref).unwrap();
+  ///     assert!(approx_eq(1.0, basic.get_coefficient(&s1_ref)));
   ///     assert!(approx_eq(10.0, basic.get_constant()));
   ///   }
-  ///   assert!(tableau.remove_row(&index.external(String::from("x"))).is_ok());
-  ///   assert!(tableau.get_basic(&index.external(String::from("x"))).is_none());
+  ///   assert!(tableau.remove_row(&x_ref).is_ok());
+  ///   assert!(tableau.get_basic(&x_ref).is_none());
   /// }
   /// ```
   pub fn remove_row(&mut self, var: &VarRef) -> Result<InternedLinearExpression, String> {
@@ -446,16 +481,19 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::expr::{approx_eq, InternedLinearExpression};
+  /// use constraint::abs::{InternedLinearExpression, RawLinearExpression};
+  /// use constraint::expr::approx_eq;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(index.external(String::from("x")), InternedLinearExpression::from(index.external(String::from("s1"))).plus(&InternedLinearExpression::from(10.0)), false).is_ok());
-  ///   assert!(tableau.substitute(&index.external(String::from("s1")), &InternedLinearExpression::from(-8.0)).is_ok());
-  ///   let basic = tableau.get_basic(&index.external(String::from("x"))).unwrap();
-  ///   assert!(approx_eq(0.0, basic.get_coefficient(&index.external(String::from("s1")))));
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   let s1_ref = {tableau.index.external(String::from("s1"))};
+  ///   let x_ref = {tableau.index.external(String::from("x"))};
+  ///   assert!(tableau.substitute(&s1_ref, &InternedLinearExpression::from(-8.0)).is_ok());
+  ///   let basic = tableau.get_basic(&x_ref).unwrap();
+  ///   assert!(approx_eq(0.0, basic.get_coefficient(&s1_ref)));
   ///   assert!(approx_eq(2.0, basic.get_constant()));
   /// }
   /// ```
@@ -473,23 +511,26 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::expr::{approx_eq, InternedLinearExpression};
+  /// use constraint::abs::RawLinearExpression;
+  /// use constraint::expr::approx_eq;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(index.external(String::from("x")),
-  ///           InternedLinearExpression::from(index.external(String::from("s1"))).
-  ///             plus(&InternedLinearExpression::from(10.0)), false).is_ok());
-  ///   assert!(tableau.add_row(index.external(String::from("y")),
-  ///           InternedLinearExpression::from(index.external(String::from("s1"))).
-  ///             plus(&InternedLinearExpression::term(index.external(String::from("s2")), 5.2)).
-  ///             plus(&InternedLinearExpression::from(-72.3)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("x")),
+  ///           RawLinearExpression::from(Var::external(String::from("s1"))).
+  ///             plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("y")),
+  ///           RawLinearExpression::from(Var::external(String::from("s1"))).
+  ///             plus(&RawLinearExpression::term(Var::external(String::from("s2")), 5.2)).
+  ///             plus(&RawLinearExpression::from(-72.3)), false).is_ok());
   ///   let solution = tableau.get_basic_feasible_solution();
+  ///   let x_ref = {tableau.index.external(String::from("x"))};
+  ///   let y_ref = {tableau.index.external(String::from("y"))};
   ///   assert_eq!(solution.len(), 5); // two basics + two parameters + the objective variable.
-  ///   assert!(approx_eq(10.0, *solution.get(&index.external(String::from("x"))).unwrap()));
-  ///   assert!(approx_eq(-72.3, *solution.get(&index.external(String::from("y"))).unwrap()));
+  ///   assert!(approx_eq(10.0, *solution.get(&x_ref).unwrap()));
+  ///   assert!(approx_eq(-72.3, *solution.get(&y_ref).unwrap()));
   /// }
   /// ```
   pub fn get_basic_feasible_solution(&self) -> HashMap<VarRef, Scalar> {
@@ -503,13 +544,13 @@ impl Tableau {
       Ok(expr) => expr,
       Err(s) => return Err(s)
     };
-    let relation = LinearRelation::new(InternedLinearExpression::from(exit_var.clone()), Relation::EQ, expr);
+    let relation = InternedLinearRelation::new(InternedLinearExpression::from(exit_var.clone()), Relation::EQ, expr);
     let solved_for_entry = match relation.solve_for(entry_var) {
       Ok((_, expr)) => expr,
       Err(s) => return Err(s)
     };
     self.substitute(entry_var, &solved_for_entry).unwrap();
-    self.add_row(entry_var.clone(), solved_for_entry, false).unwrap();
+    self.add_interned_row(entry_var.clone(), solved_for_entry, false).unwrap();
     self.remove_column(entry_var).unwrap();
     Ok(())
   }
@@ -588,7 +629,6 @@ impl Tableau {
 mod test {
   extern crate itertools;
   use expr::approx_eq;
-  use var::VarIndex;
   use std::io::BufReader;
   use std::io::prelude::*;
   use std::fs::File;
@@ -597,8 +637,7 @@ mod test {
   fn from_file(file: &str) -> Tableau {
     let f = BufReader::new(File::open(file).unwrap());
     let buf = f.lines().map(|r|r.unwrap_or(String::new())).join(";");
-    let mut index = VarIndex::new();
-    parse_Problem(&mut index, buf.as_ref()).unwrap().augmented_simplex().unwrap()
+    parse_Problem(buf.as_ref()).unwrap().augmented_simplex().unwrap()
   }
 
   use grammar::*;

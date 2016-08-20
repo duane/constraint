@@ -1,5 +1,6 @@
 use std::string::ToString;
 
+#[derive(Debug)]
 pub struct Namer {
   prefix: &'static str,
   count: usize

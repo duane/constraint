@@ -1,31 +1,32 @@
 use std::str::FromStr;
-use expr::{Scalar, LinearExpression, LinearRelation, Relation};
-use problem::{Problem, ProblemObjective};
-use var::{VarIndex, VarRef};
+use expr::{Scalar, RawLinearRelation, Relation};
+use abs::RawLinearExpression;
+use problem::{Problem, ProblemObjective, RawProblemObjective};
+use var::Var;
 
-grammar(index: &mut VarIndex);
+grammar;
 
 pub Scalar: Scalar = <s:r"-?[0-9]+\.?[0-9]*([eE]-?[0-9]+)?"> => f64::from_str(s).unwrap();
 
-pub Variable: VarRef = <s:r"[_a-zA-Z][_a-zA-Z0-9]*"> => index.external(String::from(s));
+pub Variable: Var = <s:r"[_a-zA-Z][_a-zA-Z0-9]*"> => Var::external(String::from(s));
 
-pub Term: (Option<Scalar>, Option<VarRef>) = {
+pub Term: (Option<Scalar>, Option<Var>) = {
   <s:Scalar> => (Some(s), None),
   <v:Variable> => (None, Some(v)),
   <s:Scalar> "*"? <v:Variable> => (Some(s), Some(v))
 };
 
-pub Expression: LinearExpression = {
+pub Expression: RawLinearExpression = {
   <e:(Term "+")*> <u:Term> => {
-    let mut expr = LinearExpression::new();
-    let mut terms: Vec<(Option<Scalar>, Option<VarRef>)> = e.into_iter().map(|t| t.0).collect();
+    let mut expr = RawLinearExpression::new();
+    let mut terms: Vec<(Option<Scalar>, Option<Var>)> = e.into_iter().map(|t| t.0).collect();
     terms.push(u);
     for (scalar, var) in terms.into_iter() {
       let term = match (scalar, var) {
-        (Some(scalar), Some(var)) => LinearExpression::term(var, scalar),
-        (None, Some(var)) => LinearExpression::from(var),
-        (Some(scalar), None) => LinearExpression::from(scalar),
-        (None, None) => LinearExpression::new()
+        (Some(scalar), Some(var)) => RawLinearExpression::term(var, scalar),
+        (None, Some(var)) => RawLinearExpression::from(var),
+        (Some(scalar), None) => RawLinearExpression::from(scalar),
+        (None, None) => RawLinearExpression::new()
       };
       expr.plus_this(&term);
     }
@@ -42,11 +43,11 @@ pub Relation: Relation = {
   "=!=" => Relation::NEQ
 };
 
-pub LinearRelation: LinearRelation = {
-  <lhs:Expression> <o:Relation> <rhs:Expression> => LinearRelation::new(lhs, o, rhs)
+pub LinearRelation: RawLinearRelation = {
+  <lhs:Expression> <o:Relation> <rhs:Expression> => RawLinearRelation::new(lhs, o, rhs)
 };
 
-pub ProblemObjective: ProblemObjective = {
+pub ProblemObjective: RawProblemObjective = {
   "maximize(" <e:Expression> ")" => ProblemObjective::Maximize(e),
   "minimize(" <e:Expression> ")" => ProblemObjective::Minimize(e)
 };
@@ -55,8 +56,8 @@ pub LINE_SEP = ";";
 
 pub Problem: Problem = {
   <o: ProblemObjective> LINE_SEP+ <i:LinearRelation> <r:(LINE_SEP+ LinearRelation)*> => {
-    let mut exprs: Vec<LinearRelation> = r.into_iter().map(|t|{t.1}).collect();
+    let mut exprs: Vec<RawLinearRelation> = r.into_iter().map(|t|{t.1}).collect();
     exprs.push(i);
-    Problem::new(o, exprs, index.clone())
+    Problem::new(o, exprs)
   }
 };
