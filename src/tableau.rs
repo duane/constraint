@@ -470,10 +470,6 @@ impl Tableau {
     Ok(())
   }
 
-  fn remove_parameter(&mut self, var: &VarRef) -> Result<(), String> {
-    Err(String::from("Dunno what to do"))
-  }
-
   ///
   /// Substitute a variable for an expression throughout a tableau.
   ///
@@ -557,7 +553,6 @@ impl Tableau {
 
   pub fn simplex(&mut self) -> Result<(), String> {
     loop {
-      let min_objective_coefficient = scalar::MAX;
       let initial: Option<(VarRef, Scalar)> = None;
       let o_entry_var = self.get_objective().
         get_expr().
@@ -571,7 +566,7 @@ impl Tableau {
           found
         }
       });
-      let (entry_var, zc) = match o_entry_var {
+      let (entry_var, _) = match o_entry_var {
         Some(tuple) => tuple,
         None => return Ok(())
       };
@@ -595,7 +590,7 @@ impl Tableau {
         }
       });
       let exit_var = match o_exit_var {
-        Some((v, r)) => v,
+        Some((v, _)) => v,
         None => return Ok(())
       };
       self.pivot(&entry_var, &exit_var).unwrap();
@@ -606,7 +601,6 @@ impl Tableau {
   /// Print the tableau to stdout prettily.
   ///
   pub fn print(&self) {
-    let basic_vars: BTreeSet<VarRef> = self.rows.keys().map(|c|c.clone()).collect();
     let parametric_vars: BTreeSet<VarRef> = self.columns.keys().map(|c|c.clone()).collect();
     let header_row: Vec<Cell> = vec![String::new(), String::from("c")].into_iter().chain(parametric_vars.iter().map(|v|(*v).name().clone())).map(|s|Cell::from(&s)).collect();
     let mut table = Table::new();

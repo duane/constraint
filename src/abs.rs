@@ -511,7 +511,7 @@ impl<V> LinearExpression<V> where V: Ord + Clone + Hash + Debug {
   /// ```
   ///
   pub fn eval(&self, bindings: &HashMap<V, Scalar>) -> LinearExpression<V> {
-    let (defined, undefined) = self.terms.iter().map(|(k,v)|(k.clone(), *v)).partition(|&(ref k,v)|bindings.contains_key(k));
+    let (defined, undefined) = self.terms.iter().map(|(k,v)|(k.clone(), *v)).partition(|&(ref k,_)|bindings.contains_key(k));
     let mut result = self.constant;
     for (ref var, coef) in defined {
       result += coef * *bindings.get(var).unwrap();
