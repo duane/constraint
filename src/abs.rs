@@ -597,3 +597,16 @@ impl From<Var> for RawLinearExpression {
     LinearExpression::term(var, 1.0)
   }
 }
+
+use std::str::FromStr;
+use grammar::*;
+
+impl FromStr for RawLinearExpression {
+  type Err = String;
+  fn from_str(s: &str) -> Result<Self, Self::Err> {
+    match parse_Expression(s) {
+      Ok(result) => Ok(result),
+      Err(e) => Err(format!("{:?}", e))
+    }
+  }
+}

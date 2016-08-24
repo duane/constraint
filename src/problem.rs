@@ -118,15 +118,13 @@ impl Problem {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::RawLinearExpression;
-  /// use constraint::expr::{RawLinearRelation, Relation};
-  /// use constraint::problem::{Problem, ProblemObjective};
-  /// use constraint::var::Var;
+  /// use constraint::expr::RawLinearRelation;
+  /// use constraint::problem::{Problem, RawProblemObjective};
+  /// use std::str::FromStr;
   ///
   /// fn main() {
-  ///   let x = Var::external(String::from("x"));
-  ///   let objective = ProblemObjective::Minimize(RawLinearExpression::from(x.clone()));
-  ///   let constraints = vec!(RawLinearRelation::new(RawLinearExpression::from(x.clone()), Relation::EQ, RawLinearExpression::from(5.0)));
+  ///   let objective = RawProblemObjective::from_str("minimize(x)").unwrap();
+  ///   let constraints = vec!(RawLinearRelation::from_str("x == 5").unwrap());
   ///   let _ = Problem::new(objective, constraints);
   /// }
   /// ```
@@ -177,19 +175,15 @@ impl Problem {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::RawLinearExpression;
-  /// use constraint::expr::{approx_eq, RawLinearRelation, Relation};
-  /// use constraint::problem::{Problem, ProblemObjective};
+  /// use constraint::expr::approx_eq;
+  /// use constraint::tableau::Tableau;
+  /// use std::str::FromStr;
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let x = Var::external(String::from("x"));
-  ///   let objective = ProblemObjective::Minimize(RawLinearExpression::from(x.clone()));
-  ///   let constraints = vec!(RawLinearRelation::new(RawLinearExpression::from(x.clone()), Relation::EQ, RawLinearExpression::from(5.0)));
-  ///   let problem = Problem::new(objective, constraints);
-  ///   let tableau = problem.augmented_simplex().unwrap();
+  ///   let tableau = Tableau::from_str("minimize(x);x==5").unwrap();
   ///   let basic_feasible_solution = tableau.get_basic_feasible_solution();
-  ///   assert!(approx_eq(5.0, *basic_feasible_solution.get(&x).unwrap()));
+  ///   assert!(approx_eq(5.0, *basic_feasible_solution.get(&Var::external(String::from("x"))).unwrap()));
   /// }
   pub fn augmented_simplex(&self) -> Result<Tableau, String> {
     let mut slack_namer = Namer::new("s_");
@@ -311,6 +305,29 @@ impl Display for Problem {
                             String::from("subject to:")];
     lines.extend(self.subject_to.iter().map(|c|{c.to_string()}));
     fmt.write_str(lines.join("\n").as_ref() as &str)
+  }
+}
+
+use std::str::FromStr;
+use grammar::*;
+
+impl FromStr for RawProblemObjective {
+  type Err = String;
+  fn from_str(s: &str) -> Result<Self, Self::Err> {
+    match parse_ProblemObjective(s) {
+      Ok(result) => Ok(result),
+      Err(e) => Err(format!("{:?}", e))
+    }
+  }
+}
+
+impl FromStr for Problem {
+  type Err = String;
+  fn from_str(s: &str) -> Result<Self, Self::Err> {
+    match parse_Problem(s) {
+      Ok(result) => Ok(result),
+      Err(e) => Err(format!("{:?}", e))
+    }
   }
 }
 

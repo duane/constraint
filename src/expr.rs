@@ -205,6 +205,19 @@ impl<V> LinearRelation<V> where V: Ord + Clone + Hash + Debug + Display {
   }
 }
 
+use std::str::FromStr;
+use grammar::*;
+
+impl FromStr for RawLinearRelation {
+  type Err = String;
+  fn from_str(s: &str) -> Result<Self, Self::Err> {
+    match parse_LinearRelation(s) {
+      Ok(result) => Ok(result),
+      Err(e) => Err(format!("{:?}", e))
+    }
+  }
+}
+
 impl<V> Display for LinearRelation<V> where V: Ord + Clone + Hash + Debug + Display {
   fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
     fmt.write_str(format!("{} {} {}",

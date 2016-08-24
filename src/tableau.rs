@@ -2,6 +2,8 @@ use expr::*;
 use problem::*;
 use std::collections::{BTreeSet, HashMap, HashSet};
 use std::collections::hash_map;
+use std::str::FromStr;
+use grammar::parse_Problem;
 
 use prettytable::Table;
 use prettytable::row::Row;
@@ -111,15 +113,14 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::RawLinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::tableau::Tableau;
-  /// use constraint::problem::ProblemObjective;
-  /// use constraint::var::Var;
+  /// use constraint::problem::RawProblemObjective;
+  /// use std::str::FromStr;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   tableau.set_objective(ProblemObjective::Maximize(RawLinearExpression::from(Var::external(String::from("x")))));
+  ///   tableau.set_objective(RawProblemObjective::from_str("minimize(x)").unwrap());
   ///   let x_ref = {tableau.index.external(String::from("x"))};
   ///   assert!(approx_eq(1.0, tableau.get_objective().get_expr().get_coefficient(&x_ref)));
   /// }
@@ -139,10 +140,11 @@ impl Tableau {
   /// use constraint::abs::RawLinearExpression;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
+  /// use std::str::FromStr;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from_str("s1+10").unwrap(), false).is_ok());
   ///   let x_ref = {tableau.index.external(String::from("x"))};
   ///   assert!(tableau.is_basic(&x_ref));
   ///   let s1_ref = {tableau.index.external(String::from("s1"))};
@@ -163,10 +165,11 @@ impl Tableau {
   /// use constraint::abs::RawLinearExpression;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
+  /// use std::str::FromStr;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from_str("s1+10").unwrap(), false).is_ok());
   ///   let x_ref = {tableau.index.external(String::from("x"))};
   ///   let s1_ref = {tableau.index.external(String::from("s1"))};
   ///   let c_ref = {tableau.index.external(String::from("c"))};
@@ -190,10 +193,11 @@ impl Tableau {
   /// use constraint::expr::approx_eq;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
+  /// use std::str::FromStr;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from_str("s1+10").unwrap(), false).is_ok());
   ///   let x_ref = {tableau.index.external(String::from("x"))};
   ///   let s1_ref = {tableau.index.external(String::from("s1"))};
   ///   let basic = tableau.get_basic(&x_ref).unwrap();
@@ -215,10 +219,11 @@ impl Tableau {
   /// use constraint::abs::RawLinearExpression;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
+  /// use std::str::FromStr;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from_str("s1+10").unwrap(), false).is_ok());
   ///   let s1_ref = {tableau.index.external(String::from("s1"))};
   ///   let mut keys = tableau.parametric_vars();
   ///   assert_eq!(1, keys.len());
@@ -239,10 +244,11 @@ impl Tableau {
   /// use constraint::abs::RawLinearExpression;
   /// use constraint::tableau::{TABLEAU_OBJECTIVE_VARIABLE, Tableau};
   /// use constraint::var::{Var, VarRef};
+  /// use std::str::FromStr;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from_str("s1+10").unwrap(), false).is_ok());
   ///   let keys: Vec<VarRef> = tableau.basic_vars().map(|s|s.clone()).collect();
   ///   assert_eq!(2, keys.len());
   ///   let x_ref = {tableau.index.external(String::from("x"))};
@@ -265,10 +271,11 @@ impl Tableau {
   /// use constraint::abs::RawLinearExpression;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
+  /// use std::str::FromStr;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from_str("s1+10").unwrap(), false).is_ok());
   ///   let s1_ref = {tableau.index.external(String::from("s1"))};
   ///   let keys = tableau.get_parametric_vars();
   ///   assert_eq!(1, keys.len());
@@ -289,10 +296,11 @@ impl Tableau {
   /// use constraint::abs::RawLinearExpression;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
+  /// use std::str::FromStr;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from_str("s1+10").unwrap(), false).is_ok());
   ///   let s1_ref = {tableau.index.external(String::from("s1"))};
   ///   let x_ref = {tableau.index.external(String::from("x"))};
   ///   let vars = tableau.get_basic_vars_for_param(&s1_ref);
@@ -354,12 +362,13 @@ impl Tableau {
   /// use constraint::expr::approx_eq;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
+  /// use std::str::FromStr;
   ///
   /// fn main() {
   ///   let x = Var::external(String::from("x"));
   ///   let s1 = Var::internal(String::from("s1"));
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(x.clone(), RawLinearExpression::from(s1.clone()).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(x.clone(), RawLinearExpression::from_str("s1+10").unwrap(), false).is_ok());
   ///   let basic = tableau.get_basic(&tableau.index.get(&String::from("x")).unwrap()).unwrap();
   ///   assert!(approx_eq(1.0, basic.get_coefficient(&tableau.index.get(&String::from("s1")).unwrap())));
   ///   assert!(approx_eq(10.0, basic.get_constant()));
@@ -427,10 +436,11 @@ impl Tableau {
   /// use constraint::expr::approx_eq;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
+  /// use std::str::FromStr;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from_str("s1+10").unwrap(), false).is_ok());
   ///   let x_ref = {tableau.index.external(String::from("x"))};
   ///   let s1_ref = {tableau.index.external(String::from("s1"))};
   ///   {
@@ -481,10 +491,11 @@ impl Tableau {
   /// use constraint::expr::approx_eq;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
+  /// use std::str::FromStr;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from(Var::external(String::from("s1"))).plus(&RawLinearExpression::from(10.0)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from_str("s1+10").unwrap(), false).is_ok());
   ///   let s1_ref = {tableau.index.external(String::from("s1"))};
   ///   let x_ref = {tableau.index.external(String::from("x"))};
   ///   assert!(tableau.substitute(&s1_ref, &InternedLinearExpression::from(-8.0)).is_ok());
@@ -511,16 +522,12 @@ impl Tableau {
   /// use constraint::expr::approx_eq;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
+  /// use std::str::FromStr;
   ///
   /// fn main() {
   ///   let mut tableau = Tableau::new();
-  ///   assert!(tableau.add_row(Var::external(String::from("x")),
-  ///           RawLinearExpression::from(Var::external(String::from("s1"))).
-  ///             plus(&RawLinearExpression::from(10.0)), false).is_ok());
-  ///   assert!(tableau.add_row(Var::external(String::from("y")),
-  ///           RawLinearExpression::from(Var::external(String::from("s1"))).
-  ///             plus(&RawLinearExpression::term(Var::external(String::from("s2")), 5.2)).
-  ///             plus(&RawLinearExpression::from(-72.3)), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from_str("s1+10").unwrap(), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("y")), RawLinearExpression::from_str("s1+5.2s2+-72.3").unwrap(), false).is_ok());
   ///   let solution = tableau.get_basic_feasible_solution();
   ///   let x_ref = {tableau.index.external(String::from("x"))};
   ///   let y_ref = {tableau.index.external(String::from("y"))};
@@ -616,6 +623,16 @@ impl Tableau {
     }
     println!("{}", table);
     println!("Basic feasible solution: {:?}", self.get_basic_feasible_solution());
+  }
+}
+
+impl FromStr for Tableau {
+  type Err = String;
+  fn from_str(s: &str) -> Result<Self, Self::Err> {
+    match parse_Problem(s) {
+      Ok(result) => result.augmented_simplex(),
+      Err(e) => Err(format!("{:?}", e))
+    }
   }
 }
 
