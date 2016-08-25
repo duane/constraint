@@ -4,7 +4,6 @@ use std::collections::{HashMap, HashSet, LinkedList};
 use state::*;
 use tableau::*;
 use var::{Var, VarIndex, VarRef};
-use abs::{LinearExpression, RawLinearExpression};
 use std::hash::Hash;
 
 pub type RawProblemObjective = ProblemObjective<Var>;
@@ -35,7 +34,7 @@ impl<V> ProblemObjective<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::InternedLinearExpression;
+  /// use constraint::expr::InternedLinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::problem::ProblemObjective;
   /// use constraint::var::VarIndex;
@@ -61,7 +60,7 @@ impl<V> ProblemObjective<V> where V: Ord + Clone + Hash + Debug {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::InternedLinearExpression;
+  /// use constraint::expr::InternedLinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::problem::ProblemObjective;
   /// use constraint::var::VarIndex;
@@ -337,7 +336,6 @@ mod test {
   use expr::*;
   use problem::*;
   use var::Var;
-  use abs::RawLinearExpression;
 
   #[test]
   fn const_equation() {

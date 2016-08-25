@@ -8,7 +8,6 @@ use grammar::parse_Problem;
 use prettytable::Table;
 use prettytable::row::Row;
 use prettytable::cell::Cell;
-use abs::{InternedLinearExpression, RawLinearExpression};
 
 use state::Namer;
 use var::{Var, VarIndex, VarRef};
@@ -137,7 +136,7 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::RawLinearExpression;
+  /// use constraint::expr::RawLinearExpression;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
   /// use std::str::FromStr;
@@ -162,7 +161,7 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::RawLinearExpression;
+  /// use constraint::expr::RawLinearExpression;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
   /// use std::str::FromStr;
@@ -189,7 +188,7 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::RawLinearExpression;
+  /// use constraint::expr::RawLinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
@@ -216,7 +215,7 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::RawLinearExpression;
+  /// use constraint::expr::RawLinearExpression;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
   /// use std::str::FromStr;
@@ -241,7 +240,7 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::RawLinearExpression;
+  /// use constraint::expr::RawLinearExpression;
   /// use constraint::tableau::{TABLEAU_OBJECTIVE_VARIABLE, Tableau};
   /// use constraint::var::{Var, VarRef};
   /// use std::str::FromStr;
@@ -268,7 +267,7 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::RawLinearExpression;
+  /// use constraint::expr::RawLinearExpression;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
   /// use std::str::FromStr;
@@ -293,7 +292,7 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::RawLinearExpression;
+  /// use constraint::expr::RawLinearExpression;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
   /// use std::str::FromStr;
@@ -359,7 +358,7 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::RawLinearExpression;
+  /// use constraint::expr::RawLinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
@@ -433,7 +432,7 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::RawLinearExpression;
+  /// use constraint::expr::RawLinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
@@ -489,7 +488,7 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::{InternedLinearExpression, RawLinearExpression};
+  /// use constraint::expr::{InternedLinearExpression, RawLinearExpression};
   /// use constraint::expr::approx_eq;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;
@@ -521,7 +520,7 @@ impl Tableau {
   ///
   /// ```
   /// extern crate constraint;
-  /// use constraint::abs::RawLinearExpression;
+  /// use constraint::expr::RawLinearExpression;
   /// use constraint::expr::approx_eq;
   /// use constraint::tableau::Tableau;
   /// use constraint::var::Var;

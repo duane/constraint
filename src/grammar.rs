@@ -2,7 +2,7 @@
 #![allow(unused_variables)]
 use std::str::FromStr;
 use expr::{Scalar, RawLinearRelation, Relation};
-use abs::RawLinearExpression;
+use expr::RawLinearExpression;
 use problem::{Problem, ProblemObjective, RawProblemObjective};
 use var::Var;
 extern crate lalrpop_util as __lalrpop_util;
@@ -13,7 +13,7 @@ mod __parse__Expression {
 
     use std::str::FromStr;
     use expr::{Scalar, RawLinearRelation, Relation};
-    use abs::RawLinearExpression;
+    use expr::RawLinearExpression;
     use problem::{Problem, ProblemObjective, RawProblemObjective};
     use var::Var;
     extern crate lalrpop_util as __lalrpop_util;
@@ -661,7 +661,7 @@ mod __parse__LINE_SEP {
 
     use std::str::FromStr;
     use expr::{Scalar, RawLinearRelation, Relation};
-    use abs::RawLinearExpression;
+    use expr::RawLinearExpression;
     use problem::{Problem, ProblemObjective, RawProblemObjective};
     use var::Var;
     extern crate lalrpop_util as __lalrpop_util;
@@ -832,7 +832,7 @@ mod __parse__LinearRelation {
 
     use std::str::FromStr;
     use expr::{Scalar, RawLinearRelation, Relation};
-    use abs::RawLinearExpression;
+    use expr::RawLinearExpression;
     use problem::{Problem, ProblemObjective, RawProblemObjective};
     use var::Var;
     extern crate lalrpop_util as __lalrpop_util;
@@ -2318,7 +2318,7 @@ mod __parse__Problem {
 
     use std::str::FromStr;
     use expr::{Scalar, RawLinearRelation, Relation};
-    use abs::RawLinearExpression;
+    use expr::RawLinearExpression;
     use problem::{Problem, ProblemObjective, RawProblemObjective};
     use var::Var;
     extern crate lalrpop_util as __lalrpop_util;
@@ -5030,7 +5030,7 @@ mod __parse__ProblemObjective {
 
     use std::str::FromStr;
     use expr::{Scalar, RawLinearRelation, Relation};
-    use abs::RawLinearExpression;
+    use expr::RawLinearExpression;
     use problem::{Problem, ProblemObjective, RawProblemObjective};
     use var::Var;
     extern crate lalrpop_util as __lalrpop_util;
@@ -5922,7 +5922,7 @@ mod __parse__Relation {
 
     use std::str::FromStr;
     use expr::{Scalar, RawLinearRelation, Relation};
-    use abs::RawLinearExpression;
+    use expr::RawLinearExpression;
     use problem::{Problem, ProblemObjective, RawProblemObjective};
     use var::Var;
     extern crate lalrpop_util as __lalrpop_util;
@@ -6298,7 +6298,7 @@ mod __parse__Scalar {
 
     use std::str::FromStr;
     use expr::{Scalar, RawLinearRelation, Relation};
-    use abs::RawLinearExpression;
+    use expr::RawLinearExpression;
     use problem::{Problem, ProblemObjective, RawProblemObjective};
     use var::Var;
     extern crate lalrpop_util as __lalrpop_util;
@@ -6469,7 +6469,7 @@ mod __parse__Term {
 
     use std::str::FromStr;
     use expr::{Scalar, RawLinearRelation, Relation};
-    use abs::RawLinearExpression;
+    use expr::RawLinearExpression;
     use problem::{Problem, ProblemObjective, RawProblemObjective};
     use var::Var;
     extern crate lalrpop_util as __lalrpop_util;
@@ -6893,7 +6893,7 @@ mod __parse__Variable {
 
     use std::str::FromStr;
     use expr::{Scalar, RawLinearRelation, Relation};
-    use abs::RawLinearExpression;
+    use expr::RawLinearExpression;
     use problem::{Problem, ProblemObjective, RawProblemObjective};
     use var::Var;
     extern crate lalrpop_util as __lalrpop_util;

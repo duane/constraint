@@ -1,6 +1,6 @@
 use std::str::FromStr;
 use expr::{Scalar, RawLinearRelation, Relation};
-use abs::RawLinearExpression;
+use expr::RawLinearExpression;
 use problem::{Problem, ProblemObjective, RawProblemObjective};
 use var::Var;
 
