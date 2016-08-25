@@ -341,6 +341,7 @@ impl Tableau {
   fn add_interned_row(&mut self, var: VarRef, e: InternedLinearExpression, restricted: bool) -> Result<(), String> {
     assert!(!self.rows.contains_key(&var));
     let vars: HashSet<VarRef> = e.terms().keys().map(|s| s.clone()).collect();
+    var.set_value(e.get_constant());
     self.rows.insert(var.clone(), e);
     for parameter in vars.iter() {
       self.note_added_variable(&var, parameter).unwrap();
@@ -453,6 +454,7 @@ impl Tableau {
   /// }
   /// ```
   pub fn remove_row(&mut self, var: &VarRef) -> Result<InternedLinearExpression, String> {
+    var.set_value(0.0);
     let removed = match self.rows.remove(var) {
       Some(expr) => expr,
       None => return Err(String::from("Cannot remove variable from tableau that does not exist"))
@@ -505,8 +507,9 @@ impl Tableau {
   /// }
   /// ```
   pub fn substitute(&mut self, var: &VarRef, e: &InternedLinearExpression) -> Result<(), String> {
-    for (_, row_expr) in self.rows.iter_mut() {
+    for (this_var, row_expr) in self.rows.iter_mut() {
       row_expr.substitute(var, e);
+      this_var.set_value(row_expr.get_constant());
     }
     Ok(())
   }
@@ -657,9 +660,15 @@ mod test {
     let mut  tableau = from_file("test/problems/cassowary-tochi");
     tableau.simplex().unwrap();
     let solution = tableau.get_basic_feasible_solution();
-    assert!(approx_eq(-10.0, *solution.get(&tableau.index.external(String::from("x_l"))).unwrap()));
-    assert!(approx_eq(-5.0, *solution.get(&tableau.index.external(String::from("x_m"))).unwrap()));
-    assert!(approx_eq(0.0, *solution.get(&tableau.index.external(String::from("x_r"))).unwrap()));
+    let x_l_ref = tableau.index.external(String::from("x_l"));
+    let x_m_ref = tableau.index.external(String::from("x_m"));
+    let x_r_ref = tableau.index.external(String::from("x_r"));
+    assert!(approx_eq(-10.0, x_l_ref.get_value()));
+    assert!(approx_eq(-5.0, x_m_ref.get_value()));
+    assert!(approx_eq(0.0, x_r_ref.get_value()));
+    assert!(approx_eq(-10.0, *solution.get(&x_l_ref).unwrap()));
+    assert!(approx_eq(-5.0, *solution.get(&x_m_ref).unwrap()));
+    assert!(approx_eq(0.0, *solution.get(&x_r_ref).unwrap()));
     assert!(approx_eq(5.0, *solution.get(&tableau.index.external(String::from(super::TABLEAU_OBJECTIVE_VARIABLE))).unwrap()));
   }
 
@@ -668,7 +677,9 @@ mod test {
     let mut tableau = from_file("test/problems/equate");
     tableau.simplex().unwrap();
     let solution = tableau.get_basic_feasible_solution();
-    assert!(approx_eq(4.0, *solution.get(&tableau.index.external(String::from("x"))).unwrap()));
+    let x_ref = tableau.index.external(String::from("x"));
+    assert!(approx_eq(4.0, x_ref.get_value()));
+    assert!(approx_eq(4.0, *solution.get(&x_ref).unwrap()));
     assert!(approx_eq(4.0, *solution.get(&tableau.index.external(String::from(super::TABLEAU_OBJECTIVE_VARIABLE))).unwrap()));
   }
 
@@ -677,7 +688,9 @@ mod test {
     let mut tableau = from_file("test/problems/one_slack");
     tableau.simplex().unwrap();
     let solution = tableau.get_basic_feasible_solution();
-    assert!(approx_eq(0.0, *solution.get(&tableau.index.external(String::from("x"))).unwrap()));
+    let x_ref = tableau.index.external(String::from("x"));
+    assert!(approx_eq(0.0, x_ref.get_value()));
+    assert!(approx_eq(0.0, *solution.get(&x_ref).unwrap()));
     assert!(approx_eq(0.0, *solution.get(&tableau.index.external(String::from(super::TABLEAU_OBJECTIVE_VARIABLE))).unwrap()));
   }
 
@@ -686,8 +699,12 @@ mod test {
     let mut tableau = from_file("test/problems/two_slack");
     tableau.simplex().unwrap();
     let solution = tableau.get_basic_feasible_solution();
-    assert!(approx_eq(0.0, *solution.get(&tableau.index.external(String::from("x"))).unwrap()));
-    assert!(approx_eq(0.0, *solution.get(&tableau.index.external(String::from("y"))).unwrap()));
+    let x_ref = tableau.index.external(String::from("x"));
+    let y_ref = tableau.index.external(String::from("y"));
+    assert!(approx_eq(0.0, x_ref.get_value()));
+    assert!(approx_eq(0.0, y_ref.get_value()));
+    assert!(approx_eq(0.0, *solution.get(&x_ref).unwrap()));
+    assert!(approx_eq(0.0, *solution.get(&y_ref).unwrap()));
     assert!(approx_eq(0.0, *solution.get(&tableau.index.external(String::from(super::TABLEAU_OBJECTIVE_VARIABLE))).unwrap()));
   }
 
@@ -696,10 +713,15 @@ mod test {
     let mut tableau = from_file("test/problems/one_pivot");
     tableau.simplex().unwrap();
     let solution = tableau.get_basic_feasible_solution();
-
-    assert!(approx_eq(-80.0, *solution.get(&tableau.index.external(String::from("x"))).unwrap()));
-    assert!(approx_eq(-80.0, *solution.get(&tableau.index.external(String::from("o"))).unwrap()));
-    assert!(approx_eq(0.0, *solution.get(&tableau.index.external(String::from("y"))).unwrap()));
+    let x_ref = tableau.index.external(String::from("x"));
+    let o_ref = tableau.index.external(String::from("o"));
+    let y_ref = tableau.index.external(String::from("y"));
+    assert!(approx_eq(-80.0, x_ref.get_value()));
+    assert!(approx_eq(-80.0, o_ref.get_value()));
+    assert!(approx_eq(0.0, y_ref.get_value()));
+    assert!(approx_eq(-80.0, *solution.get(&x_ref).unwrap()));
+    assert!(approx_eq(-80.0, *solution.get(&o_ref).unwrap()));
+    assert!(approx_eq(0.0, *solution.get(&y_ref).unwrap()));
     assert!(approx_eq(-40.0, *solution.get(&tableau.index.external(String::from(super::TABLEAU_OBJECTIVE_VARIABLE))).unwrap()));
   }
 

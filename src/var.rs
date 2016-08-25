@@ -53,6 +53,24 @@ impl Var {
     }
   }
 
+  pub fn get_value<'s>(&'s self) -> Scalar {
+    match self {
+      &Var::External(_, ref value) => value.get(),
+      _ => unreachable!()
+    }
+  }
+
+  pub fn set_value<'s>(&'s self, val: Scalar) {
+    match self {
+      &Var::External(_, ref value) => {
+        println!("Setting value {:?} = {:?}", self.name(), val);
+        value.set(val);
+        println!("Now has value {:?} = {:?}", self.name(), self.get_value());
+      },
+      _ => ()
+    }
+  }
+
   pub fn internal(name: String) -> Var {
     Var::Internal(name)
   }
@@ -132,9 +150,13 @@ impl VarIndex {
   /// }
   ///
   pub fn insert<'s>(&'s mut self, var: Var) -> VarRef {
-    let name = {var.name().clone()};
+    match self.variables.get(var.name()).and_then(|weak|weak.upgrade()) {
+      Some(var_ref) => return var_ref,
+      None => ()
+    }
+    let name = var.name().clone();
     let var_ref = Rc::new(var);
-    self.variables.entry(name).or_insert_with(||Rc::downgrade(&var_ref));
+    self.variables.insert(name, Rc::downgrade(&var_ref));
     var_ref
   }
 
