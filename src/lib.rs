@@ -9,4 +9,4 @@ pub mod problem;
 pub mod grammar;
 pub mod tableau;
 pub mod var;
-//pub mod abs;
+pub mod grammar_test;
