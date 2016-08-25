@@ -79,11 +79,11 @@ mod __parse__Expression {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state6(input, __tokens, __sym0));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state7(input, __tokens, __sym0));
             }
@@ -144,11 +144,11 @@ mod __parse__Expression {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state10(input, __tokens, __sym0, __sym1));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state11(input, __tokens, __sym0, __sym1));
             }
@@ -187,8 +187,8 @@ mod __parse__Expression {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -221,7 +221,7 @@ mod __parse__Expression {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (2, __tok0), __loc2)) => {
+            Some((__loc1, (3, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state13(input, __tokens, __sym0, __sym1));
             }
@@ -230,8 +230,8 @@ mod __parse__Expression {
                 __result = try!(__state9(input, __tokens, __sym1));
             }
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -278,8 +278,8 @@ mod __parse__Expression {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -313,8 +313,8 @@ mod __parse__Expression {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -351,11 +351,11 @@ mod __parse__Expression {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state19(input, __tokens, __sym1));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state20(input, __tokens, __sym1));
             }
@@ -476,9 +476,9 @@ mod __parse__Expression {
         };
         match __lookahead {
             None |
-            Some((_, (2, _), _)) |
             Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -517,8 +517,8 @@ mod __parse__Expression {
         };
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -556,7 +556,7 @@ mod __parse__Expression {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state7(input, __tokens, __sym2));
             }
@@ -619,7 +619,7 @@ mod __parse__Expression {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state7(input, __tokens, __sym2));
             }
@@ -679,8 +679,8 @@ mod __parse__Expression {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -758,15 +758,15 @@ mod __parse__Expression {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (1, __tok0), __loc2)) => {
+            Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state27(input, __tokens, __sym0, __sym1, __sym2));
             }
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state28(input, __tokens, __sym1, __sym2));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state29(input, __tokens, __sym1, __sym2));
             }
@@ -792,9 +792,9 @@ mod __parse__Expression {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -827,7 +827,7 @@ mod __parse__Expression {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (2, __tok0), __loc2)) => {
+            Some((__loc1, (3, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state31(input, __tokens, __sym0, __sym1));
             }
@@ -835,9 +835,9 @@ mod __parse__Expression {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state22(input, __tokens, __sym1));
             }
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -883,9 +883,9 @@ mod __parse__Expression {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -918,9 +918,9 @@ mod __parse__Expression {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -957,11 +957,11 @@ mod __parse__Expression {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state19(input, __tokens, __sym1));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state20(input, __tokens, __sym1));
             }
@@ -1081,10 +1081,10 @@ mod __parse__Expression {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (1, _), _)) |
             Some((_, (2, _), _)) |
             Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -1122,9 +1122,9 @@ mod __parse__Expression {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -1159,8 +1159,8 @@ mod __parse__Expression {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -1197,8 +1197,8 @@ mod __parse__Expression {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -1236,8 +1236,8 @@ mod __parse__Expression {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -1275,8 +1275,8 @@ mod __parse__Expression {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -1318,8 +1318,8 @@ mod __parse__Expression {
         };
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -1359,7 +1359,7 @@ mod __parse__Expression {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state20(input, __tokens, __sym2));
             }
@@ -1422,7 +1422,7 @@ mod __parse__Expression {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state20(input, __tokens, __sym2));
             }
@@ -1481,9 +1481,9 @@ mod __parse__Expression {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -1561,15 +1561,15 @@ mod __parse__Expression {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (1, __tok0), __loc2)) => {
+            Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state37(input, __tokens, __sym0, __sym1, __sym2));
             }
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state28(input, __tokens, __sym1, __sym2));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state29(input, __tokens, __sym1, __sym2));
             }
@@ -1596,9 +1596,9 @@ mod __parse__Expression {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -1634,9 +1634,9 @@ mod __parse__Expression {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -1673,9 +1673,9 @@ mod __parse__Expression {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -1712,9 +1712,9 @@ mod __parse__Expression {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -1755,9 +1755,9 @@ mod __parse__Expression {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -1853,7 +1853,7 @@ mod __parse__LINE_SEP {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (5, __tok0), __loc2)) => {
+            Some((__loc1, (6, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state2(input, __tokens, __sym0));
             }
@@ -2021,11 +2021,11 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state7(input, __tokens, __sym0));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state8(input, __tokens, __sym0));
             }
@@ -2090,17 +2090,17 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (0, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state12(input, __tokens, __sym0, __sym1));
+                __result = try!(__state12(input, __tokens, __sym1));
             }
             Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state13(input, __tokens, __sym0, __sym1));
             }
-            Some((__loc1, (6, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state14(input, __tokens, __sym1));
+                __result = try!(__state14(input, __tokens, __sym0, __sym1));
             }
             Some((__loc1, (7, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
@@ -2189,9 +2189,9 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -2229,7 +2229,7 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (2, __tok0), __loc2)) => {
+            Some((__loc1, (3, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state21(input, __tokens, __sym0, __sym1));
             }
@@ -2237,9 +2237,9 @@ mod __parse__LinearRelation {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state10(input, __tokens, __sym1));
             }
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -2290,9 +2290,9 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -2330,9 +2330,9 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -2374,11 +2374,11 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state27(input, __tokens, __sym1));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state28(input, __tokens, __sym1));
             }
@@ -2498,10 +2498,10 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (2, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -2544,9 +2544,9 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -2585,11 +2585,11 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state37(input, __tokens, __sym2));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state38(input, __tokens, __sym2));
             }
@@ -2645,6 +2645,46 @@ mod __parse__LinearRelation {
     >(
         input: &'input str,
         __tokens: &mut __TOKENS,
+        __sym0: &mut Option<(usize, &'input str, usize)>,
+    ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
+    {
+        let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
+        let __lookahead = match __tokens.next() {
+            Some(Ok(v)) => Some(v),
+            None => None,
+            Some(Err(e)) => return Err(e),
+        };
+        match __lookahead {
+            Some((_, (1, _), _)) |
+            Some((_, (5, _), _)) |
+            Some((_, (14, _), _)) |
+            Some((_, (15, _), _)) => {
+                let __sym0 = __sym0.take().unwrap();
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action24(input, __sym0);
+                let __nt = __Nonterminal::Relation((
+                    __start,
+                    __nt,
+                    __end,
+                ));
+                return Ok((__lookahead, __nt));
+            }
+            _ => {
+                return Err(__ParseError::UnrecognizedToken {
+                    token: __lookahead,
+                    expected: vec![],
+                });
+            }
+        }
+    }
+
+    pub fn __state13<
+        'input,
+        __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
+    >(
+        input: &'input str,
+        __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, RawLinearExpression, usize)>,
         __sym1: &mut Option<(usize, &'input str, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
@@ -2656,7 +2696,7 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state8(input, __tokens, __sym2));
             }
@@ -2702,7 +2742,7 @@ mod __parse__LinearRelation {
         return Ok(__result);
     }
 
-    pub fn __state13<
+    pub fn __state14<
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
@@ -2719,7 +2759,7 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state8(input, __tokens, __sym2));
             }
@@ -2765,46 +2805,6 @@ mod __parse__LinearRelation {
         return Ok(__result);
     }
 
-    pub fn __state14<
-        'input,
-        __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
-    >(
-        input: &'input str,
-        __tokens: &mut __TOKENS,
-        __sym0: &mut Option<(usize, &'input str, usize)>,
-    ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
-    {
-        let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
-        let __lookahead = match __tokens.next() {
-            Some(Ok(v)) => Some(v),
-            None => None,
-            Some(Err(e)) => return Err(e),
-        };
-        match __lookahead {
-            Some((_, (0, _), _)) |
-            Some((_, (4, _), _)) |
-            Some((_, (14, _), _)) |
-            Some((_, (15, _), _)) => {
-                let __sym0 = __sym0.take().unwrap();
-                let __start = __sym0.0.clone();
-                let __end = __sym0.2.clone();
-                let __nt = super::__action19(input, __sym0);
-                let __nt = __Nonterminal::Relation((
-                    __start,
-                    __nt,
-                    __end,
-                ));
-                return Ok((__lookahead, __nt));
-            }
-            _ => {
-                return Err(__ParseError::UnrecognizedToken {
-                    token: __lookahead,
-                    expected: vec![],
-                });
-            }
-        }
-    }
-
     pub fn __state15<
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
@@ -2821,14 +2821,14 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (0, _), _)) |
-            Some((_, (4, _), _)) |
+            Some((_, (1, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (14, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action20(input, __sym0);
+                let __nt = super::__action19(input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -2861,14 +2861,14 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (0, _), _)) |
-            Some((_, (4, _), _)) |
+            Some((_, (1, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (14, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action24(input, __sym0);
+                let __nt = super::__action20(input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -2901,8 +2901,8 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (0, _), _)) |
-            Some((_, (4, _), _)) |
+            Some((_, (1, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (14, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
@@ -2941,8 +2941,8 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (0, _), _)) |
-            Some((_, (4, _), _)) |
+            Some((_, (1, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (14, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
@@ -2981,8 +2981,8 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (0, _), _)) |
-            Some((_, (4, _), _)) |
+            Some((_, (1, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (14, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
@@ -3018,9 +3018,9 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -3103,15 +3103,15 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (1, __tok0), __loc2)) => {
+            Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state44(input, __tokens, __sym0, __sym1, __sym2));
             }
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state45(input, __tokens, __sym1, __sym2));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state46(input, __tokens, __sym1, __sym2));
             }
@@ -3137,9 +3137,9 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -3172,7 +3172,7 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (2, __tok0), __loc2)) => {
+            Some((__loc1, (3, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state48(input, __tokens, __sym0, __sym1));
             }
@@ -3180,9 +3180,9 @@ mod __parse__LinearRelation {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state30(input, __tokens, __sym1));
             }
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -3228,9 +3228,9 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -3263,9 +3263,9 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -3302,11 +3302,11 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state27(input, __tokens, __sym1));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state28(input, __tokens, __sym1));
             }
@@ -3426,10 +3426,10 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (1, _), _)) |
             Some((_, (2, _), _)) |
             Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -3467,9 +3467,9 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -3503,9 +3503,9 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -3546,11 +3546,11 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym3 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state51(input, __tokens, __sym2, __sym3));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym3 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state52(input, __tokens, __sym2, __sym3));
             }
@@ -3591,8 +3591,8 @@ mod __parse__LinearRelation {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -3625,7 +3625,7 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (2, __tok0), __loc2)) => {
+            Some((__loc1, (3, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state54(input, __tokens, __sym0, __sym1));
             }
@@ -3634,8 +3634,8 @@ mod __parse__LinearRelation {
                 __result = try!(__state40(input, __tokens, __sym1));
             }
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -3682,8 +3682,8 @@ mod __parse__LinearRelation {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -3717,8 +3717,8 @@ mod __parse__LinearRelation {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -3755,11 +3755,11 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state27(input, __tokens, __sym1));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state28(input, __tokens, __sym1));
             }
@@ -3880,9 +3880,9 @@ mod __parse__LinearRelation {
         };
         match __lookahead {
             None |
-            Some((_, (2, _), _)) |
             Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -3921,8 +3921,8 @@ mod __parse__LinearRelation {
         };
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -3957,9 +3957,9 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -4001,9 +4001,9 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -4045,9 +4045,9 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -4093,9 +4093,9 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -4140,7 +4140,7 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state28(input, __tokens, __sym2));
             }
@@ -4203,7 +4203,7 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state28(input, __tokens, __sym2));
             }
@@ -4262,9 +4262,9 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -4342,15 +4342,15 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (1, __tok0), __loc2)) => {
+            Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state60(input, __tokens, __sym0, __sym1, __sym2));
             }
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state45(input, __tokens, __sym1, __sym2));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state46(input, __tokens, __sym1, __sym2));
             }
@@ -4377,9 +4377,9 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -4418,7 +4418,7 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state38(input, __tokens, __sym2));
             }
@@ -4481,7 +4481,7 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state38(input, __tokens, __sym2));
             }
@@ -4541,8 +4541,8 @@ mod __parse__LinearRelation {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -4620,15 +4620,15 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (1, __tok0), __loc2)) => {
+            Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state64(input, __tokens, __sym0, __sym1, __sym2));
             }
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state45(input, __tokens, __sym1, __sym2));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state46(input, __tokens, __sym1, __sym2));
             }
@@ -4656,8 +4656,8 @@ mod __parse__LinearRelation {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -4693,9 +4693,9 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -4732,9 +4732,9 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -4771,9 +4771,9 @@ mod __parse__LinearRelation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -4814,9 +4814,9 @@ mod __parse__LinearRelation {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -4854,8 +4854,8 @@ mod __parse__LinearRelation {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -4893,8 +4893,8 @@ mod __parse__LinearRelation {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -4932,8 +4932,8 @@ mod __parse__LinearRelation {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -4975,8 +4975,8 @@ mod __parse__LinearRelation {
         };
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -5150,7 +5150,7 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (5, __tok0), __loc2)) => {
+            Some((__loc1, (6, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state7(input, __tokens, __sym1));
             }
@@ -5196,11 +5196,11 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state13(input, __tokens, __sym1));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state14(input, __tokens, __sym1));
             }
@@ -5266,11 +5266,11 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state13(input, __tokens, __sym1));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state14(input, __tokens, __sym1));
             }
@@ -5332,9 +5332,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (0, _), _)) |
-            Some((_, (4, _), _)) |
+            Some((_, (1, _), _)) |
             Some((_, (5, _), _)) |
+            Some((_, (6, _), _)) |
             Some((_, (14, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
@@ -5370,15 +5370,15 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state25(input, __tokens, __sym2));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state26(input, __tokens, __sym2));
             }
-            Some((__loc1, (5, __tok0), __loc2)) => {
+            Some((__loc1, (6, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state7(input, __tokens, __sym2));
             }
@@ -5452,9 +5452,9 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (0, _), _)) |
-            Some((_, (4, _), _)) |
+            Some((_, (1, _), _)) |
             Some((_, (5, _), _)) |
+            Some((_, (6, _), _)) |
             Some((_, (14, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
@@ -5490,15 +5490,15 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (1, __tok0), __loc2)) => {
+            Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state29(input, __tokens, __sym0, __sym1, __sym2));
             }
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state30(input, __tokens, __sym1, __sym2));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state31(input, __tokens, __sym1, __sym2));
             }
@@ -5524,9 +5524,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -5559,7 +5559,7 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (2, __tok0), __loc2)) => {
+            Some((__loc1, (3, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state33(input, __tokens, __sym0, __sym1));
             }
@@ -5567,9 +5567,9 @@ mod __parse__Problem {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state16(input, __tokens, __sym1));
             }
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -5615,9 +5615,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -5650,9 +5650,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -5689,11 +5689,11 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state13(input, __tokens, __sym1));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state14(input, __tokens, __sym1));
             }
@@ -5813,10 +5813,10 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (1, _), _)) |
             Some((_, (2, _), _)) |
             Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -5854,9 +5854,9 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -5890,15 +5890,15 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (1, __tok0), __loc2)) => {
+            Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state36(input, __tokens, __sym0, __sym1, __sym2));
             }
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state30(input, __tokens, __sym1, __sym2));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state31(input, __tokens, __sym1, __sym2));
             }
@@ -5924,17 +5924,17 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (0, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state38(input, __tokens, __sym0, __sym1));
+                __result = try!(__state38(input, __tokens, __sym1));
             }
             Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state39(input, __tokens, __sym0, __sym1));
             }
-            Some((__loc1, (6, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
-                __result = try!(__state40(input, __tokens, __sym1));
+                __result = try!(__state40(input, __tokens, __sym0, __sym1));
             }
             Some((__loc1, (7, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
@@ -5991,9 +5991,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (0, _), _)) |
-            Some((_, (4, _), _)) |
+            Some((_, (1, _), _)) |
             Some((_, (5, _), _)) |
+            Some((_, (6, _), _)) |
             Some((_, (14, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
@@ -6031,7 +6031,7 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (5, __tok0), __loc2)) => {
+            Some((__loc1, (6, __tok0), __loc2)) => {
                 let mut __sym3 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state7(input, __tokens, __sym3));
             }
@@ -6091,9 +6091,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -6131,7 +6131,7 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (2, __tok0), __loc2)) => {
+            Some((__loc1, (3, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state49(input, __tokens, __sym0, __sym1));
             }
@@ -6139,9 +6139,9 @@ mod __parse__Problem {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state28(input, __tokens, __sym1));
             }
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -6192,9 +6192,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -6232,9 +6232,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -6276,11 +6276,11 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state13(input, __tokens, __sym1));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state14(input, __tokens, __sym1));
             }
@@ -6400,10 +6400,10 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (2, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -6446,9 +6446,9 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -6492,7 +6492,7 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (5, _), _)) => {
+            Some((_, (6, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -6532,7 +6532,7 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state14(input, __tokens, __sym2));
             }
@@ -6595,7 +6595,7 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state14(input, __tokens, __sym2));
             }
@@ -6654,9 +6654,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -6734,15 +6734,15 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (1, __tok0), __loc2)) => {
+            Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state55(input, __tokens, __sym0, __sym1, __sym2));
             }
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state30(input, __tokens, __sym1, __sym2));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state31(input, __tokens, __sym1, __sym2));
             }
@@ -6769,9 +6769,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -6811,7 +6811,7 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (5, _), _)) => {
+            Some((_, (6, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -6847,11 +6847,11 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state61(input, __tokens, __sym2));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state62(input, __tokens, __sym2));
             }
@@ -6907,6 +6907,46 @@ mod __parse__Problem {
     >(
         input: &'input str,
         __tokens: &mut __TOKENS,
+        __sym0: &mut Option<(usize, &'input str, usize)>,
+    ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
+    {
+        let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
+        let __lookahead = match __tokens.next() {
+            Some(Ok(v)) => Some(v),
+            None => None,
+            Some(Err(e)) => return Err(e),
+        };
+        match __lookahead {
+            Some((_, (1, _), _)) |
+            Some((_, (5, _), _)) |
+            Some((_, (14, _), _)) |
+            Some((_, (15, _), _)) => {
+                let __sym0 = __sym0.take().unwrap();
+                let __start = __sym0.0.clone();
+                let __end = __sym0.2.clone();
+                let __nt = super::__action24(input, __sym0);
+                let __nt = __Nonterminal::Relation((
+                    __start,
+                    __nt,
+                    __end,
+                ));
+                return Ok((__lookahead, __nt));
+            }
+            _ => {
+                return Err(__ParseError::UnrecognizedToken {
+                    token: __lookahead,
+                    expected: vec![],
+                });
+            }
+        }
+    }
+
+    pub fn __state39<
+        'input,
+        __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
+    >(
+        input: &'input str,
+        __tokens: &mut __TOKENS,
         __sym0: &mut Option<(usize, RawLinearExpression, usize)>,
         __sym1: &mut Option<(usize, &'input str, usize)>,
     ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
@@ -6918,7 +6958,7 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state26(input, __tokens, __sym2));
             }
@@ -6964,7 +7004,7 @@ mod __parse__Problem {
         return Ok(__result);
     }
 
-    pub fn __state39<
+    pub fn __state40<
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
     >(
@@ -6981,7 +7021,7 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state26(input, __tokens, __sym2));
             }
@@ -7027,46 +7067,6 @@ mod __parse__Problem {
         return Ok(__result);
     }
 
-    pub fn __state40<
-        'input,
-        __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
-    >(
-        input: &'input str,
-        __tokens: &mut __TOKENS,
-        __sym0: &mut Option<(usize, &'input str, usize)>,
-    ) -> Result<(Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>), __ParseError<usize,(usize, &'input str),()>>
-    {
-        let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
-        let __lookahead = match __tokens.next() {
-            Some(Ok(v)) => Some(v),
-            None => None,
-            Some(Err(e)) => return Err(e),
-        };
-        match __lookahead {
-            Some((_, (0, _), _)) |
-            Some((_, (4, _), _)) |
-            Some((_, (14, _), _)) |
-            Some((_, (15, _), _)) => {
-                let __sym0 = __sym0.take().unwrap();
-                let __start = __sym0.0.clone();
-                let __end = __sym0.2.clone();
-                let __nt = super::__action19(input, __sym0);
-                let __nt = __Nonterminal::Relation((
-                    __start,
-                    __nt,
-                    __end,
-                ));
-                return Ok((__lookahead, __nt));
-            }
-            _ => {
-                return Err(__ParseError::UnrecognizedToken {
-                    token: __lookahead,
-                    expected: vec![],
-                });
-            }
-        }
-    }
-
     pub fn __state41<
         'input,
         __TOKENS: Iterator<Item=Result<(usize, (usize, &'input str), usize),__ParseError<usize,(usize, &'input str),()>>>,
@@ -7083,14 +7083,14 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (0, _), _)) |
-            Some((_, (4, _), _)) |
+            Some((_, (1, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (14, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action20(input, __sym0);
+                let __nt = super::__action19(input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -7123,14 +7123,14 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (0, _), _)) |
-            Some((_, (4, _), _)) |
+            Some((_, (1, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (14, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action24(input, __sym0);
+                let __nt = super::__action20(input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -7163,8 +7163,8 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (0, _), _)) |
-            Some((_, (4, _), _)) |
+            Some((_, (1, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (14, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
@@ -7203,8 +7203,8 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (0, _), _)) |
-            Some((_, (4, _), _)) |
+            Some((_, (1, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (14, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
@@ -7243,8 +7243,8 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (0, _), _)) |
-            Some((_, (4, _), _)) |
+            Some((_, (1, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (14, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
@@ -7282,7 +7282,7 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (5, __tok0), __loc2)) => {
+            Some((__loc1, (6, __tok0), __loc2)) => {
                 let mut __sym4 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state7(input, __tokens, __sym4));
             }
@@ -7339,15 +7339,15 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state25(input, __tokens, __sym1));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state26(input, __tokens, __sym1));
             }
-            Some((__loc1, (5, __tok0), __loc2)) => {
+            Some((__loc1, (6, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state7(input, __tokens, __sym1));
             }
@@ -7418,9 +7418,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -7503,15 +7503,15 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (1, __tok0), __loc2)) => {
+            Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state70(input, __tokens, __sym0, __sym1, __sym2));
             }
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state30(input, __tokens, __sym1, __sym2));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state31(input, __tokens, __sym1, __sym2));
             }
@@ -7538,9 +7538,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -7581,9 +7581,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -7620,9 +7620,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -7659,9 +7659,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -7702,9 +7702,9 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -7741,16 +7741,16 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym3 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state71(input, __tokens, __sym2, __sym3));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym3 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state72(input, __tokens, __sym2, __sym3));
             }
             None |
-            Some((_, (5, _), _)) => {
+            Some((_, (6, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -7787,9 +7787,9 @@ mod __parse__Problem {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (5, _), _)) => {
+            Some((_, (5, _), _)) |
+            Some((_, (6, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -7822,7 +7822,7 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (2, __tok0), __loc2)) => {
+            Some((__loc1, (3, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state74(input, __tokens, __sym0, __sym1));
             }
@@ -7831,9 +7831,9 @@ mod __parse__Problem {
                 __result = try!(__state64(input, __tokens, __sym1));
             }
             None |
-            Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (5, _), _)) => {
+            Some((_, (5, _), _)) |
+            Some((_, (6, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -7880,9 +7880,9 @@ mod __parse__Problem {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (5, _), _)) => {
+            Some((_, (5, _), _)) |
+            Some((_, (6, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -7916,9 +7916,9 @@ mod __parse__Problem {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (5, _), _)) => {
+            Some((_, (5, _), _)) |
+            Some((_, (6, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -7955,11 +7955,11 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state13(input, __tokens, __sym1));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state14(input, __tokens, __sym1));
             }
@@ -8080,10 +8080,10 @@ mod __parse__Problem {
         };
         match __lookahead {
             None |
-            Some((_, (2, _), _)) |
             Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
             Some((_, (5, _), _)) |
+            Some((_, (6, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -8122,9 +8122,9 @@ mod __parse__Problem {
         };
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (5, _), _)) => {
+            Some((_, (5, _), _)) |
+            Some((_, (6, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -8159,9 +8159,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -8203,9 +8203,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -8246,15 +8246,15 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state25(input, __tokens, __sym2));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state26(input, __tokens, __sym2));
             }
-            Some((__loc1, (5, __tok0), __loc2)) => {
+            Some((__loc1, (6, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state7(input, __tokens, __sym2));
             }
@@ -8326,7 +8326,7 @@ mod __parse__Problem {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (5, _), _)) => {
+            Some((_, (6, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -8362,9 +8362,9 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -8410,9 +8410,9 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (3, _), _)) |
+            Some((_, (0, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (6, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (7, _), _)) |
             Some((_, (8, _), _)) |
             Some((_, (9, _), _)) |
@@ -8457,7 +8457,7 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state62(input, __tokens, __sym2));
             }
@@ -8520,7 +8520,7 @@ mod __parse__Problem {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state62(input, __tokens, __sym2));
             }
@@ -8580,9 +8580,9 @@ mod __parse__Problem {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (5, _), _)) => {
+            Some((_, (5, _), _)) |
+            Some((_, (6, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -8660,15 +8660,15 @@ mod __parse__Problem {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (1, __tok0), __loc2)) => {
+            Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state81(input, __tokens, __sym0, __sym1, __sym2));
             }
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state30(input, __tokens, __sym1, __sym2));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state31(input, __tokens, __sym1, __sym2));
             }
@@ -8696,9 +8696,9 @@ mod __parse__Problem {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (5, _), _)) => {
+            Some((_, (5, _), _)) |
+            Some((_, (6, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -8735,7 +8735,7 @@ mod __parse__Problem {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (5, _), _)) => {
+            Some((_, (6, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -8773,9 +8773,9 @@ mod __parse__Problem {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (5, _), _)) => {
+            Some((_, (5, _), _)) |
+            Some((_, (6, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -8813,9 +8813,9 @@ mod __parse__Problem {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (5, _), _)) => {
+            Some((_, (5, _), _)) |
+            Some((_, (6, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -8853,9 +8853,9 @@ mod __parse__Problem {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (5, _), _)) => {
+            Some((_, (5, _), _)) |
+            Some((_, (6, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -8897,9 +8897,9 @@ mod __parse__Problem {
         };
         match __lookahead {
             None |
-            Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
-            Some((_, (5, _), _)) => {
+            Some((_, (5, _), _)) |
+            Some((_, (6, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -9073,11 +9073,11 @@ mod __parse__ProblemObjective {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state9(input, __tokens, __sym1));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state10(input, __tokens, __sym1));
             }
@@ -9143,11 +9143,11 @@ mod __parse__ProblemObjective {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state9(input, __tokens, __sym1));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state10(input, __tokens, __sym1));
             }
@@ -9210,15 +9210,15 @@ mod __parse__ProblemObjective {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (1, __tok0), __loc2)) => {
+            Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state14(input, __tokens, __sym0, __sym1, __sym2));
             }
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state15(input, __tokens, __sym1, __sym2));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state16(input, __tokens, __sym1, __sym2));
             }
@@ -9244,9 +9244,9 @@ mod __parse__ProblemObjective {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -9279,7 +9279,7 @@ mod __parse__ProblemObjective {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (2, __tok0), __loc2)) => {
+            Some((__loc1, (3, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state18(input, __tokens, __sym0, __sym1));
             }
@@ -9287,9 +9287,9 @@ mod __parse__ProblemObjective {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state12(input, __tokens, __sym1));
             }
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -9335,9 +9335,9 @@ mod __parse__ProblemObjective {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -9370,9 +9370,9 @@ mod __parse__ProblemObjective {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -9409,11 +9409,11 @@ mod __parse__ProblemObjective {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (0, __tok0), __loc2)) => {
+            Some((__loc1, (1, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state9(input, __tokens, __sym1));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym1 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state10(input, __tokens, __sym1));
             }
@@ -9533,10 +9533,10 @@ mod __parse__ProblemObjective {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (1, _), _)) |
             Some((_, (2, _), _)) |
             Some((_, (3, _), _)) |
             Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) |
             Some((_, (15, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -9574,9 +9574,9 @@ mod __parse__ProblemObjective {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
@@ -9610,15 +9610,15 @@ mod __parse__ProblemObjective {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (1, __tok0), __loc2)) => {
+            Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state21(input, __tokens, __sym0, __sym1, __sym2));
             }
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state15(input, __tokens, __sym1, __sym2));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state16(input, __tokens, __sym1, __sym2));
             }
@@ -9690,7 +9690,7 @@ mod __parse__ProblemObjective {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state10(input, __tokens, __sym2));
             }
@@ -9753,7 +9753,7 @@ mod __parse__ProblemObjective {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state10(input, __tokens, __sym2));
             }
@@ -9812,9 +9812,9 @@ mod __parse__ProblemObjective {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -9892,15 +9892,15 @@ mod __parse__ProblemObjective {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (1, __tok0), __loc2)) => {
+            Some((__loc1, (2, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state25(input, __tokens, __sym0, __sym1, __sym2));
             }
-            Some((__loc1, (3, __tok0), __loc2)) => {
+            Some((__loc1, (4, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state15(input, __tokens, __sym1, __sym2));
             }
-            Some((__loc1, (4, __tok0), __loc2)) => {
+            Some((__loc1, (5, __tok0), __loc2)) => {
                 let mut __sym2 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state16(input, __tokens, __sym1, __sym2));
             }
@@ -9927,9 +9927,9 @@ mod __parse__ProblemObjective {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __start = __sym0.0.clone();
@@ -10006,9 +10006,9 @@ mod __parse__ProblemObjective {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -10045,9 +10045,9 @@ mod __parse__ProblemObjective {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -10084,9 +10084,9 @@ mod __parse__ProblemObjective {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -10127,9 +10127,9 @@ mod __parse__ProblemObjective {
             Some(Err(e)) => return Err(e),
         };
         match __lookahead {
-            Some((_, (1, _), _)) |
-            Some((_, (3, _), _)) |
-            Some((_, (4, _), _)) => {
+            Some((_, (2, _), _)) |
+            Some((_, (4, _), _)) |
+            Some((_, (5, _), _)) => {
                 let __sym0 = __sym0.take().unwrap();
                 let __sym1 = __sym1.take().unwrap();
                 let __sym2 = __sym2.take().unwrap();
@@ -10225,7 +10225,7 @@ mod __parse__Relation {
     {
         let mut __result: (Option<(usize, (usize, &'input str), usize)>, __Nonterminal<'input>);
         match __lookahead {
-            Some((__loc1, (6, __tok0), __loc2)) => {
+            Some((__loc1, (0, __tok0), __loc2)) => {
                 let mut __sym0 = &mut Some((__loc1, (__tok0), __loc2));
                 __result = try!(__state2(input, __tokens, __sym0));
             }
@@ -10323,7 +10323,7 @@ mod __parse__Relation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action19(input, __sym0);
+                let __nt = super::__action24(input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -10360,7 +10360,7 @@ mod __parse__Relation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action20(input, __sym0);
+                let __nt = super::__action19(input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -10397,7 +10397,7 @@ mod __parse__Relation {
                 let __sym0 = __sym0.take().unwrap();
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action24(input, __sym0);
+                let __nt = super::__action20(input, __sym0);
                 let __nt = __Nonterminal::Relation((
                     __start,
                     __nt,
@@ -10879,78 +10879,83 @@ mod __intern_token {
                 0 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
-                        40 => /* '(' */ {
-                            __current_match = Some((0, __index + 1));
+                        33 => /* '!' */ {
                             __current_state = 1;
                             continue;
                         }
-                        41 => /* ')' */ {
+                        40 => /* '(' */ {
                             __current_match = Some((1, __index + 1));
                             __current_state = 2;
                             continue;
                         }
-                        42 => /* '*' */ {
+                        41 => /* ')' */ {
                             __current_match = Some((2, __index + 1));
                             __current_state = 3;
                             continue;
                         }
-                        43 => /* '+' */ {
+                        42 => /* '*' */ {
                             __current_match = Some((3, __index + 1));
                             __current_state = 4;
                             continue;
                         }
-                        45 => /* '-' */ {
+                        43 => /* '+' */ {
                             __current_match = Some((4, __index + 1));
                             __current_state = 5;
                             continue;
                         }
-                        48 ... 57 => {
-                            __current_match = Some((14, __index + __ch.len_utf8()));
+                        45 => /* '-' */ {
+                            __current_match = Some((5, __index + 1));
                             __current_state = 6;
                             continue;
                         }
-                        59 => /* ';' */ {
-                            __current_match = Some((5, __index + 1));
+                        48 ... 57 => {
+                            __current_match = Some((14, __index + __ch.len_utf8()));
                             __current_state = 7;
                             continue;
                         }
-                        60 => /* '<' */ {
+                        59 => /* ';' */ {
                             __current_match = Some((6, __index + 1));
                             __current_state = 8;
                             continue;
                         }
-                        61 => /* '=' */ {
+                        60 => /* '<' */ {
+                            __current_match = Some((7, __index + 1));
                             __current_state = 9;
+                            continue;
+                        }
+                        61 => /* '=' */ {
+                            __current_match = Some((9, __index + 1));
+                            __current_state = 10;
                             continue;
                         }
                         62 => /* '>' */ {
                             __current_match = Some((10, __index + 1));
-                            __current_state = 10;
+                            __current_state = 11;
                             continue;
                         }
                         65 ... 90 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
-                            __current_state = 11;
+                            __current_state = 12;
                             continue;
                         }
                         95 => /* '_' */ {
                             __current_match = Some((15, __index + 1));
-                            __current_state = 11;
+                            __current_state = 12;
                             continue;
                         }
                         97 ... 108 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
-                            __current_state = 11;
+                            __current_state = 12;
                             continue;
                         }
                         109 => /* 'm' */ {
                             __current_match = Some((15, __index + 1));
-                            __current_state = 12;
+                            __current_state = 13;
                             continue;
                         }
                         110 ... 122 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
-                            __current_state = 11;
+                            __current_state = 12;
                             continue;
                         }
                         _ => {
@@ -10961,6 +10966,11 @@ mod __intern_token {
                 1 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        61 => /* '=' */ {
+                            __current_match = Some((0, __index + 1));
+                            __current_state = 15;
+                            continue;
+                        }
                         _ => {
                             return __current_match;
                         }
@@ -11001,24 +11011,6 @@ mod __intern_token {
                 6 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
-                        46 => /* '.' */ {
-                            __current_match = Some((14, __index + 1));
-                            __current_state = 14;
-                            continue;
-                        }
-                        48 ... 57 => {
-                            __current_match = Some((14, __index + __ch.len_utf8()));
-                            __current_state = 15;
-                            continue;
-                        }
-                        69 => /* 'E' */ {
-                            __current_state = 16;
-                            continue;
-                        }
-                        101 => /* 'e' */ {
-                            __current_state = 16;
-                            continue;
-                        }
                         _ => {
                             return __current_match;
                         }
@@ -11027,6 +11019,24 @@ mod __intern_token {
                 7 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        46 => /* '.' */ {
+                            __current_match = Some((14, __index + 1));
+                            __current_state = 16;
+                            continue;
+                        }
+                        48 ... 57 => {
+                            __current_match = Some((14, __index + __ch.len_utf8()));
+                            __current_state = 17;
+                            continue;
+                        }
+                        69 => /* 'E' */ {
+                            __current_state = 18;
+                            continue;
+                        }
+                        101 => /* 'e' */ {
+                            __current_state = 18;
+                            continue;
+                        }
                         _ => {
                             return __current_match;
                         }
@@ -11035,11 +11045,6 @@ mod __intern_token {
                 8 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
-                        61 => /* '=' */ {
-                            __current_match = Some((7, __index + 1));
-                            __current_state = 17;
-                            continue;
-                        }
                         _ => {
                             return __current_match;
                         }
@@ -11048,12 +11053,8 @@ mod __intern_token {
                 9 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
-                        33 => /* '!' */ {
-                            __current_state = 18;
-                            continue;
-                        }
                         61 => /* '=' */ {
-                            __current_match = Some((9, __index + 1));
+                            __current_match = Some((8, __index + 1));
                             __current_state = 19;
                             continue;
                         }
@@ -11063,6 +11064,14 @@ mod __intern_token {
                     }
                 }
                 10 => {
+                    let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
+                    match __ch as u32 {
+                        _ => {
+                            return __current_match;
+                        }
+                    }
+                }
+                11 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
                         61 => /* '=' */ {
@@ -11075,16 +11084,26 @@ mod __intern_token {
                         }
                     }
                 }
-                11 => {
+                12 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        46 => /* '.' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
                         48 ... 57 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        65 ... 90 => {
+                        65 ... 91 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        93 => /* ']' */ {
+                            __current_match = Some((15, __index + 1));
                             __current_state = 21;
                             continue;
                         }
@@ -11103,16 +11122,26 @@ mod __intern_token {
                         }
                     }
                 }
-                12 => {
+                13 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        46 => /* '.' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
                         48 ... 57 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        65 ... 90 => {
+                        65 ... 91 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        93 => /* ']' */ {
+                            __current_match = Some((15, __index + 1));
                             __current_state = 21;
                             continue;
                         }
@@ -11146,30 +11175,9 @@ mod __intern_token {
                         }
                     }
                 }
-                13 => {
-                    let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
-                    match __ch as u32 {
-                        _ => {
-                            return __current_match;
-                        }
-                    }
-                }
                 14 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
-                        48 ... 57 => {
-                            __current_match = Some((14, __index + __ch.len_utf8()));
-                            __current_state = 14;
-                            continue;
-                        }
-                        69 => /* 'E' */ {
-                            __current_state = 16;
-                            continue;
-                        }
-                        101 => /* 'e' */ {
-                            __current_state = 16;
-                            continue;
-                        }
                         _ => {
                             return __current_match;
                         }
@@ -11178,24 +11186,6 @@ mod __intern_token {
                 15 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
-                        46 => /* '.' */ {
-                            __current_match = Some((14, __index + 1));
-                            __current_state = 14;
-                            continue;
-                        }
-                        48 ... 57 => {
-                            __current_match = Some((14, __index + __ch.len_utf8()));
-                            __current_state = 15;
-                            continue;
-                        }
-                        69 => /* 'E' */ {
-                            __current_state = 16;
-                            continue;
-                        }
-                        101 => /* 'e' */ {
-                            __current_state = 16;
-                            continue;
-                        }
                         _ => {
                             return __current_match;
                         }
@@ -11204,13 +11194,17 @@ mod __intern_token {
                 16 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
-                        45 => /* '-' */ {
-                            __current_state = 24;
-                            continue;
-                        }
                         48 ... 57 => {
                             __current_match = Some((14, __index + __ch.len_utf8()));
-                            __current_state = 25;
+                            __current_state = 16;
+                            continue;
+                        }
+                        69 => /* 'E' */ {
+                            __current_state = 18;
+                            continue;
+                        }
+                        101 => /* 'e' */ {
+                            __current_state = 18;
                             continue;
                         }
                         _ => {
@@ -11221,6 +11215,24 @@ mod __intern_token {
                 17 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        46 => /* '.' */ {
+                            __current_match = Some((14, __index + 1));
+                            __current_state = 16;
+                            continue;
+                        }
+                        48 ... 57 => {
+                            __current_match = Some((14, __index + __ch.len_utf8()));
+                            __current_state = 17;
+                            continue;
+                        }
+                        69 => /* 'E' */ {
+                            __current_state = 18;
+                            continue;
+                        }
+                        101 => /* 'e' */ {
+                            __current_state = 18;
+                            continue;
+                        }
                         _ => {
                             return __current_match;
                         }
@@ -11229,9 +11241,13 @@ mod __intern_token {
                 18 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
-                        61 => /* '=' */ {
-                            __current_match = Some((8, __index + 1));
-                            __current_state = 26;
+                        45 => /* '-' */ {
+                            __current_state = 24;
+                            continue;
+                        }
+                        48 ... 57 => {
+                            __current_match = Some((14, __index + __ch.len_utf8()));
+                            __current_state = 25;
                             continue;
                         }
                         _ => {
@@ -11258,13 +11274,23 @@ mod __intern_token {
                 21 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        46 => /* '.' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
                         48 ... 57 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        65 ... 90 => {
+                        65 ... 91 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        93 => /* ']' */ {
+                            __current_match = Some((15, __index + 1));
                             __current_state = 21;
                             continue;
                         }
@@ -11286,13 +11312,23 @@ mod __intern_token {
                 22 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        46 => /* '.' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
                         48 ... 57 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        65 ... 90 => {
+                        65 ... 91 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        93 => /* ']' */ {
+                            __current_match = Some((15, __index + 1));
                             __current_state = 21;
                             continue;
                         }
@@ -11308,7 +11344,7 @@ mod __intern_token {
                         }
                         120 => /* 'x' */ {
                             __current_match = Some((15, __index + 1));
-                            __current_state = 27;
+                            __current_state = 26;
                             continue;
                         }
                         121 ... 122 => {
@@ -11324,13 +11360,23 @@ mod __intern_token {
                 23 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        46 => /* '.' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
                         48 ... 57 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        65 ... 90 => {
+                        65 ... 91 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        93 => /* ']' */ {
+                            __current_match = Some((15, __index + 1));
                             __current_state = 21;
                             continue;
                         }
@@ -11346,7 +11392,7 @@ mod __intern_token {
                         }
                         110 => /* 'n' */ {
                             __current_match = Some((15, __index + 1));
-                            __current_state = 28;
+                            __current_state = 27;
                             continue;
                         }
                         111 ... 122 => {
@@ -11388,6 +11434,46 @@ mod __intern_token {
                 26 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        46 => /* '.' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
+                        48 ... 57 => {
+                            __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        65 ... 91 => {
+                            __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        93 => /* ']' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
+                        95 => /* '_' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
+                        97 ... 104 => {
+                            __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        105 => /* 'i' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 28;
+                            continue;
+                        }
+                        106 ... 122 => {
+                            __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
                         _ => {
                             return __current_match;
                         }
@@ -11396,13 +11482,23 @@ mod __intern_token {
                 27 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        46 => /* '.' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
                         48 ... 57 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        65 ... 90 => {
+                        65 ... 91 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        93 => /* ']' */ {
+                            __current_match = Some((15, __index + 1));
                             __current_state = 21;
                             continue;
                         }
@@ -11434,13 +11530,23 @@ mod __intern_token {
                 28 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        46 => /* '.' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
                         48 ... 57 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        65 ... 90 => {
+                        65 ... 91 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        93 => /* ']' */ {
+                            __current_match = Some((15, __index + 1));
                             __current_state = 21;
                             continue;
                         }
@@ -11449,17 +11555,17 @@ mod __intern_token {
                             __current_state = 21;
                             continue;
                         }
-                        97 ... 104 => {
+                        97 ... 108 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        105 => /* 'i' */ {
+                        109 => /* 'm' */ {
                             __current_match = Some((15, __index + 1));
                             __current_state = 30;
                             continue;
                         }
-                        106 ... 122 => {
+                        110 ... 122 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
@@ -11472,13 +11578,23 @@ mod __intern_token {
                 29 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        46 => /* '.' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
                         48 ... 57 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        65 ... 90 => {
+                        65 ... 91 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        93 => /* ']' */ {
+                            __current_match = Some((15, __index + 1));
                             __current_state = 21;
                             continue;
                         }
@@ -11510,13 +11626,23 @@ mod __intern_token {
                 30 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        46 => /* '.' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
                         48 ... 57 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        65 ... 90 => {
+                        65 ... 91 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        93 => /* ']' */ {
+                            __current_match = Some((15, __index + 1));
                             __current_state = 21;
                             continue;
                         }
@@ -11525,17 +11651,17 @@ mod __intern_token {
                             __current_state = 21;
                             continue;
                         }
-                        97 ... 108 => {
+                        97 ... 104 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        109 => /* 'm' */ {
+                        105 => /* 'i' */ {
                             __current_match = Some((15, __index + 1));
                             __current_state = 32;
                             continue;
                         }
-                        110 ... 122 => {
+                        106 ... 122 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
@@ -11548,13 +11674,23 @@ mod __intern_token {
                 31 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        46 => /* '.' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
                         48 ... 57 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        65 ... 90 => {
+                        65 ... 91 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        93 => /* ']' */ {
+                            __current_match = Some((15, __index + 1));
                             __current_state = 21;
                             continue;
                         }
@@ -11586,13 +11722,23 @@ mod __intern_token {
                 32 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        46 => /* '.' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
                         48 ... 57 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        65 ... 90 => {
+                        65 ... 91 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        93 => /* ']' */ {
+                            __current_match = Some((15, __index + 1));
                             __current_state = 21;
                             continue;
                         }
@@ -11601,19 +11747,14 @@ mod __intern_token {
                             __current_state = 21;
                             continue;
                         }
-                        97 ... 104 => {
+                        97 ... 121 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        105 => /* 'i' */ {
+                        122 => /* 'z' */ {
                             __current_match = Some((15, __index + 1));
                             __current_state = 34;
-                            continue;
-                        }
-                        106 ... 122 => {
-                            __current_match = Some((15, __index + __ch.len_utf8()));
-                            __current_state = 21;
                             continue;
                         }
                         _ => {
@@ -11624,13 +11765,23 @@ mod __intern_token {
                 33 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        46 => /* '.' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
                         48 ... 57 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        65 ... 90 => {
+                        65 ... 91 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        93 => /* ']' */ {
+                            __current_match = Some((15, __index + 1));
                             __current_state = 21;
                             continue;
                         }
@@ -11657,13 +11808,23 @@ mod __intern_token {
                 34 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        46 => /* '.' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
                         48 ... 57 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        65 ... 90 => {
+                        65 ... 91 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        93 => /* ']' */ {
+                            __current_match = Some((15, __index + 1));
                             __current_state = 21;
                             continue;
                         }
@@ -11672,14 +11833,19 @@ mod __intern_token {
                             __current_state = 21;
                             continue;
                         }
-                        97 ... 121 => {
+                        97 ... 100 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        122 => /* 'z' */ {
+                        101 => /* 'e' */ {
                             __current_match = Some((15, __index + 1));
                             __current_state = 36;
+                            continue;
+                        }
+                        102 ... 122 => {
+                            __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
                             continue;
                         }
                         _ => {
@@ -11690,13 +11856,23 @@ mod __intern_token {
                 35 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        46 => /* '.' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
                         48 ... 57 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        65 ... 90 => {
+                        65 ... 91 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        93 => /* ']' */ {
+                            __current_match = Some((15, __index + 1));
                             __current_state = 21;
                             continue;
                         }
@@ -11728,13 +11904,28 @@ mod __intern_token {
                 36 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
+                        40 => /* '(' */ {
+                            __current_match = Some((12, __index + 1));
+                            __current_state = 38;
+                            continue;
+                        }
+                        46 => /* '.' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
+                            continue;
+                        }
                         48 ... 57 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
                         }
-                        65 ... 90 => {
+                        65 ... 91 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        93 => /* ']' */ {
+                            __current_match = Some((15, __index + 1));
                             __current_state = 21;
                             continue;
                         }
@@ -11743,17 +11934,7 @@ mod __intern_token {
                             __current_state = 21;
                             continue;
                         }
-                        97 ... 100 => {
-                            __current_match = Some((15, __index + __ch.len_utf8()));
-                            __current_state = 21;
-                            continue;
-                        }
-                        101 => /* 'e' */ {
-                            __current_match = Some((15, __index + 1));
-                            __current_state = 38;
-                            continue;
-                        }
-                        102 ... 122 => {
+                        97 ... 122 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
                             __current_state = 21;
                             continue;
@@ -11767,8 +11948,13 @@ mod __intern_token {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
                         40 => /* '(' */ {
-                            __current_match = Some((12, __index + 1));
+                            __current_match = Some((13, __index + 1));
                             __current_state = 39;
+                            continue;
+                        }
+                        46 => /* '.' */ {
+                            __current_match = Some((15, __index + 1));
+                            __current_state = 21;
                             continue;
                         }
                         48 ... 57 => {
@@ -11776,8 +11962,13 @@ mod __intern_token {
                             __current_state = 21;
                             continue;
                         }
-                        65 ... 90 => {
+                        65 ... 91 => {
                             __current_match = Some((15, __index + __ch.len_utf8()));
+                            __current_state = 21;
+                            continue;
+                        }
+                        93 => /* ']' */ {
+                            __current_match = Some((15, __index + 1));
                             __current_state = 21;
                             continue;
                         }
@@ -11799,45 +11990,12 @@ mod __intern_token {
                 38 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
-                        40 => /* '(' */ {
-                            __current_match = Some((13, __index + 1));
-                            __current_state = 40;
-                            continue;
-                        }
-                        48 ... 57 => {
-                            __current_match = Some((15, __index + __ch.len_utf8()));
-                            __current_state = 21;
-                            continue;
-                        }
-                        65 ... 90 => {
-                            __current_match = Some((15, __index + __ch.len_utf8()));
-                            __current_state = 21;
-                            continue;
-                        }
-                        95 => /* '_' */ {
-                            __current_match = Some((15, __index + 1));
-                            __current_state = 21;
-                            continue;
-                        }
-                        97 ... 122 => {
-                            __current_match = Some((15, __index + __ch.len_utf8()));
-                            __current_state = 21;
-                            continue;
-                        }
                         _ => {
                             return __current_match;
                         }
                     }
                 }
                 39 => {
-                    let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
-                    match __ch as u32 {
-                        _ => {
-                            return __current_match;
-                        }
-                    }
-                }
-                40 => {
                     let (__index, __ch) = match __chars.next() { Some(p) => p, None => return __current_match };
                     match __ch as u32 {
                         _ => {

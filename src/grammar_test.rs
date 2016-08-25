@@ -47,8 +47,8 @@ mod tests {
 
   #[test]
   fn parse_lalr_relations() {
-    assert_eq!(Relation::EQ, grammar::parse_Relation("==").unwrap());
-    assert_eq!(Relation::NEQ, grammar::parse_Relation("=!=").unwrap());
+    assert_eq!(Relation::EQ, grammar::parse_Relation("=").unwrap());
+    assert_eq!(Relation::NEQ, grammar::parse_Relation("!=").unwrap());
     assert_eq!(Relation::LT, grammar::parse_Relation("<").unwrap());
     assert_eq!(Relation::LEQ, grammar::parse_Relation("<=").unwrap());
     assert_eq!(Relation::GT, grammar::parse_Relation(">").unwrap());
@@ -59,7 +59,7 @@ mod tests {
   fn parse_lalr_linear_relations() {
     let gt = grammar::parse_LinearRelation("3x1>2x2").unwrap();
     assert!(gt.op == Relation::GT);
-    let eq = grammar::parse_LinearRelation("-8.2x+5==8.2y+5").unwrap();
+    let eq = grammar::parse_LinearRelation("-8.2x+5=8.2y+5").unwrap();
     assert!(eq.op == Relation::EQ);
     let geq = grammar::parse_LinearRelation("2x + 3x >= 5x").unwrap();
     assert!(geq.op == Relation::GEQ);
@@ -67,7 +67,7 @@ mod tests {
     assert!(leq.op == Relation::LEQ);
     let lt = grammar::parse_LinearRelation("4y<5y2").unwrap();
     assert!(lt.op == Relation::LT);
-    let neq = grammar::parse_LinearRelation("x =!= y").unwrap();
+    let neq = grammar::parse_LinearRelation("x != y").unwrap();
     assert!(neq.op == Relation::NEQ);
   }
 }

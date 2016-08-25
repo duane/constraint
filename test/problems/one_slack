@@ -1,2 +1,2 @@
-minimize(-1.0x)
+minimize(-x)
 x <= 0.0

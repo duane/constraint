@@ -650,8 +650,8 @@ impl Relation {
 impl Display for Relation {
   fn fmt(&self, fmt: &mut Formatter) -> Result<(), Error> {
     let op_str = match self {
-      &Relation::EQ => "==",
-      &Relation::NEQ => "=!=",
+      &Relation::EQ => "=",
+      &Relation::NEQ => "!=",
       &Relation::LT => "<",
       &Relation::LEQ => "<=",
       &Relation::GT => ">",

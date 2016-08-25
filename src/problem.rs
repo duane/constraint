@@ -123,7 +123,7 @@ impl Problem {
   ///
   /// fn main() {
   ///   let objective = RawProblemObjective::from_str("minimize(x)").unwrap();
-  ///   let constraints = vec!(RawLinearRelation::from_str("x == 5").unwrap());
+  ///   let constraints = vec!(RawLinearRelation::from_str("x = 5").unwrap());
   ///   let _ = Problem::new(objective, constraints);
   /// }
   /// ```
@@ -147,11 +147,6 @@ impl Problem {
     }
   }
 
-  // lhs <= rhs
-  // lhs + s_n == rhs, 0 <= s_n
-  // 0 == rhs - lhs - s_n, 0 <= s_n
-  // 0 >= (rhs - lhs - + s_n), 0 <= s_n
-  // 0 == (rhs - lhs), 0 <= s_n
   fn convert_leq_to_eq<'s, 'r>(&'s self, lr: &'r mut RawLinearRelation, namer: &mut Namer) -> Option<Var> {
     if lr.op == Relation::LEQ {
       let slack = Var::internal(namer.vend());
@@ -180,7 +175,7 @@ impl Problem {
   /// use constraint::var::Var;
   ///
   /// fn main() {
-  ///   let tableau = Tableau::from_str("minimize(x);x==5").unwrap();
+  ///   let tableau = Tableau::from_str("minimize(x);x=5").unwrap();
   ///   let basic_feasible_solution = tableau.get_basic_feasible_solution();
   ///   assert!(approx_eq(5.0, *basic_feasible_solution.get(&Var::external(String::from("x"))).unwrap()));
   /// }
@@ -361,7 +356,7 @@ mod test {
 
   #[test]
   fn test_problem_parse() {
-    let buf = r#"minimize(x_m-x_l);2x_m==x_l+x_r;x_l+10<=x_r;x_l>=-10;x_r<=100"#;
+    let buf = r#"minimize(x_m-x_l);2x_m=x_l+x_r;x_l+10<=x_r;x_l>=-10;x_r<=100"#;
     let problem = parse_Problem(buf).unwrap();
     let mut tableau = problem.augmented_simplex().unwrap();
     tableau.simplex().unwrap();
