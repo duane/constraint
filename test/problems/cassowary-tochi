@@ -1,4 +1,4 @@
-minimize(x_m + -1.0x_l)
+minimize(x_m - x_l)
 2x_m == x_l+x_r
 x_l+10 <= x_r
 x_l >= -10

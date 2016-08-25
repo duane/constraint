@@ -529,7 +529,7 @@ impl Tableau {
   /// fn main() {
   ///   let mut tableau = Tableau::new();
   ///   assert!(tableau.add_row(Var::external(String::from("x")), RawLinearExpression::from_str("s1+10").unwrap(), false).is_ok());
-  ///   assert!(tableau.add_row(Var::external(String::from("y")), RawLinearExpression::from_str("s1+5.2s2+-72.3").unwrap(), false).is_ok());
+  ///   assert!(tableau.add_row(Var::external(String::from("y")), RawLinearExpression::from_str("s1+5.2s2-72.3").unwrap(), false).is_ok());
   ///   let solution = tableau.get_basic_feasible_solution();
   ///   let x_ref = {tableau.index.external(String::from("x"))};
   ///   let y_ref = {tableau.index.external(String::from("y"))};

@@ -361,7 +361,7 @@ mod test {
 
   #[test]
   fn test_problem_parse() {
-    let buf = r#"minimize(x_m+-1.0x_l);2x_m==x_l+x_r;x_l+10<=x_r;x_l>=-10;x_r<=100"#;
+    let buf = r#"minimize(x_m-x_l);2x_m==x_l+x_r;x_l+10<=x_r;x_l>=-10;x_r<=100"#;
     let problem = parse_Problem(buf).unwrap();
     let mut tableau = problem.augmented_simplex().unwrap();
     tableau.simplex().unwrap();

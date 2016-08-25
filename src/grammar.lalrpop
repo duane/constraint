@@ -6,32 +6,26 @@ use var::Var;
 
 grammar;
 
-pub Scalar: Scalar = <s:r"-?[0-9]+\.?[0-9]*([eE]-?[0-9]+)?"> => f64::from_str(s).unwrap();
+pub Scalar: Scalar = <s:r"[0-9]+\.?[0-9]*([eE]-?[0-9]+)?"> => f64::from_str(s).unwrap();
 
 pub Variable: Var = <s:r"[_a-zA-Z][_a-zA-Z0-9]*"> => Var::external(String::from(s));
 
-pub Term: (Option<Scalar>, Option<Var>) = {
-  <s:Scalar> => (Some(s), None),
-  <v:Variable> => (None, Some(v)),
-  <s:Scalar> "*"? <v:Variable> => (Some(s), Some(v))
+Term: RawLinearExpression = {
+  <s:Scalar> => RawLinearExpression::from(s),
+  <v:Variable> =>  RawLinearExpression::from(v),
+  <s:Scalar> "*"? <v:Variable> => RawLinearExpression::term(v, s)
+};
+
+PossiblyUnaryTerm: RawLinearExpression = {
+    "-" <r:Term> => r.times(-1.0),
+    <r:Term> => r
 };
 
 pub Expression: RawLinearExpression = {
-  <e:(Term "+")*> <u:Term> => {
-    let mut expr = RawLinearExpression::new();
-    let mut terms: Vec<(Option<Scalar>, Option<Var>)> = e.into_iter().map(|t| t.0).collect();
-    terms.push(u);
-    for (scalar, var) in terms.into_iter() {
-      let term = match (scalar, var) {
-        (Some(scalar), Some(var)) => RawLinearExpression::term(var, scalar),
-        (None, Some(var)) => RawLinearExpression::from(var),
-        (Some(scalar), None) => RawLinearExpression::from(scalar),
-        (None, None) => RawLinearExpression::new()
-      };
-      expr.plus_this(&term);
-    }
-    expr
-  }
+  <t:PossiblyUnaryTerm> => t,
+  <a:Expression> "+" <b:PossiblyUnaryTerm> => a.plus(&b),
+  <a:Expression> "-" <b:PossiblyUnaryTerm> => a.minus(&b),
+  "(" <e:Expression> ")" => e
 };
 
 pub Relation: Relation = {

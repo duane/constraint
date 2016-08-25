@@ -3,6 +3,7 @@ mod tests {
   use expr::*;
   use grammar;
   use var::Var;
+  use std::str::FromStr;
 
   fn parse_scalar_lalr() {
     assert!(approx_eq(0.0, grammar::parse_Scalar("0.0").unwrap()));
@@ -25,35 +26,8 @@ mod tests {
   }
 
   #[test]
-  fn parse_lalr_terms() {
-    let term1 = grammar::parse_Term("2x").unwrap();
-    assert!(approx_eq(2.0, term1.0.unwrap()));
-    assert_eq!(&String::from("x"), term1.1.unwrap().name());
-
-    let term2 = grammar::parse_Term("-43.x2").unwrap();
-    assert!(approx_eq(-43.0, term2.0.unwrap()));
-    assert_eq!(&String::from("x2"), term2.1.unwrap().name());
-
-    let term3 = grammar::parse_Term("y").unwrap();
-    assert!(term3.0.is_none());
-    assert_eq!(&String::from("y"), term3.1.unwrap().name());
-
-    let term4 = grammar::parse_Term("0.4").unwrap();
-    assert!(approx_eq(0.4, term4.0.unwrap()));
-    assert!(term4.1.is_none());
-
-    let term5 = grammar::parse_Term("-72.3 x3").unwrap();
-    assert!(approx_eq(-72.3, term5.0.unwrap()));
-    assert_eq!(&String::from("x3"), term5.1.unwrap().name());
-
-    let term6 = grammar::parse_Term("-72.3*x3").unwrap();
-    assert!(approx_eq(-72.3, term6.0.unwrap()));
-    assert_eq!(&String::from("x3"), term6.1.unwrap().name());
-  }
-
-  #[test]
   fn parse_lalr_exprs() {
-    let expr = grammar::parse_Expression("-42.3 x4 + 92 +-92.x4+0.0x2+-92.3x3+-82").unwrap();
+    let expr = grammar::parse_Expression("-42.3 x4 + 92 +-92.x4+0.0x2-92.3x3-82").unwrap();
     let x4_ref = Var::external(String::from("x4"));
     let x2_ref = Var::external(String::from("x2"));
     let x3_ref = Var::external(String::from("x3"));
@@ -61,6 +35,14 @@ mod tests {
     assert!(approx_eq(0.0, expr.get_coefficient(&x2_ref)));
     assert!(approx_eq(-92.3, expr.get_coefficient(&x3_ref)));
     assert!(approx_eq(10.0, expr.get_constant()));
+  }
+
+  #[test]
+  fn parse_minus() {
+    RawLinearExpression::from_str("x-y").expect("Basic subtraction");
+    RawLinearExpression::from_str("-x").expect("Basic unary negation");
+    RawLinearExpression::from_str("-x-y").expect("Combined unary negation and subtraction");
+    RawLinearExpression::from_str("x--y").expect("Combined subtraction and unary negation");
   }
 
   #[test]
