@@ -6,6 +6,7 @@ use std::mem::swap;
 use std::string::ToString;
 use std::str::FromStr;
 use var::{Var, VarIndex, VarRef};
+use state::Namer;
 
 pub type Scalar = scalar::Scalar;
 
@@ -669,6 +670,51 @@ pub struct LinearRelation<V: Ord + Clone + Hash + Debug> {
   pub lhs: LinearExpression<V>,
   pub op: Relation,
   pub rhs: LinearExpression<V>
+}
+
+impl RawLinearRelation {
+  pub fn convert_to_leq_and_eq(&mut self) {
+    match self.op {
+      Relation::EQ | Relation::NEQ | Relation::LEQ | Relation::LT => (),
+      Relation::GEQ | Relation::GT => {
+        self.reverse();
+      }
+    }
+    if self.op == Relation::LT {
+      self.rhs.plus_this(&RawLinearExpression::from(scalar::EPSILON * 2.0));
+      self.op = Relation::LEQ;
+    }
+  }
+
+  pub fn convert_leq_to_eq(&mut self, namer: &mut Namer) -> Option<Var> {
+    if self.op == Relation::LEQ {
+      let slack = Var::internal(namer.vend());
+      self.lhs.plus_this(&RawLinearExpression::from(slack.clone()));
+      self.lhs.times_this(-1.0);
+      self.rhs.plus_this(&self.lhs);
+      self.lhs = RawLinearExpression::new();
+
+      self.op = Relation::EQ;
+      Some(slack)
+    } else {
+      None
+    }
+  }
+
+  // Returns the extra variable created to satisfy the conversion
+  pub fn convert_to_augmented_simplex_form(&mut self, slack_namer: &mut Namer) -> Option<Var> {
+    match self.op {
+      Relation::NEQ => panic!("I don't know what to do!"),
+      Relation::EQ => {
+        self.rhs.minus_this(&self.lhs);
+        self.lhs = RawLinearExpression::new();
+        return None;
+      },
+      Relation::LEQ => (),
+      _ => self.convert_to_leq_and_eq()
+    };
+    self.convert_leq_to_eq(slack_namer)
+  }
 }
 
 impl<V> LinearRelation<V> where V: Ord + Clone + Hash + Debug + Display {

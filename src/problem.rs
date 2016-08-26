@@ -134,34 +134,6 @@ impl Problem {
     }
   }
 
-  fn convert_to_leq_and_eq(&self, lr: &mut RawLinearRelation) {
-    match lr.op {
-      Relation::EQ | Relation::NEQ | Relation::LEQ | Relation::LT => (),
-      Relation::GEQ | Relation::GT => {
-        lr.reverse();
-      }
-    }
-    if lr.op == Relation::LT {
-      lr.rhs.plus_this(&RawLinearExpression::from(scalar::EPSILON * 2.0));
-      lr.op = Relation::LEQ;
-    }
-  }
-
-  fn convert_leq_to_eq<'s, 'r>(&'s self, lr: &'r mut RawLinearRelation, namer: &mut Namer) -> Option<Var> {
-    if lr.op == Relation::LEQ {
-      let slack = Var::internal(namer.vend());
-      lr.lhs.plus_this(&RawLinearExpression::from(slack.clone()));
-      lr.lhs.times_this(-1.0);
-      lr.rhs.plus_this(&lr.lhs);
-      lr.lhs = RawLinearExpression::new();
-
-      lr.op = Relation::EQ;
-      Some(slack)
-    } else {
-      None
-    }
-  }
-
   ///
   /// Use the augmented simplex algorithm to convert the problem into a tableau adapted for the simplex algorithm.
   ///
@@ -190,27 +162,16 @@ impl Problem {
   // 3: Convert LEQs to equations, generating a slack variable. Add to restricted variables.
   // 4: Return: <equations, slack variables>
   fn augmented_simplex_phase_one(&self, slack_namer: &mut Namer) -> (LinkedList<RawLinearRelation>, HashSet<Var>) {
-    let raw_constraints: LinkedList<RawLinearRelation> = self.subject_to.iter().map(|c|{c.clone()}).collect();
     let mut normalized_constraints = LinkedList::<RawLinearRelation>::new();
+    let raw_constraints: LinkedList<RawLinearRelation> = self.subject_to.iter().map(|c|{c.clone()}).collect();
     let mut restricted_vars = HashSet::<Var>::new();
 
     for mut constraint in raw_constraints.into_iter() {
-      match constraint.op {
-        Relation::NEQ => panic!("I don't know what to do!"),
-        Relation::EQ => {
-          constraint.rhs.minus_this(&constraint.lhs);
-          constraint.lhs = RawLinearExpression::new();
-          normalized_constraints.push_back(constraint);
-          continue;
-        }
-        Relation::LEQ => (),
-        _ => self.convert_to_leq_and_eq(&mut constraint)
-      }
-      match self.convert_leq_to_eq(&mut constraint, slack_namer) {
+      match constraint.convert_to_augmented_simplex_form(slack_namer) {
         Some(var) => {
           restricted_vars.insert(var);
-        }
-        _ => ()
+        },
+        None => ()
       }
       normalized_constraints.push_back(constraint);
     }
