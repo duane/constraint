@@ -702,6 +702,26 @@ impl RawLinearRelation {
   }
 
   // Returns the extra variable created to satisfy the conversion
+  pub fn augmented_simplex_form(&self, slack_namer: &mut Namer) -> (RawLinearExpression, Option<Var>) {
+    let mut mutated = match self.op {
+      Relation::NEQ => panic!("I don't know what to do!"),
+      Relation::EQ => {
+        let mut expr = self.rhs.clone();
+        expr.minus_this(&self.lhs);
+        return (expr, None);
+      },
+      Relation::LEQ => self.clone(),
+      _ => {
+        let mut tmp = self.clone();
+        tmp.convert_to_leq_and_eq();
+        tmp
+      }
+    };
+    let slack = mutated.convert_leq_to_eq(slack_namer);
+    (mutated.rhs, slack)
+  }
+
+  // Returns the extra variable created to satisfy the conversion
   pub fn convert_to_augmented_simplex_form(&mut self, slack_namer: &mut Namer) -> Option<Var> {
     match self.op {
       Relation::NEQ => panic!("I don't know what to do!"),

@@ -381,6 +381,27 @@ impl Tableau {
   }
 
   ///
+  /// Documentation
+  /// # Examples
+  ///
+  /// ```
+  /// extern crate constraint;
+  /// use constraint::var::Var;
+  /// use constraint::expr::{RawLinearExpression, RawLinearRelation, Relation};
+  /// use constraint::tableau::Tableau;
+  ///
+  /// fn main() {
+  ///   let mut tableau = Tableau::new();
+  ///   let _ = tableau.add_constraint(RawLinearRelation::new(RawLinearExpression::from(Var::external(String::from("x"))), Relation::EQ, RawLinearExpression::from(5.0)));
+  /// }
+  pub fn add_constraint(&mut self, lr: RawLinearRelation) -> Result<(), String> {
+    // get augmented simplex version.
+    let (expr, slack) = lr.augmented_simplex_form(&mut self.slack_namer);
+    println!("Expression: {:?}", expr);
+    Ok(())
+  }
+
+  ///
   /// Vends a new external variable reference. Does not add to the tableau; just the index. The returned reference is the only strong reference.
   ///
   /// # Examples
